@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Act of Contrition",
+        "content": "O My God, I am sorry for my sins with all my heart. In choosing to do wrong and failing to do good, I have sinned against you, whom I should love above all things. I firmly intend, with the help of your grace, to do penance, to sin no more and to avoid whatever leads me to sin. Our Savior, Jesus Christ, suffered and died for us. In His Name, O Lord, have mercy.",
+        "displayOrder": 1
+    },
+    {
+        "title": "Prayer Before Confession",
+        "content": "Come, Holy Spirit, into my soul. Enlighten my mind that I may know the sins I ought to confess, and grant me your grace to be truly sorry for my sins.",
+        "displayOrder": 2
+    },
+    {
+        "title": "Prayer After Confession",
+        "content": "My Jesus, your blood flows to cleanse my soul and your mercy restores my life. Keep me close to you and help me to avoid sin. Amen.",
+        "displayOrder": 3
+    }
+]
