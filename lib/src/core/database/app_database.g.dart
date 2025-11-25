@@ -45,9 +45,15 @@ class $CommandmentsTable extends Commandments
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _customTitleMeta =
+      const VerificationMeta('customTitle');
+  @override
+  late final GeneratedColumn<String> customTitle = GeneratedColumn<String>(
+      'custom_title', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, commandmentNo, content, languageCode, code];
+      [id, commandmentNo, content, languageCode, code, customTitle];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -85,6 +91,12 @@ class $CommandmentsTable extends Commandments
       context.handle(
           _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
     }
+    if (data.containsKey('custom_title')) {
+      context.handle(
+          _customTitleMeta,
+          customTitle.isAcceptableOrUnknown(
+              data['custom_title']!, _customTitleMeta));
+    }
     return context;
   }
 
@@ -104,6 +116,8 @@ class $CommandmentsTable extends Commandments
           .read(DriftSqlType.string, data['${effectivePrefix}language_code'])!,
       code: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}code']),
+      customTitle: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}custom_title']),
     );
   }
 
@@ -119,12 +133,14 @@ class Commandment extends DataClass implements Insertable<Commandment> {
   final String content;
   final String languageCode;
   final String? code;
+  final String? customTitle;
   const Commandment(
       {required this.id,
       required this.commandmentNo,
       required this.content,
       required this.languageCode,
-      this.code});
+      this.code,
+      this.customTitle});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -134,6 +150,9 @@ class Commandment extends DataClass implements Insertable<Commandment> {
     map['language_code'] = Variable<String>(languageCode);
     if (!nullToAbsent || code != null) {
       map['code'] = Variable<String>(code);
+    }
+    if (!nullToAbsent || customTitle != null) {
+      map['custom_title'] = Variable<String>(customTitle);
     }
     return map;
   }
@@ -145,6 +164,9 @@ class Commandment extends DataClass implements Insertable<Commandment> {
       content: Value(content),
       languageCode: Value(languageCode),
       code: code == null && nullToAbsent ? const Value.absent() : Value(code),
+      customTitle: customTitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customTitle),
     );
   }
 
@@ -157,6 +179,7 @@ class Commandment extends DataClass implements Insertable<Commandment> {
       content: serializer.fromJson<String>(json['content']),
       languageCode: serializer.fromJson<String>(json['languageCode']),
       code: serializer.fromJson<String?>(json['code']),
+      customTitle: serializer.fromJson<String?>(json['customTitle']),
     );
   }
   @override
@@ -168,6 +191,7 @@ class Commandment extends DataClass implements Insertable<Commandment> {
       'content': serializer.toJson<String>(content),
       'languageCode': serializer.toJson<String>(languageCode),
       'code': serializer.toJson<String?>(code),
+      'customTitle': serializer.toJson<String?>(customTitle),
     };
   }
 
@@ -176,13 +200,15 @@ class Commandment extends DataClass implements Insertable<Commandment> {
           int? commandmentNo,
           String? content,
           String? languageCode,
-          Value<String?> code = const Value.absent()}) =>
+          Value<String?> code = const Value.absent(),
+          Value<String?> customTitle = const Value.absent()}) =>
       Commandment(
         id: id ?? this.id,
         commandmentNo: commandmentNo ?? this.commandmentNo,
         content: content ?? this.content,
         languageCode: languageCode ?? this.languageCode,
         code: code.present ? code.value : this.code,
+        customTitle: customTitle.present ? customTitle.value : this.customTitle,
       );
   Commandment copyWithCompanion(CommandmentsCompanion data) {
     return Commandment(
@@ -195,6 +221,8 @@ class Commandment extends DataClass implements Insertable<Commandment> {
           ? data.languageCode.value
           : this.languageCode,
       code: data.code.present ? data.code.value : this.code,
+      customTitle:
+          data.customTitle.present ? data.customTitle.value : this.customTitle,
     );
   }
 
@@ -205,14 +233,15 @@ class Commandment extends DataClass implements Insertable<Commandment> {
           ..write('commandmentNo: $commandmentNo, ')
           ..write('content: $content, ')
           ..write('languageCode: $languageCode, ')
-          ..write('code: $code')
+          ..write('code: $code, ')
+          ..write('customTitle: $customTitle')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, commandmentNo, content, languageCode, code);
+      Object.hash(id, commandmentNo, content, languageCode, code, customTitle);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -221,7 +250,8 @@ class Commandment extends DataClass implements Insertable<Commandment> {
           other.commandmentNo == this.commandmentNo &&
           other.content == this.content &&
           other.languageCode == this.languageCode &&
-          other.code == this.code);
+          other.code == this.code &&
+          other.customTitle == this.customTitle);
 }
 
 class CommandmentsCompanion extends UpdateCompanion<Commandment> {
@@ -230,12 +260,14 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
   final Value<String> content;
   final Value<String> languageCode;
   final Value<String?> code;
+  final Value<String?> customTitle;
   const CommandmentsCompanion({
     this.id = const Value.absent(),
     this.commandmentNo = const Value.absent(),
     this.content = const Value.absent(),
     this.languageCode = const Value.absent(),
     this.code = const Value.absent(),
+    this.customTitle = const Value.absent(),
   });
   CommandmentsCompanion.insert({
     this.id = const Value.absent(),
@@ -243,6 +275,7 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
     required String content,
     this.languageCode = const Value.absent(),
     this.code = const Value.absent(),
+    this.customTitle = const Value.absent(),
   })  : commandmentNo = Value(commandmentNo),
         content = Value(content);
   static Insertable<Commandment> custom({
@@ -251,6 +284,7 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
     Expression<String>? content,
     Expression<String>? languageCode,
     Expression<String>? code,
+    Expression<String>? customTitle,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -258,6 +292,7 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
       if (content != null) 'content': content,
       if (languageCode != null) 'language_code': languageCode,
       if (code != null) 'code': code,
+      if (customTitle != null) 'custom_title': customTitle,
     });
   }
 
@@ -266,13 +301,15 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
       Value<int>? commandmentNo,
       Value<String>? content,
       Value<String>? languageCode,
-      Value<String?>? code}) {
+      Value<String?>? code,
+      Value<String?>? customTitle}) {
     return CommandmentsCompanion(
       id: id ?? this.id,
       commandmentNo: commandmentNo ?? this.commandmentNo,
       content: content ?? this.content,
       languageCode: languageCode ?? this.languageCode,
       code: code ?? this.code,
+      customTitle: customTitle ?? this.customTitle,
     );
   }
 
@@ -294,6 +331,9 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
     if (code.present) {
       map['code'] = Variable<String>(code.value);
     }
+    if (customTitle.present) {
+      map['custom_title'] = Variable<String>(customTitle.value);
+    }
     return map;
   }
 
@@ -304,7 +344,8 @@ class CommandmentsCompanion extends UpdateCompanion<Commandment> {
           ..write('commandmentNo: $commandmentNo, ')
           ..write('content: $content, ')
           ..write('languageCode: $languageCode, ')
-          ..write('code: $code')
+          ..write('code: $code, ')
+          ..write('customTitle: $customTitle')
           ..write(')'))
         .toString();
   }
@@ -2712,6 +2753,7 @@ typedef $$CommandmentsTableCreateCompanionBuilder = CommandmentsCompanion
   required String content,
   Value<String> languageCode,
   Value<String?> code,
+  Value<String?> customTitle,
 });
 typedef $$CommandmentsTableUpdateCompanionBuilder = CommandmentsCompanion
     Function({
@@ -2720,6 +2762,7 @@ typedef $$CommandmentsTableUpdateCompanionBuilder = CommandmentsCompanion
   Value<String> content,
   Value<String> languageCode,
   Value<String?> code,
+  Value<String?> customTitle,
 });
 
 class $$CommandmentsTableTableManager extends RootTableManager<
@@ -2744,6 +2787,7 @@ class $$CommandmentsTableTableManager extends RootTableManager<
             Value<String> content = const Value.absent(),
             Value<String> languageCode = const Value.absent(),
             Value<String?> code = const Value.absent(),
+            Value<String?> customTitle = const Value.absent(),
           }) =>
               CommandmentsCompanion(
             id: id,
@@ -2751,6 +2795,7 @@ class $$CommandmentsTableTableManager extends RootTableManager<
             content: content,
             languageCode: languageCode,
             code: code,
+            customTitle: customTitle,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -2758,6 +2803,7 @@ class $$CommandmentsTableTableManager extends RootTableManager<
             required String content,
             Value<String> languageCode = const Value.absent(),
             Value<String?> code = const Value.absent(),
+            Value<String?> customTitle = const Value.absent(),
           }) =>
               CommandmentsCompanion.insert(
             id: id,
@@ -2765,6 +2811,7 @@ class $$CommandmentsTableTableManager extends RootTableManager<
             content: content,
             languageCode: languageCode,
             code: code,
+            customTitle: customTitle,
           ),
         ));
 }
@@ -2794,6 +2841,11 @@ class $$CommandmentsTableFilterComposer
 
   ColumnFilters<String> get code => $state.composableBuilder(
       column: $state.table.code,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get customTitle => $state.composableBuilder(
+      column: $state.table.customTitle,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -2841,6 +2893,11 @@ class $$CommandmentsTableOrderingComposer
 
   ColumnOrderings<String> get code => $state.composableBuilder(
       column: $state.table.code,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get customTitle => $state.composableBuilder(
+      column: $state.table.customTitle,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }

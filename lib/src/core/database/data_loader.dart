@@ -20,6 +20,7 @@ class DataLoader {
         content: json['content'],
         languageCode: Value(languageCode),
         code: Value(json['code']),
+        customTitle: Value(json['custom_title']),
       );
     }).toList();
   }

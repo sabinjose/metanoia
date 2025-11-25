@@ -30,7 +30,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -111,6 +111,10 @@ class AppDatabase extends _$AppDatabase {
           }
         });
       }
+      if (from < 11) {
+        // Add customTitle column to commandments table
+        await m.addColumn(commandments, commandments.customTitle);
+      }
 
       // Sync content after any upgrade to ensure latest JSON data is applied
       await syncContent();
@@ -133,9 +137,12 @@ class AppDatabase extends _$AppDatabase {
         if (existing != null) {
           // Update content if changed
           if (existing.content != cmd.content.value) {
-            await update(
-              commandments,
-            ).replace(existing.copyWith(content: cmd.content.value));
+            await update(commandments).replace(
+              existing.copyWith(
+                content: cmd.content.value,
+                customTitle: cmd.customTitle,
+              ),
+            );
           }
         } else {
           // Insert new

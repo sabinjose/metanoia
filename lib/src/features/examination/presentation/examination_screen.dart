@@ -321,7 +321,8 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  '${l10n.commandment} ${item.commandment.commandmentNo}',
+                                  item.commandment.customTitle ??
+                                      '${l10n.commandment} ${item.commandment.commandmentNo}',
                                   style: Theme.of(
                                     context,
                                   ).textTheme.titleMedium?.copyWith(
@@ -359,13 +360,21 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                 ),
                             ],
                           ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              item.commandment.content,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ),
+                          subtitle:
+                              (item.commandment.customTitle != null &&
+                                      item.commandment.customTitle ==
+                                          item.commandment.content)
+                                  ? null
+                                  : Padding(
+                                    padding: const EdgeInsets.only(top: 8.0),
+                                    child: Text(
+                                      item.commandment.content,
+                                      style:
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                    ),
+                                  ),
                           children:
                               commandmentQuestions.map((q) {
                                 final isSelected = selectedQuestions

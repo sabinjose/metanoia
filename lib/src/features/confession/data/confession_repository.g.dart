@@ -7,7 +7,7 @@ part of 'confession_repository.dart';
 // **************************************************************************
 
 String _$confessionRepositoryHash() =>
-    r'eb410387712b54c679a65fefcae680c3e04b0da5';
+    r'6e4fb53c1263d4687377ad3d18d6f403a2de1aa7';
 
 /// See also [confessionRepository].
 @ProviderFor(confessionRepository)
@@ -26,7 +26,7 @@ final confessionRepositoryProvider =
 // ignore: unused_element
 typedef ConfessionRepositoryRef = AutoDisposeProviderRef<ConfessionRepository>;
 String _$lastFinishedConfessionHash() =>
-    r'f9fc1aa19735cee01abe5d52989e05877619d72a';
+    r'425ef7bf78c2e8adff81a9b98da51af838a79c29';
 
 /// See also [lastFinishedConfession].
 @ProviderFor(lastFinishedConfession)

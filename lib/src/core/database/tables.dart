@@ -8,6 +8,7 @@ class Commandments extends Table {
   TextColumn get content => text()();
   TextColumn get languageCode => text().withDefault(const Constant('en'))();
   TextColumn get code => text().nullable().unique()();
+  TextColumn get customTitle => text().nullable()();
 }
 
 class ExaminationQuestions extends Table {

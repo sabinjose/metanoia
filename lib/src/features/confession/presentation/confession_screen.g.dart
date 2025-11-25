@@ -6,7 +6,7 @@ part of 'confession_screen.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$activeConfessionHash() => r'0ca619610f19f6daff9ddb1dfb60a473f80c7af7';
+String _$activeConfessionHash() => r'da055d2a7d3e41414628e9791e18316466bbe44d';
 
 /// See also [activeConfession].
 @ProviderFor(activeConfession)

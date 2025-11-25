@@ -7,7 +7,7 @@ part of 'examination_repository.dart';
 // **************************************************************************
 
 String _$examinationRepositoryHash() =>
-    r'e165698dedcd2a57f4eee92ab0541622d8f03c04';
+    r'a0b564f3e4236c3494eb7c5cc262e06ca22be535';
 
 /// See also [examinationRepository].
 @ProviderFor(examinationRepository)
@@ -26,7 +26,7 @@ final examinationRepositoryProvider =
 // ignore: unused_element
 typedef ExaminationRepositoryRef
     = AutoDisposeProviderRef<ExaminationRepository>;
-String _$examinationDataHash() => r'54f7c1aba389799985dce26e9775814ca7795443';
+String _$examinationDataHash() => r'6627c521aabdf48e1d08999e4b65bfe602706709';
 
 /// See also [examinationData].
 @ProviderFor(examinationData)

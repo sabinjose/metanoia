@@ -6,7 +6,7 @@ part of 'quote_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$quoteRepositoryHash() => r'bab38b98c4c6ce10ee588d9a74cfeb5089516de1';
+String _$quoteRepositoryHash() => r'7e5cb101b41d051d864d01e9974a6912e4ea3ef3';
 
 /// See also [quoteRepository].
 @ProviderFor(quoteRepository)
@@ -23,7 +23,7 @@ final quoteRepositoryProvider = AutoDisposeProvider<QuoteRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef QuoteRepositoryRef = AutoDisposeProviderRef<QuoteRepository>;
-String _$randomQuoteHash() => r'af9dbc148b34feec9e9cdc794b8318e32b75b958';
+String _$randomQuoteHash() => r'5dda2df8df80fa04256fe615ba7f9f41f873d2e3';
 
 /// Copied from Dart SDK
 class _SystemHash {
