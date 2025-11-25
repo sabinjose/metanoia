@@ -211,8 +211,10 @@ class ConfessionHistoryScreen extends ConsumerWidget {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Delete Confession?'),
-            content: const Text('This action cannot be undone.'),
+            title: const Text('Delete This Confession?'),
+            content: const Text(
+              'This will permanently delete this confession from your history. This action cannot be undone.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
