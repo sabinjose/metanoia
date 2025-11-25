@@ -154,8 +154,15 @@ class ExaminationController extends _$ExaminationController {
       });
     }
 
-    // Clear the state after saving
+    // Don't clear the state here - it will be cleared after navigation
+    // to ensure the confess screen can load the data properly
+  }
+
+  Future<void> clearAfterSave() async {
+    // Clear the state and reset for next examination
     state = {};
+    _draftConfessionId = null;
+    lastSavedAt = null;
   }
 
   Future<void> clearDraft() async {

@@ -185,11 +185,14 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                   selectedQuestions.isEmpty
                       ? null
                       : () async {
-                        await ref
-                            .read(examinationControllerProvider.notifier)
-                            .saveConfession();
+                        final controller = ref.read(
+                          examinationControllerProvider.notifier,
+                        );
+                        await controller.saveConfession();
                         if (context.mounted) {
                           context.go('/confess');
+                          // Clear the examination state after navigation
+                          await controller.clearAfterSave();
                         }
                       },
             ),
