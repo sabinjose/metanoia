@@ -7,18 +7,22 @@ part 'language_provider.g.dart';
 @riverpod
 class LanguageController extends _$LanguageController {
   @override
-  Future<Locale> build() async {
+  Future<Locale?> build() async {
     final prefs = await SharedPreferences.getInstance();
     final languageCode = prefs.getString('app_language');
     if (languageCode != null) {
       return Locale(languageCode);
     }
-    return const Locale('en');
+    return null;
   }
 
-  Future<void> setLanguage(Locale locale) async {
+  Future<void> setLanguage(Locale? locale) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('app_language', locale.languageCode);
+    if (locale == null) {
+      await prefs.remove('app_language');
+    } else {
+      await prefs.setString('app_language', locale.languageCode);
+    }
     state = AsyncValue.data(locale);
   }
 }

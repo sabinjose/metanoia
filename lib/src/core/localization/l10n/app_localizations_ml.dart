@@ -304,4 +304,49 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get rateDialogLater => 'പിന്നീട് ഓർമ്മിപ്പിക്കുക';
+
+  @override
+  String get greekLabel => 'ഗ്രീക്ക്';
+
+  @override
+  String get nounLabel => 'നാമം';
+
+  @override
+  String get metanoiaDefinition => 'മനസ്സിനും ഹൃദയത്തിനും ഉണ്ടാകുന്ന ആഴത്തിലുള്ള മാറ്റം; ഒരു വ്യക്തിയുടെ സത്തയെ മുഴുവനായി രൂപാന്തരപ്പെടുത്തുകയും ദൈവത്തിലേക്ക് തിരിച്ചുവിടുകയും ചെയ്യുന്ന ആത്മീയ ഉണർവ്.';
+
+  @override
+  String get turnBackToGrace => 'കൃപയിലേക്ക് മടങ്ങുക';
+
+  @override
+  String get welcomeSubtitle => 'അർത്ഥവത്തായ കുമ്പസാരത്തിനുള്ള നിങ്ങളുടെ വഴികാട്ടി';
+
+  @override
+  String get getStarted => 'തുടങ്ങാം';
+
+  @override
+  String get chooseContentLanguage => 'ഉള്ളടക്ക ഭാഷ തിരഞ്ഞെടുക്കുക';
+
+  @override
+  String get contentLanguageDescription => 'പ്രാർത്ഥനകൾക്കും മനസ്സാക്ഷി പരിശോധനയ്ക്കും വഴികാട്ടികൾക്കുമായി ഭാഷ തിരഞ്ഞെടുക്കുക';
+
+  @override
+  String get changeAnytimeNote => 'ക്രമീകരണങ്ങളിൽ നിങ്ങൾക്ക് എപ്പോൾ വേണമെങ്കിലും ഇത് മാറ്റാം';
+
+  @override
+  String get continueButton => 'തുടരുക';
+
+  @override
+  String get examineDescription => 'കുമ്പസാരത്തിന് മുമ്പ് പത്തു കൽപ്പനകൾ ഉപയോഗിച്ച് മനസ്സാക്ഷി പരിശോധിക്കുക';
+
+  @override
+  String get confessDescription => 'ഒന്നും മറന്നുപോകാതിരിക്കാൻ കുമ്പസാരത്തിനിടെ പാപങ്ങൾ രേഖപ്പെടുത്തുക';
+
+  @override
+  String get prayersDescription => 'കുമ്പസാരത്തിന് മുമ്പും ശേഷവുമുള്ള പ്രാർത്ഥനകളും പ്രായശ്ചിത്ത പ്രാർത്ഥനകളും ലഭ്യമാണ്';
+
+  @override
+  String get remindersDescription => 'കുമ്പസാരത്തിന് പോകാൻ മറക്കാതിരിക്കാൻ ക്രമീകരണങ്ങളിൽ ഓർമ്മപ്പെടുത്തലുകൾ സജ്ജീകരിക്കുക';
+
+  @override
+  String get nextButton => 'അടുത്തത്';
 }

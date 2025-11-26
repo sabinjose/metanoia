@@ -676,6 +676,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remind me later'**
   String get rateDialogLater;
+
+  /// No description provided for @greekLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Greek'**
+  String get greekLabel;
+
+  /// No description provided for @nounLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'noun'**
+  String get nounLabel;
+
+  /// No description provided for @metanoiaDefinition.
+  ///
+  /// In en, this message translates to:
+  /// **'A profound change of mind and heart; a spiritual awakening that transforms one\'s entire being and redirects their life toward God.'**
+  String get metanoiaDefinition;
+
+  /// No description provided for @turnBackToGrace.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn Back to Grace'**
+  String get turnBackToGrace;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your guide for a meaningful confession'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @chooseContentLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Content Language'**
+  String get chooseContentLanguage;
+
+  /// No description provided for @contentLanguageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language for prayers, conscience examination, and guides'**
+  String get contentLanguageDescription;
+
+  /// No description provided for @changeAnytimeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this anytime in Settings'**
+  String get changeAnytimeNote;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @examineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Examine your conscience using the Ten Commandments before confession'**
+  String get examineDescription;
+
+  /// No description provided for @confessDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your sins during confession to ensure nothing is forgotten'**
+  String get confessDescription;
+
+  /// No description provided for @prayersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Access prayers for before and after confession, and penance prayers'**
+  String get prayersDescription;
+
+  /// No description provided for @remindersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set regular reminders in Settings so you never forget to go to confession'**
+  String get remindersDescription;
+
+  /// No description provided for @nextButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

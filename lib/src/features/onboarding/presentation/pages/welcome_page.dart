@@ -117,14 +117,18 @@ class _WelcomePageState extends State<WelcomePage>
                         boxShadow: [
                           // Soft outer glow
                           BoxShadow(
-                            color: theme.colorScheme.primary.withValues(alpha: 0.25),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.25,
+                            ),
                             blurRadius: 40,
                             spreadRadius: 0,
                             offset: const Offset(0, 20),
                           ),
                           // Secondary glow (golden)
                           BoxShadow(
-                            color: theme.colorScheme.secondary.withValues(alpha: 0.2),
+                            color: theme.colorScheme.secondary.withValues(
+                              alpha: 0.2,
+                            ),
                             blurRadius: 30,
                             spreadRadius: -5,
                             offset: const Offset(0, 15),
@@ -196,7 +200,7 @@ class _WelcomePageState extends State<WelcomePage>
 
                 // Tagline - Serif, Premium
                 Text(
-                  'Turn Back to Grace',
+                  l10n.turnBackToGrace,
                   style: GoogleFonts.ebGaramond(
                     fontSize: 20,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
@@ -211,9 +215,11 @@ class _WelcomePageState extends State<WelcomePage>
 
                 // Subtitle
                 Text(
-                  'Your guide for a meaningful confession',
+                  l10n.welcomeSubtitle,
                   style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                    color: theme.colorScheme.onSurfaceVariant.withValues(
+                      alpha: 0.8,
+                    ),
                     fontWeight: FontWeight.w400,
                     height: 1.4,
                     letterSpacing: 0.2,
@@ -233,7 +239,9 @@ class _WelcomePageState extends State<WelcomePage>
                       borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.4,
+                          ),
                           blurRadius: 24,
                           spreadRadius: 0,
                           offset: const Offset(0, 12),
@@ -256,7 +264,7 @@ class _WelcomePageState extends State<WelcomePage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Get Started',
+                            l10n.getStarted,
                             style: theme.textTheme.titleLarge?.copyWith(
                               color: theme.colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,

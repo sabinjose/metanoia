@@ -73,8 +73,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               children: [
                 MetanoiaIntroPage(onNext: _nextPage),
                 WelcomePage(onNext: _nextPage),
-                ContentLanguagePage(onNext: _nextPage),
-                FeaturesOverviewPage(onComplete: _completeOnboarding),
+                FeaturesOverviewPage(onComplete: _nextPage),
+                ContentLanguagePage(onNext: _completeOnboarding),
               ],
             ),
           ),

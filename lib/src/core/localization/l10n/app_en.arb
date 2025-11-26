@@ -99,5 +99,20 @@
   "rateDialogContent": "If you find this app helpful, please take a moment to rate it. It helps us a lot!",
   "rateDialogYes": "Rate Now",
   "rateDialogNo": "No, thanks",
-  "rateDialogLater": "Remind me later"
+  "rateDialogLater": "Remind me later",
+  "greekLabel": "Greek",
+  "nounLabel": "noun",
+  "metanoiaDefinition": "A profound change of mind and heart; a spiritual awakening that transforms one's entire being and redirects their life toward God.",
+  "turnBackToGrace": "Turn Back to Grace",
+  "welcomeSubtitle": "Your guide for a meaningful confession",
+  "getStarted": "Get Started",
+  "chooseContentLanguage": "Choose Content Language",
+  "contentLanguageDescription": "Select language for prayers, conscience examination, and guides",
+  "changeAnytimeNote": "You can change this anytime in Settings",
+  "continueButton": "Continue",
+  "examineDescription": "Examine your conscience using the Ten Commandments before confession",
+  "confessDescription": "Track your sins during confession to ensure nothing is forgotten",
+  "prayersDescription": "Access prayers for before and after confession, and penance prayers",
+  "remindersDescription": "Set regular reminders in Settings so you never forget to go to confession",
+  "nextButton": "Next"
 }

@@ -189,15 +189,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: languageState.when(
               data:
                   (locale) => SegmentedButton<String>(
-                    segments: const [
-                      ButtonSegment(value: 'en', label: Text('English')),
-                      ButtonSegment(value: 'ml', label: Text('മലയാളം')),
+                    segments: [
+                      ButtonSegment(
+                        value: 'system',
+                        label: Text(l10n.system),
+                        icon: const Icon(Icons.brightness_auto),
+                      ),
+                      const ButtonSegment(value: 'en', label: Text('English')),
+                      const ButtonSegment(value: 'ml', label: Text('മലയാളം')),
                     ],
-                    selected: {locale.languageCode},
+                    selected: {locale?.languageCode ?? 'system'},
                     onSelectionChanged: (Set<String> newSelection) {
+                      final value = newSelection.first;
                       ref
                           .read(languageControllerProvider.notifier)
-                          .setLanguage(Locale(newSelection.first));
+                          .setLanguage(
+                            value == 'system' ? null : Locale(value),
+                          );
                     },
                   ),
               loading: () => const Center(child: CircularProgressIndicator()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
 class MetanoiaIntroPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -63,6 +64,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
@@ -108,7 +110,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Metanoia',
+                              l10n.appTitle,
                               style: GoogleFonts.ebGaramond(
                                 fontSize: 62,
                                 fontWeight: FontWeight.w600,
@@ -138,7 +140,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                     ),
                                   ),
                                   child: Text(
-                                    'Greek',
+                                    l10n.greekLabel,
                                     style: GoogleFonts.inter(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
@@ -202,7 +204,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                'noun',
+                                l10n.nounLabel,
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -213,7 +215,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                             ),
                             const SizedBox(height: 28),
                             Text(
-                              'A profound change of mind and heart; a spiritual awakening that transforms one\'s entire being and redirects their life toward God.',
+                              l10n.metanoiaDefinition,
                               style: GoogleFonts.inter(
                                 fontSize: 20,
                                 height: 1.7,
@@ -235,7 +237,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                           child: Column(
                             children: [
                               Text(
-                                'Turn Back to Grace',
+                                l10n.turnBackToGrace,
                                 style: GoogleFonts.ebGaramond(
                                   fontSize: 20,
                                   color: theme.colorScheme.onSurfaceVariant
@@ -267,7 +269,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                         theme.colorScheme.onPrimary,
                                     padding: const EdgeInsets.all(20),
                                   ),
-                                  tooltip: 'Next',
+                                  tooltip: l10n.nextButton,
                                 ),
                               ),
                             ],

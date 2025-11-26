@@ -316,4 +316,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateDialogLater => 'Remind me later';
+
+  @override
+  String get greekLabel => 'Greek';
+
+  @override
+  String get nounLabel => 'noun';
+
+  @override
+  String get metanoiaDefinition => 'A profound change of mind and heart; a spiritual awakening that transforms one\'s entire being and redirects their life toward God.';
+
+  @override
+  String get turnBackToGrace => 'Turn Back to Grace';
+
+  @override
+  String get welcomeSubtitle => 'Your guide for a meaningful confession';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get chooseContentLanguage => 'Choose Content Language';
+
+  @override
+  String get contentLanguageDescription => 'Select language for prayers, conscience examination, and guides';
+
+  @override
+  String get changeAnytimeNote => 'You can change this anytime in Settings';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get examineDescription => 'Examine your conscience using the Ten Commandments before confession';
+
+  @override
+  String get confessDescription => 'Track your sins during confession to ensure nothing is forgotten';
+
+  @override
+  String get prayersDescription => 'Access prayers for before and after confession, and penance prayers';
+
+  @override
+  String get remindersDescription => 'Set regular reminders in Settings so you never forget to go to confession';
+
+  @override
+  String get nextButton => 'Next';
 }

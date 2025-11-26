@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
 class ContentLanguagePage extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -55,6 +56,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final contentLanguage = ref.watch(contentLanguageControllerProvider);
 
     return Padding(
@@ -98,7 +100,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
 
             // Title
             Text(
-              'Choose Content Language',
+              l10n.chooseContentLanguage,
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -113,7 +115,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
             Container(
               constraints: const BoxConstraints(maxWidth: 320),
               child: Text(
-                'Select language for prayers, conscience examination, and guides',
+                l10n.contentLanguageDescription,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   height: 1.5,
@@ -160,9 +162,11 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
 
             // Note
             Text(
-              'You can change this anytime in Settings',
+              l10n.changeAnytimeNote,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                color: theme.colorScheme.onSurfaceVariant.withValues(
+                  alpha: 0.7,
+                ),
                 fontStyle: FontStyle.italic,
               ),
               textAlign: TextAlign.center,
@@ -185,7 +189,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
                   shadowColor: theme.colorScheme.primary.withValues(alpha: 0.3),
                 ),
                 child: Text(
-                  'Continue',
+                  l10n.continueButton,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,

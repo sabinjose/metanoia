@@ -51,29 +51,25 @@ class _FeaturesOverviewPageState extends State<FeaturesOverviewPage> {
               _FeatureCard(
                 icon: Icons.assignment_outlined,
                 title: l10n.examineTitle,
-                description:
-                    'Examine your conscience using the Ten Commandments before confession',
+                description: l10n.examineDescription,
                 color: theme.colorScheme.primary,
               ),
               _FeatureCard(
                 icon: Icons.church_outlined,
                 title: l10n.confessTitle,
-                description:
-                    'Track your sins during confession to ensure nothing is forgotten',
+                description: l10n.confessDescription,
                 color: theme.colorScheme.secondary,
               ),
               _FeatureCard(
                 icon: Icons.menu_book_outlined,
                 title: l10n.prayersTitle,
-                description:
-                    'Access prayers for before and after confession, and penance prayers',
+                description: l10n.prayersDescription,
                 color: theme.colorScheme.tertiary,
               ),
               _FeatureCard(
                 icon: Icons.notifications_outlined,
-                title: 'Reminders',
-                description:
-                    'Set regular reminders in Settings so you never forget to go to confession',
+                title: l10n.reminders,
+                description: l10n.remindersDescription,
                 color: theme.colorScheme.error,
               ),
             ],
@@ -128,7 +124,9 @@ class _FeaturesOverviewPageState extends State<FeaturesOverviewPage> {
                 elevation: 0,
               ),
               child: Text(
-                _currentPage < _totalPages - 1 ? 'Next' : 'Get Started',
+                _currentPage < _totalPages - 1
+                    ? l10n.nextButton
+                    : l10n.getStarted,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
