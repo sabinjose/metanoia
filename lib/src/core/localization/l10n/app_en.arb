@@ -61,6 +61,7 @@
   "version": "Version",
   "selectDay": "Select Day",
   "selected": "{count} selected",
+  "selectedLabel": "selected",
   "searchPlaceholder": "Search commandments or questions...",
   "noResults": "No results found",
   "viewHistory": "View History",

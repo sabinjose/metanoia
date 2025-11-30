@@ -196,7 +196,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '$selectedInSection / $totalInSection ${l10n.selected(selectedInSection)}',
+                    '$selectedInSection / $totalInSection ${l10n.selectedLabel}',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onPrimaryContainer,
                       fontWeight: FontWeight.bold,

@@ -443,6 +443,12 @@ abstract class AppLocalizations {
   /// **'{count} selected'**
   String selected(Object count);
 
+  /// No description provided for @selectedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'selected'**
+  String get selectedLabel;
+
   /// No description provided for @searchPlaceholder.
   ///
   /// In en, this message translates to:
