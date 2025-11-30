@@ -729,7 +729,9 @@ class _MilestoneDot extends StatelessWidget {
           color: theme.colorScheme.onPrimary,
           fontSize: 10,
           fontWeight: FontWeight.bold,
+          height: 1.0,
         ),
+        textAlign: TextAlign.center,
       );
     } else if (isCompleted && hasSelections) {
       // Completed with selections - checkmark
