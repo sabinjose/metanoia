@@ -199,5 +199,9 @@
   "minutesAgo": "{count}m ago",
   "hoursAgo": "{count}h ago",
   "general": "General",
-  "noQuestionsInSection": "No questions in this section"
+  "noQuestionsInSection": "No questions in this section",
+  "skip": "Skip",
+  "back": "Back",
+  "skipOnboardingTitle": "Skip Introduction?",
+  "skipOnboardingMessage": "You can always access help and settings later from the app menu."
 }

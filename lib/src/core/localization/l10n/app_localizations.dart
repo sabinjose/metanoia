@@ -1252,6 +1252,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No questions in this section'**
   String get noQuestionsInSection;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @skipOnboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip Introduction?'**
+  String get skipOnboardingTitle;
+
+  /// No description provided for @skipOnboardingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You can always access help and settings later from the app menu.'**
+  String get skipOnboardingMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

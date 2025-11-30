@@ -156,5 +156,9 @@
   "minutesAgo": "{count} മി. മുമ്പ്",
   "hoursAgo": "{count} മ. മുമ്പ്",
   "general": "പൊതുവായത്",
-  "noQuestionsInSection": "ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല"
+  "noQuestionsInSection": "ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല",
+  "skip": "ഒഴിവാക്കുക",
+  "back": "മടങ്ങുക",
+  "skipOnboardingTitle": "ആമുഖം ഒഴിവാക്കണോ?",
+  "skipOnboardingMessage": "ആപ്പ് മെനുവിൽ നിന്ന് പിന്നീട് സഹായവും ക്രമീകരണങ്ങളും എപ്പോൾ വേണമെങ്കിലും ആക്സസ് ചെയ്യാം."
 }

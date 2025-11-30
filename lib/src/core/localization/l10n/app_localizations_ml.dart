@@ -624,4 +624,16 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get noQuestionsInSection => 'ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല';
+
+  @override
+  String get skip => 'ഒഴിവാക്കുക';
+
+  @override
+  String get back => 'മടങ്ങുക';
+
+  @override
+  String get skipOnboardingTitle => 'ആമുഖം ഒഴിവാക്കണോ?';
+
+  @override
+  String get skipOnboardingMessage => 'ആപ്പ് മെനുവിൽ നിന്ന് പിന്നീട് സഹായവും ക്രമീകരണങ്ങളും എപ്പോൾ വേണമെങ്കിലും ആക്സസ് ചെയ്യാം.';
 }

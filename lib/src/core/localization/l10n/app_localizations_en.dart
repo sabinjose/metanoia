@@ -636,4 +636,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noQuestionsInSection => 'No questions in this section';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get skipOnboardingTitle => 'Skip Introduction?';
+
+  @override
+  String get skipOnboardingMessage => 'You can always access help and settings later from the app menu.';
 }

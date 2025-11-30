@@ -1,10 +1,12 @@
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:confessionapp/src/features/onboarding/presentation/onboarding_controller.dart';
 import 'package:confessionapp/src/features/onboarding/presentation/pages/welcome_page.dart';
 import 'package:confessionapp/src/features/onboarding/presentation/pages/content_language_page.dart';
-import 'package:confessionapp/src/features/onboarding/presentation/pages/features_overview_page.dart';
+import 'package:confessionapp/src/features/onboarding/presentation/pages/feature_page.dart';
 import 'package:confessionapp/src/features/onboarding/presentation/pages/metanoia_intro_page.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -17,11 +19,24 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final int _totalPages = 4;
+
+  // Total pages: Intro, Welcome, 4 Features, Language = 7
+  final int _totalPages = 7;
 
   void _nextPage() {
+    HapticUtils.selectionClick();
     if (_currentPage < _totalPages - 1) {
       _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _previousPage() {
+    HapticUtils.selectionClick();
+    if (_currentPage > 0) {
+      _pageController.previousPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
@@ -37,6 +52,33 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
+  Future<void> _skipOnboarding() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(l10n.skipOnboardingTitle),
+          content: Text(l10n.skipOnboardingMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.skip),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      await _completeOnboarding();
+    }
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -46,39 +88,145 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    // Don't show skip on intro page (page 0) or last page
+    final showSkip = _currentPage > 0 && _currentPage < _totalPages - 1;
+    // Show back button except on first page
+    final showBack = _currentPage > 0;
 
     return Scaffold(
-      body: Column(
-        children: [
-          // Progress Bar
-          if (_currentPage > 0)
-            LinearProgressIndicator(
-              value: _currentPage / (_totalPages - 1),
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                theme.colorScheme.primary,
+      body: SafeArea(
+        top: true,
+        bottom: false,
+        child: Column(
+          children: [
+            // Top bar with back and skip
+            if (_currentPage > 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  children: [
+                    if (showBack)
+                      IconButton(
+                        onPressed: _previousPage,
+                        icon: const Icon(Icons.arrow_back),
+                        tooltip: l10n.back,
+                      )
+                    else
+                      const SizedBox(width: 48),
+                    const Spacer(),
+                    if (showSkip)
+                      TextButton(
+                        onPressed: _skipOnboarding,
+                        child: Text(l10n.skip),
+                      )
+                    else
+                      const SizedBox(width: 48),
+                  ],
+                ),
+              ),
+
+            // Progress indicator (after intro page)
+            if (_currentPage > 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: _ProgressDots(
+                  currentPage: _currentPage - 1, // Exclude intro from dots
+                  totalPages: _totalPages - 1,
+                ),
+              ),
+
+            // Pages
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                children: [
+                  // Page 0: Metanoia Intro
+                  MetanoiaIntroPage(onNext: _nextPage),
+                  // Page 1: Welcome
+                  WelcomePage(onNext: _nextPage),
+                  // Pages 2-5: Features (flattened)
+                  FeaturePage(
+                    icon: Icons.assignment_outlined,
+                    title: l10n.examineTitle,
+                    description: l10n.examineDescription,
+                    color: theme.colorScheme.primary,
+                    onNext: _nextPage,
+                    buttonText: l10n.nextButton,
+                  ),
+                  FeaturePage(
+                    icon: Icons.church_outlined,
+                    title: l10n.confessTitle,
+                    description: l10n.confessDescription,
+                    color: theme.colorScheme.secondary,
+                    onNext: _nextPage,
+                    buttonText: l10n.nextButton,
+                  ),
+                  FeaturePage(
+                    icon: Icons.menu_book_outlined,
+                    title: l10n.prayersTitle,
+                    description: l10n.prayersDescription,
+                    color: theme.colorScheme.tertiary,
+                    onNext: _nextPage,
+                    buttonText: l10n.nextButton,
+                  ),
+                  FeaturePage(
+                    icon: Icons.notifications_outlined,
+                    title: l10n.reminders,
+                    description: l10n.remindersDescription,
+                    color: theme.colorScheme.error,
+                    onNext: _nextPage,
+                    buttonText: l10n.nextButton,
+                  ),
+                  // Page 6: Language Selection
+                  ContentLanguagePage(onNext: _completeOnboarding),
+                ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-          // Pages
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
-              },
-              children: [
-                MetanoiaIntroPage(onNext: _nextPage),
-                WelcomePage(onNext: _nextPage),
-                FeaturesOverviewPage(onComplete: _nextPage),
-                ContentLanguagePage(onNext: _completeOnboarding),
-              ],
-            ),
+/// Progress indicator dots
+class _ProgressDots extends StatelessWidget {
+  final int currentPage;
+  final int totalPages;
+
+  const _ProgressDots({
+    required this.currentPage,
+    required this.totalPages,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        totalPages,
+        (index) => AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: index == currentPage ? 24 : 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: index <= currentPage
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+            borderRadius: BorderRadius.circular(4),
           ),
-        ],
+        ),
       ),
     );
   }
