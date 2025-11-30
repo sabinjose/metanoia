@@ -95,8 +95,8 @@ class ConfessionHistoryScreen extends ConsumerWidget {
                   await ref
                       .read(confessionRepositoryProvider)
                       .deleteConfession(confession.confession.id);
-                  // Refresh the list
-                  ref.invalidate(finishedConfessionsProvider);
+                  // Don't invalidate here - Dismissible handles the visual removal
+                  // The provider will be refreshed when the screen is revisited
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Confession deleted')),
@@ -243,16 +243,17 @@ class ConfessionHistoryScreen extends ConsumerWidget {
               ),
               FilledButton(
                 onPressed: () async {
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Close dialog
                   await ref
                       .read(confessionRepositoryProvider)
                       .deleteAllFinishedConfessions();
-                  // Refresh the list
+                  // Invalidate and pop back to confession screen
                   ref.invalidate(finishedConfessionsProvider);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('All confessions deleted')),
                     );
+                    Navigator.pop(context); // Go back to confession screen
                   }
                 },
                 style: FilledButton.styleFrom(
