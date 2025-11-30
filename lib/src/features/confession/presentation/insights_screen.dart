@@ -133,7 +133,7 @@ class InsightsScreen extends ConsumerWidget {
         _StatCard(
           icon: Icons.local_fire_department,
           label: l10n.currentStreak,
-          value: '${analytics.currentStreakWeeks} wks',
+          value: '${analytics.currentStreakWeeks} ${analytics.currentStreakWeeks == 1 ? 'wk' : 'wks'}',
           color: Colors.orange,
         ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
       ],
@@ -188,7 +188,7 @@ class InsightsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             SizedBox(
-              height: 120,
+              height: 140,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: analytics.monthlyFrequency.asMap().entries.map((entry) {
