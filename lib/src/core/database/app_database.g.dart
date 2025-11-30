@@ -3098,6 +3098,359 @@ class UserCustomSinsCompanion extends UpdateCompanion<UserCustomSin> {
   }
 }
 
+class $PenancesTable extends Penances with TableInfo<$PenancesTable, Penance> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PenancesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _confessionIdMeta =
+      const VerificationMeta('confessionId');
+  @override
+  late final GeneratedColumn<int> confessionId = GeneratedColumn<int>(
+      'confession_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES confessions (id) ON DELETE CASCADE'));
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isCompletedMeta =
+      const VerificationMeta('isCompleted');
+  @override
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+      'is_completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_completed" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _completedAtMeta =
+      const VerificationMeta('completedAt');
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+      'completed_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, confessionId, description, isCompleted, completedAt, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'penances';
+  @override
+  VerificationContext validateIntegrity(Insertable<Penance> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('confession_id')) {
+      context.handle(
+          _confessionIdMeta,
+          confessionId.isAcceptableOrUnknown(
+              data['confession_id']!, _confessionIdMeta));
+    } else if (isInserting) {
+      context.missing(_confessionIdMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('is_completed')) {
+      context.handle(
+          _isCompletedMeta,
+          isCompleted.isAcceptableOrUnknown(
+              data['is_completed']!, _isCompletedMeta));
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+          _completedAtMeta,
+          completedAt.isAcceptableOrUnknown(
+              data['completed_at']!, _completedAtMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Penance map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Penance(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      confessionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}confession_id'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      isCompleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_completed'])!,
+      completedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}completed_at']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $PenancesTable createAlias(String alias) {
+    return $PenancesTable(attachedDatabase, alias);
+  }
+}
+
+class Penance extends DataClass implements Insertable<Penance> {
+  final int id;
+  final int confessionId;
+  final String description;
+  final bool isCompleted;
+  final DateTime? completedAt;
+  final DateTime createdAt;
+  const Penance(
+      {required this.id,
+      required this.confessionId,
+      required this.description,
+      required this.isCompleted,
+      this.completedAt,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['confession_id'] = Variable<int>(confessionId);
+    map['description'] = Variable<String>(description);
+    map['is_completed'] = Variable<bool>(isCompleted);
+    if (!nullToAbsent || completedAt != null) {
+      map['completed_at'] = Variable<DateTime>(completedAt);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  PenancesCompanion toCompanion(bool nullToAbsent) {
+    return PenancesCompanion(
+      id: Value(id),
+      confessionId: Value(confessionId),
+      description: Value(description),
+      isCompleted: Value(isCompleted),
+      completedAt: completedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Penance.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Penance(
+      id: serializer.fromJson<int>(json['id']),
+      confessionId: serializer.fromJson<int>(json['confessionId']),
+      description: serializer.fromJson<String>(json['description']),
+      isCompleted: serializer.fromJson<bool>(json['isCompleted']),
+      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'confessionId': serializer.toJson<int>(confessionId),
+      'description': serializer.toJson<String>(description),
+      'isCompleted': serializer.toJson<bool>(isCompleted),
+      'completedAt': serializer.toJson<DateTime?>(completedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Penance copyWith(
+          {int? id,
+          int? confessionId,
+          String? description,
+          bool? isCompleted,
+          Value<DateTime?> completedAt = const Value.absent(),
+          DateTime? createdAt}) =>
+      Penance(
+        id: id ?? this.id,
+        confessionId: confessionId ?? this.confessionId,
+        description: description ?? this.description,
+        isCompleted: isCompleted ?? this.isCompleted,
+        completedAt: completedAt.present ? completedAt.value : this.completedAt,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  Penance copyWithCompanion(PenancesCompanion data) {
+    return Penance(
+      id: data.id.present ? data.id.value : this.id,
+      confessionId: data.confessionId.present
+          ? data.confessionId.value
+          : this.confessionId,
+      description:
+          data.description.present ? data.description.value : this.description,
+      isCompleted:
+          data.isCompleted.present ? data.isCompleted.value : this.isCompleted,
+      completedAt:
+          data.completedAt.present ? data.completedAt.value : this.completedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Penance(')
+          ..write('id: $id, ')
+          ..write('confessionId: $confessionId, ')
+          ..write('description: $description, ')
+          ..write('isCompleted: $isCompleted, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, confessionId, description, isCompleted, completedAt, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Penance &&
+          other.id == this.id &&
+          other.confessionId == this.confessionId &&
+          other.description == this.description &&
+          other.isCompleted == this.isCompleted &&
+          other.completedAt == this.completedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class PenancesCompanion extends UpdateCompanion<Penance> {
+  final Value<int> id;
+  final Value<int> confessionId;
+  final Value<String> description;
+  final Value<bool> isCompleted;
+  final Value<DateTime?> completedAt;
+  final Value<DateTime> createdAt;
+  const PenancesCompanion({
+    this.id = const Value.absent(),
+    this.confessionId = const Value.absent(),
+    this.description = const Value.absent(),
+    this.isCompleted = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  PenancesCompanion.insert({
+    this.id = const Value.absent(),
+    required int confessionId,
+    required String description,
+    this.isCompleted = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  })  : confessionId = Value(confessionId),
+        description = Value(description);
+  static Insertable<Penance> custom({
+    Expression<int>? id,
+    Expression<int>? confessionId,
+    Expression<String>? description,
+    Expression<bool>? isCompleted,
+    Expression<DateTime>? completedAt,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (confessionId != null) 'confession_id': confessionId,
+      if (description != null) 'description': description,
+      if (isCompleted != null) 'is_completed': isCompleted,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  PenancesCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? confessionId,
+      Value<String>? description,
+      Value<bool>? isCompleted,
+      Value<DateTime?>? completedAt,
+      Value<DateTime>? createdAt}) {
+    return PenancesCompanion(
+      id: id ?? this.id,
+      confessionId: confessionId ?? this.confessionId,
+      description: description ?? this.description,
+      isCompleted: isCompleted ?? this.isCompleted,
+      completedAt: completedAt ?? this.completedAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (confessionId.present) {
+      map['confession_id'] = Variable<int>(confessionId.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (isCompleted.present) {
+      map['is_completed'] = Variable<bool>(isCompleted.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PenancesCompanion(')
+          ..write('id: $id, ')
+          ..write('confessionId: $confessionId, ')
+          ..write('description: $description, ')
+          ..write('isCompleted: $isCompleted, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3113,6 +3466,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $GuideItemsTable guideItems = $GuideItemsTable(this);
   late final $PrayersTable prayers = $PrayersTable(this);
   late final $UserCustomSinsTable userCustomSins = $UserCustomSinsTable(this);
+  late final $PenancesTable penances = $PenancesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3127,7 +3481,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         userSettings,
         guideItems,
         prayers,
-        userCustomSins
+        userCustomSins,
+        penances
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -3137,6 +3492,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('confession_items', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('confessions',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('penances', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -3763,6 +4125,19 @@ class $$ConfessionsTableFilterComposer
             builder: (joinBuilder, parentComposers) =>
                 $$ConfessionItemsTableFilterComposer(ComposerState($state.db,
                     $state.db.confessionItems, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter penancesRefs(
+      ComposableFilter Function($$PenancesTableFilterComposer f) f) {
+    final $$PenancesTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.penances,
+        getReferencedColumn: (t) => t.confessionId,
+        builder: (joinBuilder, parentComposers) =>
+            $$PenancesTableFilterComposer(ComposerState(
+                $state.db, $state.db.penances, joinBuilder, parentComposers)));
     return f(composer);
   }
 }
@@ -4505,6 +4880,156 @@ class $$UserCustomSinsTableOrderingComposer
   }
 }
 
+typedef $$PenancesTableCreateCompanionBuilder = PenancesCompanion Function({
+  Value<int> id,
+  required int confessionId,
+  required String description,
+  Value<bool> isCompleted,
+  Value<DateTime?> completedAt,
+  Value<DateTime> createdAt,
+});
+typedef $$PenancesTableUpdateCompanionBuilder = PenancesCompanion Function({
+  Value<int> id,
+  Value<int> confessionId,
+  Value<String> description,
+  Value<bool> isCompleted,
+  Value<DateTime?> completedAt,
+  Value<DateTime> createdAt,
+});
+
+class $$PenancesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $PenancesTable,
+    Penance,
+    $$PenancesTableFilterComposer,
+    $$PenancesTableOrderingComposer,
+    $$PenancesTableCreateCompanionBuilder,
+    $$PenancesTableUpdateCompanionBuilder> {
+  $$PenancesTableTableManager(_$AppDatabase db, $PenancesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$PenancesTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$PenancesTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> confessionId = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<bool> isCompleted = const Value.absent(),
+            Value<DateTime?> completedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              PenancesCompanion(
+            id: id,
+            confessionId: confessionId,
+            description: description,
+            isCompleted: isCompleted,
+            completedAt: completedAt,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int confessionId,
+            required String description,
+            Value<bool> isCompleted = const Value.absent(),
+            Value<DateTime?> completedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              PenancesCompanion.insert(
+            id: id,
+            confessionId: confessionId,
+            description: description,
+            isCompleted: isCompleted,
+            completedAt: completedAt,
+            createdAt: createdAt,
+          ),
+        ));
+}
+
+class $$PenancesTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $PenancesTable> {
+  $$PenancesTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get completedAt => $state.composableBuilder(
+      column: $state.table.completedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ConfessionsTableFilterComposer get confessionId {
+    final $$ConfessionsTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.confessionId,
+        referencedTable: $state.db.confessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ConfessionsTableFilterComposer(ComposerState($state.db,
+                $state.db.confessions, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $$PenancesTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $PenancesTable> {
+  $$PenancesTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get completedAt => $state.composableBuilder(
+      column: $state.table.completedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ConfessionsTableOrderingComposer get confessionId {
+    final $$ConfessionsTableOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.confessionId,
+        referencedTable: $state.db.confessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $$ConfessionsTableOrderingComposer(ComposerState($state.db,
+                $state.db.confessions, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -4527,4 +5052,6 @@ class $AppDatabaseManager {
       $$PrayersTableTableManager(_db, _db.prayers);
   $$UserCustomSinsTableTableManager get userCustomSins =>
       $$UserCustomSinsTableTableManager(_db, _db.userCustomSins);
+  $$PenancesTableTableManager get penances =>
+      $$PenancesTableTableManager(_db, _db.penances);
 }

@@ -97,3 +97,15 @@ class UserCustomSins extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
+
+// Penance tracking for confessions
+class Penances extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get confessionId =>
+      integer().references(Confessions, #id, onDelete: KeyAction.cascade)();
+  TextColumn get description => text()(); // What penance was given
+  BoolColumn get isCompleted =>
+      boolean().withDefault(const Constant(false))();
+  DateTimeColumn get completedAt => dateTime().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
