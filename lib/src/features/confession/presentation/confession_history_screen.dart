@@ -549,11 +549,24 @@ class _ConfessionDetailsSheetState
           ),
           if (penance.isCompleted && penance.completedAt != null) ...[
             const SizedBox(height: 8),
-            Text(
-              l10n.completedOn(dateFormat.format(penance.completedAt!)),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.completedOn(dateFormat.format(penance.completedAt!)),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () =>
+                      _showEditPenanceDialog(context, l10n, penance),
+                  icon: const Icon(Icons.edit, size: 18),
+                  tooltip: l10n.editPenance,
+                  visualDensity: VisualDensity.compact,
+                ),
+              ],
             ),
           ],
           if (!penance.isCompleted) ...[
