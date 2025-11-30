@@ -105,7 +105,6 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
     ThemeData theme,
     AppLocalizations l10n,
   ) {
-    final progress = ((_currentPage + 1) / widget.data.length);
     final currentItem = widget.data[_currentPage];
 
     // Get selected count for current commandment
@@ -117,17 +116,14 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: Column(
         children: [
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 4,
-              backgroundColor: theme.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                theme.colorScheme.primary,
-              ),
-            ),
+          // Milestone progress bar with tappable dots
+          _MilestoneProgressBar(
+            totalSteps: widget.data.length,
+            currentStep: _currentPage,
+            selectedQuestions: selectedQuestions,
+            data: widget.data,
+            onStepTapped: _goToPage,
+            getSelectedCountForItem: _getSelectedCountForItem,
           ),
           const SizedBox(height: 12),
 
@@ -522,6 +518,212 @@ class _AddYourOwnTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Milestone-style progress bar with tappable dots
+class _MilestoneProgressBar extends StatelessWidget {
+  final int totalSteps;
+  final int currentStep;
+  final Map<int, String> selectedQuestions;
+  final List<CommandmentWithQuestions> data;
+  final Function(int) onStepTapped;
+  final int Function(CommandmentWithQuestions, Map<int, String>) getSelectedCountForItem;
+
+  const _MilestoneProgressBar({
+    required this.totalSteps,
+    required this.currentStep,
+    required this.selectedQuestions,
+    required this.data,
+    required this.onStepTapped,
+    required this.getSelectedCountForItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 32,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Calculate spacing based on available width
+          final availableWidth = constraints.maxWidth;
+          const dotSize = 20.0;
+          const minSpacing = 4.0;
+
+          // Check if we need scrolling
+          final totalRequiredWidth = (dotSize * totalSteps) + (minSpacing * (totalSteps - 1));
+          final needsScrolling = totalRequiredWidth > availableWidth;
+
+          if (needsScrolling) {
+            // Scrollable version for many steps
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: _buildDots(theme, dotSize, minSpacing),
+              ),
+            );
+          } else {
+            // Fit all dots evenly
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _buildDots(theme, dotSize, null),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  List<Widget> _buildDots(ThemeData theme, double dotSize, double? spacing) {
+    final List<Widget> dots = [];
+
+    for (int i = 0; i < totalSteps; i++) {
+      final isCompleted = i < currentStep;
+      final isCurrent = i == currentStep;
+      final hasSelections = getSelectedCountForItem(data[i], selectedQuestions) > 0;
+
+      // Add connecting line before dot (except for first)
+      if (i > 0 && spacing != null) {
+        dots.add(
+          Container(
+            width: spacing,
+            height: 2,
+            color: i <= currentStep
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+          ),
+        );
+      } else if (i > 0) {
+        // For evenly spaced layout, add flexible line
+        dots.add(
+          Expanded(
+            child: Container(
+              height: 2,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              color: i <= currentStep
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.outlineVariant,
+            ),
+          ),
+        );
+      }
+
+      dots.add(
+        _MilestoneDot(
+          index: i,
+          size: dotSize,
+          isCompleted: isCompleted,
+          isCurrent: isCurrent,
+          hasSelections: hasSelections,
+          onTap: () => onStepTapped(i),
+        ),
+      );
+    }
+
+    return dots;
+  }
+}
+
+/// Individual milestone dot
+class _MilestoneDot extends StatelessWidget {
+  final int index;
+  final double size;
+  final bool isCompleted;
+  final bool isCurrent;
+  final bool hasSelections;
+  final VoidCallback onTap;
+
+  const _MilestoneDot({
+    required this.index,
+    required this.size,
+    required this.isCompleted,
+    required this.isCurrent,
+    required this.hasSelections,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Color backgroundColor;
+    Color borderColor;
+    Widget? child;
+
+    if (isCurrent) {
+      // Current step - highlighted
+      backgroundColor = theme.colorScheme.primary;
+      borderColor = theme.colorScheme.primary;
+      child = Text(
+        '${index + 1}',
+        style: TextStyle(
+          color: theme.colorScheme.onPrimary,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (isCompleted && hasSelections) {
+      // Completed with selections - checkmark
+      backgroundColor = theme.colorScheme.primary;
+      borderColor = theme.colorScheme.primary;
+      child = Icon(
+        Icons.check,
+        size: 12,
+        color: theme.colorScheme.onPrimary,
+      );
+    } else if (isCompleted) {
+      // Completed without selections - just filled
+      backgroundColor = theme.colorScheme.primary.withValues(alpha: 0.3);
+      borderColor = theme.colorScheme.primary;
+      child = null;
+    } else if (hasSelections) {
+      // Not reached yet but has selections (from previous session)
+      backgroundColor = theme.colorScheme.primaryContainer;
+      borderColor = theme.colorScheme.primary;
+      child = Icon(
+        Icons.check,
+        size: 12,
+        color: theme.colorScheme.primary,
+      );
+    } else {
+      // Not yet reached
+      backgroundColor = theme.colorScheme.surface;
+      borderColor = theme.colorScheme.outlineVariant;
+      child = null;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        HapticUtils.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: borderColor,
+            width: isCurrent ? 2.5 : 1.5,
+          ),
+          boxShadow: isCurrent
+              ? [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : null,
+        ),
+        child: Center(child: child),
       ),
     );
   }
