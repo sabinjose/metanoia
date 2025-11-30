@@ -13,65 +13,162 @@ The Confession App is a comprehensive digital companion designed to assist Catho
 ### 3.1 Onboarding
 - **Purpose**: Introduce the user to the app's value proposition and set up essential preferences.
 - **Flow**:
-    1.  **Welcome Screen**: Brief introduction.
-    2.  **Language Selection**: Choose the preferred language for UI and content (e.g., English, Malayalam).
-    3.  **Security Setup**: Option to set up a PIN or biometric authentication for privacy.
-    4.  **Feature Overview**: Quick walkthrough of key features.
+    1. **Welcome Screen**: Brief introduction with app overview
+    2. **Language Selection**: Choose preferred language (English, Malayalam, or System default)
+    3. **Security Setup**: Option to set up biometric authentication for privacy
+    4. **Feature Overview**: Quick walkthrough of key features with tutorial
+    5. **Completion Tracking**: Onboarding status persisted via SharedPreferences
 
 ### 3.2 Home / Dashboard
 - **Purpose**: Central hub for accessing all app features.
 - **Components**:
-    - **Quick Actions**: "Start Examination", "Go to Confession".
-    - **Daily Quote**: Inspirational Catholic quote.
-    - **Navigation**: Access to Guide, Prayers, Settings, and History.
+    - **Daily Quote Card**: Random inspirational quote with Merriweather italic font
+    - **Quick Actions Grid** (2x2 layout):
+        - Examine Conscience (primary container)
+        - Confess (secondary/gold container)
+        - Prayers (tertiary container)
+        - Guide (surface container)
+    - **Info Cards**:
+        - Last Confession date display
+        - Next Reminder schedule
+    - **Animations**: fadeIn, scale, slideY with staggered delays using flutter_animate
+    - **Tutorial Integration**: ShowCaseView with step-by-step guides for first-time users
 
 ### 3.3 Examination of Conscience
 - **Purpose**: Help users identify their sins based on Catholic teachings.
 - **Functionality**:
-    - **Guided Flow**: Step-by-step examination based on the Ten Commandments and Precepts of the Church.
-    - **Questionnaire**: Yes/No questions for each commandment to prompt reflection.
-    - **Custom Items**: Ability to add custom sins or notes.
-    - **Progress Tracking**: Visual indicator of progress through the commandments.
-    - **Outcome**: Generates a list of sins to be confessed.
+    - **Search/Filter**: Find specific commandments or questions
+    - **Progress Tracking**: Visual counter showing selected items
+    - **Commandments List**: Expandable/collapsible sections by commandment
+    - **Question Selection**: Yes/No style questions for reflection
+    - **Draft Restore**: Automatic restoration from previous session with snackbar notification
+    - **Custom Sins**: Add personal sin notes linked to specific commandments
+    - **Actions**: Save draft, proceed to confession
 
-### 3.4 Confession Mode
+### 3.4 Custom Sins Management
+- **Purpose**: Allow users to add personal sins not covered by standard questions.
+- **Functionality**:
+    - **CRUD Operations**: Add, edit, delete custom sins
+    - **Commandment Linking**: Optional association with specific commandments
+    - **Note Field**: Additional context for each custom sin
+    - **Database Persistence**: Stored in UserCustomSins table
+    - **Dialog Interface**: Clean modal dialog for add/edit operations
+
+### 3.5 Confession Mode
 - **Purpose**: Assist the user during the actual sacrament.
 - **Functionality**:
-    - **Step-by-Step Guide**: Walkthrough of the ritual (Greeting, Confession of Sins, Act of Contrition, Absolution, Penance).
-    - **Sin List**: Display the list of sins identified during the examination.
-    - **Prayers**: Quick access to the Act of Contrition and other necessary prayers.
-    - **Text Size Control**: Adjustable text size for readability in dim confessionals.
+    - **Empty State**: Prompt to start examination if no active session
+    - **Sin List Display**: Card-based layout with numbered items
+    - **Step-by-Step Guide**: Prayer prompts and ritual walkthrough (Greeting, Confession, Act of Contrition, Absolution, Penance)
+    - **Prayers**: Quick access to Act of Contrition and necessary prayers
+    - **Completion**: Mark confession as finished with timestamp
+    - **History Access**: Navigate to past confessions
 
-### 3.5 Spiritual Guide & Resources
+### 3.6 Confession History
+- **Purpose**: Track spiritual journey privately.
+- **Functionality**:
+    - **Paginated List**: Chronological list of past confessions
+    - **Date & Status**: Display confession date and completion status
+    - **Detail View**: Open and view individual confession details
+    - **Optional Clearing**: Clear history based on user settings (KeepHistorySettings)
+    - **Privacy**: All history stored locally and encrypted
+
+### 3.7 Spiritual Guide & Resources
 - **Purpose**: Educate users about the sacrament.
 - **Content**:
-    - **FAQs**: Common questions about confession (What is it? How often? etc.).
-    - **Teachings**: Explanations from the Catechism and Church Fathers.
-    - **Prayers**: Collection of prayers relevant to repentance and thanksgiving.
+    - **Guide Screen**: Main educational content hub
+    - **FAQ Section**: Common questions with expandable answers
+    - **Prayers Screen**: Collection of prayers (Act of Contrition, etc.)
+    - **Teachings**: Catechism excerpts and Church guidance
+    - **Search Functionality**: Find specific content
+    - **Expandable Cards**: Clean, distraction-free content display
 
-### 3.6 History & Progress
-- **Purpose**: Track spiritual journey (privately).
-- **Functionality**:
-    - **Confession Log**: List of past confessions (date, time).
-    - **Status**: Mark confessions as "Completed".
-    - **Privacy**: All history is stored locally and encrypted.
-
-### 3.7 Settings
+### 3.8 Settings
 - **Purpose**: Customize the app experience.
 - **Options**:
-    - **Language**: Change app language.
-    - **Theme**: Light/Dark mode toggle.
-    - **Security**: Change PIN, enable/disable biometrics.
-    - **Data Management**: Clear all data, reset app.
-    - **Notifications**: Reminders for regular confession.
+    - **Theme Toggle**: Light/Dark/System mode with ThemeModeController
+    - **Language Selection**:
+        - App UI language (Locale)
+        - Content language (separate selection for examination/prayers)
+    - **Reminder Settings**:
+        - Frequency configuration
+        - Day of week selection
+        - Time setting
+        - Advance notification days
+    - **Data Management**:
+        - Clear confession history
+        - Keep history toggle
+        - Reset app option
+    - **About Screen**: App version, attributions, information
 
-## 4. User Experience (UX) Principles
-- **Privacy First**: Emphasize that data is stored locally and encrypted.
-- **Simplicity**: Clean, distraction-free interface suitable for prayerful reflection.
-- **Accessibility**: Support for dynamic text sizes and clear contrast.
-- **Personalization**: "User should feel personal" (as per design goals).
+## 4. Navigation Structure
 
-## 5. Content Strategy
-- **Source**: Content is derived from the Catechism of the Catholic Church, liturgical books, and approved Catholic resources.
-- **Localization**: Support for multiple languages (initially English and Malayalam) with the ability to expand.
-- **Updates**: Content is versioned and can be updated via app updates.
+```
+/ (Home - Branch 0)
+├── /examine (Examination - Branch 1)
+│   └── examine/custom-sins (Modal)
+├── /confess (Confession - Branch 2)
+│   └── confess/history (Modal)
+├── /guide (Guide - Branch 3)
+│   ├── guide/faq (Modal)
+│   └── guide/prayers (Modal)
+├── /settings (Modal)
+│   └── settings/about
+└── /onboarding (Conditional redirect for first-time users)
+```
+
+**Navigation Pattern**:
+- StatefulShellRoute for bottom nav persistence
+- Branch-specific navigator keys
+- NoTransitionPage for bottom nav items (instant switch)
+- Modal pages fade in with context.push()
+
+## 5. User Experience (UX) Principles
+- **Privacy First**: All data stored locally and encrypted with SQLCipher
+- **Simplicity**: Clean, distraction-free interface suitable for prayerful reflection
+- **Accessibility**: Support for dynamic text sizes and clear contrast
+- **Personalization**: User-centric, contemplative experience
+- **Dark Mode**: Full theme support without hardcoded colors
+- **Animations**: Subtle, respectful animations that enhance without distracting
+
+## 6. Animation & Transition Patterns
+
+### flutter_animate Usage
+```dart
+.animate().fadeIn()                    // Fade in effect
+.animate().slideY(begin: 0.2, end: 0)  // Slide from bottom
+.animate().scale(begin: 0.95)          // Scale from smaller
+.animate().fadeIn(delay: 200.ms)       // Staggered delays
+```
+
+### Page Transitions
+- **Android**: FadeUpwardsPageTransitionsBuilder
+- **iOS/macOS**: CupertinoPageTransitionsBuilder
+
+## 7. Content Strategy
+- **Source**: Content derived from Catechism of the Catholic Church, liturgical books, and approved Catholic resources
+- **Localization**:
+    - English (en) and Malayalam (ml) supported
+    - UI strings via flutter_localizations
+    - Content stored in database with languageCode column
+- **Asset Structure**:
+    ```
+    assets/data/
+    ├── commandments/commandments_{lang}.json
+    ├── questions/questions_{lang}.json
+    ├── faqs/faqs_{lang}.json
+    ├── quotes/quotes_{lang}.json
+    ├── prayers/prayers_{lang}.json
+    └── guide/guide_{lang}.json
+    ```
+- **Data Sync**: DataLoader syncs JSON assets to database on app start/update
+
+## 8. Tutorial System
+- **ShowCaseView Integration**: First-run tutorial with step-by-step guides
+- **AppShowcase Widget**:
+    - Custom tooltip with gradient header
+    - Progress indicators (dots)
+    - Navigation buttons (Previous/Continue)
+    - Dynamic blur and overlay (70-80% opacity)
+    - Responsive constraints (85% max width)
+- **Tutorial Controller**: Manages first-run tutorial flags via SharedPreferences

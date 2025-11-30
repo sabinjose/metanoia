@@ -43,9 +43,21 @@ class ExaminationController extends _$ExaminationController {
             ..where((t) => t.confessionId.equals(draft.id))).get();
 
       // Convert items back to Map<int, String>
+      // For custom sins, we use negative IDs (e.g., -customSinId)
       final Map<int, String> loadedState = {};
       for (var item in items) {
-        if (item.questionId != null) {
+        if (item.isCustom && item.note != null) {
+          // Custom sin stored with its ID in the note field
+          try {
+            final customSinId = int.parse(item.note!);
+            loadedState[-customSinId] = item.content;
+          } catch (_) {
+            // If parsing fails, treat as regular item
+            if (item.questionId != null) {
+              loadedState[item.questionId!] = item.content;
+            }
+          }
+        } else if (item.questionId != null) {
           loadedState[item.questionId!] = item.content;
         }
       }
@@ -103,11 +115,22 @@ class ExaminationController extends _$ExaminationController {
     if (state.isNotEmpty) {
       final items =
           state.entries.map((entry) {
-            return ConfessionItemsCompanion.insert(
-              confessionId: _draftConfessionId!,
-              questionId: Value(entry.key),
-              content: entry.value,
-            );
+            // Negative IDs are custom sins
+            if (entry.key < 0) {
+              return ConfessionItemsCompanion.insert(
+                confessionId: _draftConfessionId!,
+                content: entry.value,
+                isCustom: const Value(true),
+                // Store the custom sin ID in the note field
+                note: Value((-entry.key).toString()),
+              );
+            } else {
+              return ConfessionItemsCompanion.insert(
+                confessionId: _draftConfessionId!,
+                questionId: Value(entry.key),
+                content: entry.value,
+              );
+            }
           }).toList();
 
       await db.batch((batch) {
@@ -142,11 +165,22 @@ class ExaminationController extends _$ExaminationController {
 
       final items =
           state.entries.map((entry) {
-            return ConfessionItemsCompanion.insert(
-              confessionId: confessionId,
-              questionId: Value(entry.key),
-              content: entry.value,
-            );
+            // Negative IDs are custom sins
+            if (entry.key < 0) {
+              return ConfessionItemsCompanion.insert(
+                confessionId: confessionId,
+                content: entry.value,
+                isCustom: const Value(true),
+                // Store the custom sin ID in the note field
+                note: Value((-entry.key).toString()),
+              );
+            } else {
+              return ConfessionItemsCompanion.insert(
+                confessionId: confessionId,
+                questionId: Value(entry.key),
+                content: entry.value,
+              );
+            }
           }).toList();
 
       await db.batch((batch) {

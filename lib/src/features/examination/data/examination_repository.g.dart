@@ -26,7 +26,7 @@ final examinationRepositoryProvider =
 // ignore: unused_element
 typedef ExaminationRepositoryRef
     = AutoDisposeProviderRef<ExaminationRepository>;
-String _$examinationDataHash() => r'6627c521aabdf48e1d08999e4b65bfe602706709';
+String _$examinationDataHash() => r'50652def51b890eeb5eb8a8a4b23e64bccb48362';
 
 /// See also [examinationData].
 @ProviderFor(examinationData)

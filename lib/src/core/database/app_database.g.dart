@@ -2703,6 +2703,401 @@ class PrayersCompanion extends UpdateCompanion<Prayer> {
   }
 }
 
+class $UserCustomSinsTable extends UserCustomSins
+    with TableInfo<$UserCustomSinsTable, UserCustomSin> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserCustomSinsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _sinTextMeta =
+      const VerificationMeta('sinText');
+  @override
+  late final GeneratedColumn<String> sinText = GeneratedColumn<String>(
+      'sin_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _commandmentCodeMeta =
+      const VerificationMeta('commandmentCode');
+  @override
+  late final GeneratedColumn<String> commandmentCode = GeneratedColumn<String>(
+      'commandment_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _originalQuestionIdMeta =
+      const VerificationMeta('originalQuestionId');
+  @override
+  late final GeneratedColumn<int> originalQuestionId = GeneratedColumn<int>(
+      'original_question_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES examination_questions (id)'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        sinText,
+        note,
+        commandmentCode,
+        originalQuestionId,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_custom_sins';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserCustomSin> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('sin_text')) {
+      context.handle(_sinTextMeta,
+          sinText.isAcceptableOrUnknown(data['sin_text']!, _sinTextMeta));
+    } else if (isInserting) {
+      context.missing(_sinTextMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
+    if (data.containsKey('commandment_code')) {
+      context.handle(
+          _commandmentCodeMeta,
+          commandmentCode.isAcceptableOrUnknown(
+              data['commandment_code']!, _commandmentCodeMeta));
+    }
+    if (data.containsKey('original_question_id')) {
+      context.handle(
+          _originalQuestionIdMeta,
+          originalQuestionId.isAcceptableOrUnknown(
+              data['original_question_id']!, _originalQuestionIdMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserCustomSin map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserCustomSin(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      sinText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sin_text'])!,
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note']),
+      commandmentCode: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}commandment_code']),
+      originalQuestionId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}original_question_id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+    );
+  }
+
+  @override
+  $UserCustomSinsTable createAlias(String alias) {
+    return $UserCustomSinsTable(attachedDatabase, alias);
+  }
+}
+
+class UserCustomSin extends DataClass implements Insertable<UserCustomSin> {
+  final int id;
+  final String sinText;
+  final String? note;
+  final String? commandmentCode;
+  final int? originalQuestionId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const UserCustomSin(
+      {required this.id,
+      required this.sinText,
+      this.note,
+      this.commandmentCode,
+      this.originalQuestionId,
+      required this.createdAt,
+      required this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['sin_text'] = Variable<String>(sinText);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    if (!nullToAbsent || commandmentCode != null) {
+      map['commandment_code'] = Variable<String>(commandmentCode);
+    }
+    if (!nullToAbsent || originalQuestionId != null) {
+      map['original_question_id'] = Variable<int>(originalQuestionId);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  UserCustomSinsCompanion toCompanion(bool nullToAbsent) {
+    return UserCustomSinsCompanion(
+      id: Value(id),
+      sinText: Value(sinText),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      commandmentCode: commandmentCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(commandmentCode),
+      originalQuestionId: originalQuestionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalQuestionId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory UserCustomSin.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserCustomSin(
+      id: serializer.fromJson<int>(json['id']),
+      sinText: serializer.fromJson<String>(json['sinText']),
+      note: serializer.fromJson<String?>(json['note']),
+      commandmentCode: serializer.fromJson<String?>(json['commandmentCode']),
+      originalQuestionId: serializer.fromJson<int?>(json['originalQuestionId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'sinText': serializer.toJson<String>(sinText),
+      'note': serializer.toJson<String?>(note),
+      'commandmentCode': serializer.toJson<String?>(commandmentCode),
+      'originalQuestionId': serializer.toJson<int?>(originalQuestionId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  UserCustomSin copyWith(
+          {int? id,
+          String? sinText,
+          Value<String?> note = const Value.absent(),
+          Value<String?> commandmentCode = const Value.absent(),
+          Value<int?> originalQuestionId = const Value.absent(),
+          DateTime? createdAt,
+          DateTime? updatedAt}) =>
+      UserCustomSin(
+        id: id ?? this.id,
+        sinText: sinText ?? this.sinText,
+        note: note.present ? note.value : this.note,
+        commandmentCode: commandmentCode.present
+            ? commandmentCode.value
+            : this.commandmentCode,
+        originalQuestionId: originalQuestionId.present
+            ? originalQuestionId.value
+            : this.originalQuestionId,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+  UserCustomSin copyWithCompanion(UserCustomSinsCompanion data) {
+    return UserCustomSin(
+      id: data.id.present ? data.id.value : this.id,
+      sinText: data.sinText.present ? data.sinText.value : this.sinText,
+      note: data.note.present ? data.note.value : this.note,
+      commandmentCode: data.commandmentCode.present
+          ? data.commandmentCode.value
+          : this.commandmentCode,
+      originalQuestionId: data.originalQuestionId.present
+          ? data.originalQuestionId.value
+          : this.originalQuestionId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserCustomSin(')
+          ..write('id: $id, ')
+          ..write('sinText: $sinText, ')
+          ..write('note: $note, ')
+          ..write('commandmentCode: $commandmentCode, ')
+          ..write('originalQuestionId: $originalQuestionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, sinText, note, commandmentCode,
+      originalQuestionId, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserCustomSin &&
+          other.id == this.id &&
+          other.sinText == this.sinText &&
+          other.note == this.note &&
+          other.commandmentCode == this.commandmentCode &&
+          other.originalQuestionId == this.originalQuestionId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class UserCustomSinsCompanion extends UpdateCompanion<UserCustomSin> {
+  final Value<int> id;
+  final Value<String> sinText;
+  final Value<String?> note;
+  final Value<String?> commandmentCode;
+  final Value<int?> originalQuestionId;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  const UserCustomSinsCompanion({
+    this.id = const Value.absent(),
+    this.sinText = const Value.absent(),
+    this.note = const Value.absent(),
+    this.commandmentCode = const Value.absent(),
+    this.originalQuestionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  UserCustomSinsCompanion.insert({
+    this.id = const Value.absent(),
+    required String sinText,
+    this.note = const Value.absent(),
+    this.commandmentCode = const Value.absent(),
+    this.originalQuestionId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : sinText = Value(sinText);
+  static Insertable<UserCustomSin> custom({
+    Expression<int>? id,
+    Expression<String>? sinText,
+    Expression<String>? note,
+    Expression<String>? commandmentCode,
+    Expression<int>? originalQuestionId,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sinText != null) 'sin_text': sinText,
+      if (note != null) 'note': note,
+      if (commandmentCode != null) 'commandment_code': commandmentCode,
+      if (originalQuestionId != null)
+        'original_question_id': originalQuestionId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  UserCustomSinsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? sinText,
+      Value<String?>? note,
+      Value<String?>? commandmentCode,
+      Value<int?>? originalQuestionId,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? updatedAt}) {
+    return UserCustomSinsCompanion(
+      id: id ?? this.id,
+      sinText: sinText ?? this.sinText,
+      note: note ?? this.note,
+      commandmentCode: commandmentCode ?? this.commandmentCode,
+      originalQuestionId: originalQuestionId ?? this.originalQuestionId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (sinText.present) {
+      map['sin_text'] = Variable<String>(sinText.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (commandmentCode.present) {
+      map['commandment_code'] = Variable<String>(commandmentCode.value);
+    }
+    if (originalQuestionId.present) {
+      map['original_question_id'] = Variable<int>(originalQuestionId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserCustomSinsCompanion(')
+          ..write('id: $id, ')
+          ..write('sinText: $sinText, ')
+          ..write('note: $note, ')
+          ..write('commandmentCode: $commandmentCode, ')
+          ..write('originalQuestionId: $originalQuestionId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2717,6 +3112,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UserSettingsTable userSettings = $UserSettingsTable(this);
   late final $GuideItemsTable guideItems = $GuideItemsTable(this);
   late final $PrayersTable prayers = $PrayersTable(this);
+  late final $UserCustomSinsTable userCustomSins = $UserCustomSinsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2730,7 +3126,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         confessionItems,
         userSettings,
         guideItems,
-        prayers
+        prayers,
+        userCustomSins
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -3002,6 +3399,19 @@ class $$ExaminationQuestionsTableFilterComposer
             builder: (joinBuilder, parentComposers) =>
                 $$ConfessionItemsTableFilterComposer(ComposerState($state.db,
                     $state.db.confessionItems, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter userCustomSinsRefs(
+      ComposableFilter Function($$UserCustomSinsTableFilterComposer f) f) {
+    final $$UserCustomSinsTableFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.userCustomSins,
+        getReferencedColumn: (t) => t.originalQuestionId,
+        builder: (joinBuilder, parentComposers) =>
+            $$UserCustomSinsTableFilterComposer(ComposerState($state.db,
+                $state.db.userCustomSins, joinBuilder, parentComposers)));
     return f(composer);
   }
 }
@@ -3918,6 +4328,183 @@ class $$PrayersTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$UserCustomSinsTableCreateCompanionBuilder = UserCustomSinsCompanion
+    Function({
+  Value<int> id,
+  required String sinText,
+  Value<String?> note,
+  Value<String?> commandmentCode,
+  Value<int?> originalQuestionId,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
+typedef $$UserCustomSinsTableUpdateCompanionBuilder = UserCustomSinsCompanion
+    Function({
+  Value<int> id,
+  Value<String> sinText,
+  Value<String?> note,
+  Value<String?> commandmentCode,
+  Value<int?> originalQuestionId,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
+
+class $$UserCustomSinsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $UserCustomSinsTable,
+    UserCustomSin,
+    $$UserCustomSinsTableFilterComposer,
+    $$UserCustomSinsTableOrderingComposer,
+    $$UserCustomSinsTableCreateCompanionBuilder,
+    $$UserCustomSinsTableUpdateCompanionBuilder> {
+  $$UserCustomSinsTableTableManager(
+      _$AppDatabase db, $UserCustomSinsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$UserCustomSinsTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$UserCustomSinsTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> sinText = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<String?> commandmentCode = const Value.absent(),
+            Value<int?> originalQuestionId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+          }) =>
+              UserCustomSinsCompanion(
+            id: id,
+            sinText: sinText,
+            note: note,
+            commandmentCode: commandmentCode,
+            originalQuestionId: originalQuestionId,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String sinText,
+            Value<String?> note = const Value.absent(),
+            Value<String?> commandmentCode = const Value.absent(),
+            Value<int?> originalQuestionId = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+          }) =>
+              UserCustomSinsCompanion.insert(
+            id: id,
+            sinText: sinText,
+            note: note,
+            commandmentCode: commandmentCode,
+            originalQuestionId: originalQuestionId,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+        ));
+}
+
+class $$UserCustomSinsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $UserCustomSinsTable> {
+  $$UserCustomSinsTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get sinText => $state.composableBuilder(
+      column: $state.table.sinText,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get note => $state.composableBuilder(
+      column: $state.table.note,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get commandmentCode => $state.composableBuilder(
+      column: $state.table.commandmentCode,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $$ExaminationQuestionsTableFilterComposer get originalQuestionId {
+    final $$ExaminationQuestionsTableFilterComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.originalQuestionId,
+            referencedTable: $state.db.examinationQuestions,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ExaminationQuestionsTableFilterComposer(ComposerState(
+                    $state.db,
+                    $state.db.examinationQuestions,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
+class $$UserCustomSinsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $UserCustomSinsTable> {
+  $$UserCustomSinsTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get sinText => $state.composableBuilder(
+      column: $state.table.sinText,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get note => $state.composableBuilder(
+      column: $state.table.note,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get commandmentCode => $state.composableBuilder(
+      column: $state.table.commandmentCode,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
+      column: $state.table.createdAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
+      column: $state.table.updatedAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $$ExaminationQuestionsTableOrderingComposer get originalQuestionId {
+    final $$ExaminationQuestionsTableOrderingComposer composer =
+        $state.composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.originalQuestionId,
+            referencedTable: $state.db.examinationQuestions,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder, parentComposers) =>
+                $$ExaminationQuestionsTableOrderingComposer(ComposerState(
+                    $state.db,
+                    $state.db.examinationQuestions,
+                    joinBuilder,
+                    parentComposers)));
+    return composer;
+  }
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -3938,4 +4525,6 @@ class $AppDatabaseManager {
       $$GuideItemsTableTableManager(_db, _db.guideItems);
   $$PrayersTableTableManager get prayers =>
       $$PrayersTableTableManager(_db, _db.prayers);
+  $$UserCustomSinsTableTableManager get userCustomSins =>
+      $$UserCustomSinsTableTableManager(_db, _db.userCustomSins);
 }

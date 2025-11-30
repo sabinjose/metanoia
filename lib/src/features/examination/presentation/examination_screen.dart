@@ -1,5 +1,9 @@
+import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
+import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
+import 'package:confessionapp/src/features/examination/presentation/widgets/custom_sin_dialog.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -36,6 +40,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
   bool _hasShownRestoreSnackbar = false;
   final GlobalKey _searchKey = GlobalKey();
   final GlobalKey _checkKey = GlobalKey();
+  final GlobalKey _addCustomKey = GlobalKey();
 
   @override
   void initState() {
@@ -71,7 +76,11 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
     if (shouldShow && mounted) {
       // ignore: deprecated_member_use
-      ShowCaseWidget.of(context).startShowCase([_searchKey, _checkKey]);
+      ShowCaseWidget.of(context).startShowCase([
+        _searchKey,
+        _addCustomKey,
+        _checkKey,
+      ]);
       await controller.markExaminationTutorialShown();
     }
   }
@@ -155,10 +164,22 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                 if (confirmed == true && context.mounted) {
                   await controller.clearDraft();
                 }
+              } else if (value == 'custom_sins') {
+                context.push('/examine/custom-sins');
               }
             },
             itemBuilder:
                 (context) => [
+                  PopupMenuItem(
+                    value: 'custom_sins',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.note_add),
+                        const SizedBox(width: 8),
+                        Text(l10n.manageCustomSins),
+                      ],
+                    ),
+                  ),
                   if (selectedQuestions.isNotEmpty)
                     const PopupMenuItem(
                       value: 'clear',
@@ -177,8 +198,8 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
             title: l10n.finishConfession,
             description: l10n.tutorialFinishDesc,
             shapeBorder: const CircleBorder(),
-            currentStep: 2,
-            totalSteps: 2,
+            currentStep: 3,
+            totalSteps: 3,
             child: IconButton(
               icon: const Icon(Icons.check),
               onPressed:
@@ -212,7 +233,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                 borderRadius: BorderRadius.circular(16),
               ),
               currentStep: 1,
-              totalSteps: 2,
+              totalSteps: 3,
               child: TextField(
                 decoration: InputDecoration(
                   hintText: l10n.searchPlaceholder,
@@ -295,191 +316,335 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                   itemBuilder: (context, index) {
                     final item = filteredData[index];
                     final commandmentQuestions = item.questions;
-                    final selectedCount =
+                    final commandmentCustomSins = item.customSins;
+
+                    // Count selected questions
+                    final selectedQuestionsCount =
                         commandmentQuestions
                             .where((q) => selectedQuestions.containsKey(q.id))
                             .length;
 
+                    // Count selected custom sins (using negative IDs)
+                    final selectedCustomSinsCount =
+                        commandmentCustomSins
+                            .where((s) => selectedQuestions.containsKey(-s.id))
+                            .length;
+
+                    final selectedCount =
+                        selectedQuestionsCount + selectedCustomSinsCount;
+                    final totalCount =
+                        commandmentQuestions.length +
+                        commandmentCustomSins.length;
+
                     return Card(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      elevation: 0,
-                      color: Theme.of(context).colorScheme.surface,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                          width: 1,
-                        ),
-                      ),
-                      child: Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          tilePadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          elevation: 0,
+                          color: Theme.of(context).colorScheme.surface,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
+                            ),
                           ),
-                          title: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  item.commandment.customTitle ??
-                                      '${l10n.commandment} ${item.commandment.commandmentNo}',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.titleMedium?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: Theme(
+                            data: Theme.of(
+                              context,
+                            ).copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              tilePadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
                               ),
-                              if (selectedCount > 0)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).colorScheme.primaryContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    '$selectedCount/${commandmentQuestions.length}',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelSmall?.copyWith(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimaryContainer,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          subtitle:
-                              (item.commandment.customTitle != null &&
-                                      item.commandment.customTitle ==
-                                          item.commandment.content)
-                                  ? null
-                                  : Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
+                              title: Row(
+                                children: [
+                                  Expanded(
                                     child: Text(
-                                      item.commandment.content,
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium,
+                                      item.commandment.customTitle ??
+                                          '${l10n.commandment} ${item.commandment.commandmentNo}',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium?.copyWith(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                          children:
-                              commandmentQuestions.map((q) {
-                                final isSelected = selectedQuestions
-                                    .containsKey(q.id);
-                                return Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {
-                                      if (!isSelected) {
-                                        ref
-                                            .read(
-                                              examinationControllerProvider
-                                                  .notifier,
-                                            )
-                                            .selectQuestion(q.id, q.question);
-                                      } else {
-                                        ref
-                                            .read(
-                                              examinationControllerProvider
-                                                  .notifier,
-                                            )
-                                            .unselectQuestion(q.id);
-                                      }
-                                    },
-                                    child: Container(
+                                  if (selectedCount > 0)
+                                    Container(
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 12,
+                                        horizontal: 10,
+                                        vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
                                         color:
-                                            isSelected
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primaryContainer
-                                                    .withValues(alpha: 0.3)
-                                                : null,
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outlineVariant
-                                                .withValues(alpha: 0.5),
-                                            width: 0.5,
-                                          ),
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primaryContainer,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        '$selectedCount/$totalCount',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelSmall?.copyWith(
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimaryContainer,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              top: 2.0,
-                                            ),
-                                            child: Icon(
+                                    ),
+                                ],
+                              ),
+                              subtitle:
+                                  (item.commandment.customTitle != null &&
+                                          item.commandment.customTitle ==
+                                              item.commandment.content)
+                                      ? null
+                                      : Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                        ),
+                                        child: Text(
+                                          item.commandment.content,
+                                          style:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium,
+                                        ),
+                                      ),
+                              children: [
+                                // Standard questions
+                                ...commandmentQuestions.map((q) {
+                                  final isSelected = selectedQuestions
+                                      .containsKey(q.id);
+                                  return Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (!isSelected) {
+                                          ref
+                                              .read(
+                                                examinationControllerProvider
+                                                    .notifier,
+                                              )
+                                              .selectQuestion(q.id, q.question);
+                                        } else {
+                                          ref
+                                              .read(
+                                                examinationControllerProvider
+                                                    .notifier,
+                                              )
+                                              .unselectQuestion(q.id);
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
                                               isSelected
-                                                  ? Icons.check_box
-                                                  : Icons
-                                                      .check_box_outline_blank,
-                                              color:
-                                                  isSelected
-                                                      ? Theme.of(
-                                                        context,
-                                                      ).colorScheme.primary
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurfaceVariant,
-                                              size: 24,
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer
+                                                      .withValues(alpha: 0.3)
+                                                  : null,
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outlineVariant
+                                                  .withValues(alpha: 0.5),
+                                              width: 0.5,
                                             ),
                                           ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Text(
-                                              q.question,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.bodyLarge?.copyWith(
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 2.0,
+                                              ),
+                                              child: Icon(
+                                                isSelected
+                                                    ? Icons.check_box
+                                                    : Icons
+                                                        .check_box_outline_blank,
                                                 color:
                                                     isSelected
                                                         ? Theme.of(
                                                           context,
-                                                        ).colorScheme.onSurface
+                                                        ).colorScheme.primary
                                                         : Theme.of(context)
                                                             .colorScheme
                                                             .onSurfaceVariant,
-                                                fontWeight:
-                                                    isSelected
-                                                        ? FontWeight.w500
-                                                        : FontWeight.normal,
+                                                size: 24,
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: Text(
+                                                q.question,
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyLarge?.copyWith(
+                                                  color:
+                                                      isSelected
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurfaceVariant,
+                                                  fontWeight:
+                                                      isSelected
+                                                          ? FontWeight.w500
+                                                          : FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }).toList(),
-                        ),
-                      ),
-                    ).animate().fadeIn(delay: (50 * index).ms).slideY(begin: 0.1, end: 0);
+                                  );
+                                }).toList(),
+                                // Custom sins for this commandment
+                                ...item.customSins.map((customSin) {
+                                  // Use negative ID for custom sins
+                                  final customSinId = -customSin.id;
+                                  final isSelected = selectedQuestions
+                                      .containsKey(customSinId);
+                                  return Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (!isSelected) {
+                                          ref
+                                              .read(
+                                                examinationControllerProvider
+                                                    .notifier,
+                                              )
+                                              .selectQuestion(
+                                                customSinId,
+                                                customSin.sinText,
+                                              );
+                                        } else {
+                                          ref
+                                              .read(
+                                                examinationControllerProvider
+                                                    .notifier,
+                                              )
+                                              .unselectQuestion(customSinId);
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              isSelected
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .secondaryContainer
+                                                      .withValues(alpha: 0.3)
+                                                  : null,
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outlineVariant
+                                                  .withValues(alpha: 0.5),
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 2.0,
+                                              ),
+                                              child: Icon(
+                                                isSelected
+                                                    ? Icons.check_box
+                                                    : Icons
+                                                        .check_box_outline_blank,
+                                                color:
+                                                    isSelected
+                                                        ? Theme.of(
+                                                          context,
+                                                        ).colorScheme.secondary
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurfaceVariant,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Icon(
+                                              Icons.auto_awesome,
+                                              size: 16,
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.secondary,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Text(
+                                                customSin.sinText,
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyLarge?.copyWith(
+                                                  color:
+                                                      isSelected
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurfaceVariant,
+                                                  fontWeight:
+                                                      isSelected
+                                                          ? FontWeight.w500
+                                                          : FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                // Add your own row - with tutorial showcase on first item only
+                                _buildAddYourOwnRow(
+                                  context,
+                                  item.commandment.code ?? 'general',
+                                  showShowcase: index == 0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                        .animate()
+                        .fadeIn(delay: (50 * index).ms)
+                        .slideY(begin: 0.1, end: 0);
                   },
                 );
               },
@@ -509,6 +674,119 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     } else {
       final days = difference.inDays;
       return 'Saved $days day${days == 1 ? '' : 's'} ago';
+    }
+  }
+
+  Widget _buildAddYourOwnRow(
+    BuildContext context,
+    String commandmentCode, {
+    bool showShowcase = false,
+  }) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    final row = Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _showAddCustomSinDialog(context, commandmentCode),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 14,
+          ),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.15),
+            border: Border(
+              top: BorderSide(
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                width: 0.5,
+              ),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.add_circle_outline,
+                color: theme.colorScheme.secondary,
+                size: 24,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  l10n.addYourOwn,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.secondary,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.secondary.withValues(alpha: 0.7),
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (showShowcase) {
+      return AppShowcase(
+        showcaseKey: _addCustomKey,
+        title: l10n.addCustomSin,
+        description: l10n.tutorialCustomSinDesc,
+        shapeBorder: const RoundedRectangleBorder(),
+        currentStep: 2,
+        totalSteps: 3,
+        child: row,
+      );
+    }
+
+    return row;
+  }
+
+  Future<void> _showAddCustomSinDialog(
+    BuildContext context,
+    String commandmentCode,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final result = await showDialog<UserCustomSinsCompanion>(
+      context: context,
+      builder: (context) => const CustomSinDialog(),
+    );
+
+    if (result != null && mounted) {
+      try {
+        final repository = ref.read(userCustomSinsRepositoryProvider);
+
+        // Override the commandment code with the one from the current section
+        final updatedResult = UserCustomSinsCompanion(
+          sinText: result.sinText,
+          note: result.note,
+          commandmentCode: drift.Value(commandmentCode),
+          originalQuestionId: result.originalQuestionId,
+        );
+
+        await repository.insertCustomSin(updatedResult);
+
+        if (mounted) {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(content: Text(l10n.customSinAdded)),
+          );
+          // Refresh the examination data
+          ref.invalidate(examinationDataProvider);
+        }
+      } catch (e) {
+        if (mounted) {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(content: Text('${l10n.error}: $e')),
+          );
+        }
+      }
     }
   }
 }

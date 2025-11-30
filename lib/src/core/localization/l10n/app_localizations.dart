@@ -766,6 +766,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get nextButton;
+
+  /// No description provided for @customSins.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Sins'**
+  String get customSins;
+
+  /// No description provided for @manageCustomSins.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Custom Sins'**
+  String get manageCustomSins;
+
+  /// No description provided for @addCustomSin.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Sin'**
+  String get addCustomSin;
+
+  /// No description provided for @editCustomSin.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Custom Sin'**
+  String get editCustomSin;
+
+  /// No description provided for @deleteCustomSin.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Custom Sin'**
+  String get deleteCustomSin;
+
+  /// No description provided for @sinDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Sin Description'**
+  String get sinDescription;
+
+  /// No description provided for @sinDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the sin you want to remember'**
+  String get sinDescriptionHint;
+
+  /// No description provided for @sinDescriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a sin description'**
+  String get sinDescriptionRequired;
+
+  /// No description provided for @optionalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Note'**
+  String get optionalNote;
+
+  /// No description provided for @optionalNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add any additional details'**
+  String get optionalNoteHint;
+
+  /// No description provided for @selectCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Commandment (Optional)'**
+  String get selectCommandment;
+
+  /// No description provided for @noCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'General / No Commandment'**
+  String get noCommandment;
+
+  /// No description provided for @customSinAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom sin added'**
+  String get customSinAdded;
+
+  /// No description provided for @customSinUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom sin updated'**
+  String get customSinUpdated;
+
+  /// No description provided for @customSinDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom sin deleted'**
+  String get customSinDeleted;
+
+  /// No description provided for @deleteCustomSinConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this custom sin?'**
+  String get deleteCustomSinConfirm;
+
+  /// No description provided for @noCustomSins.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom sins yet'**
+  String get noCustomSins;
+
+  /// No description provided for @noCustomSinsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add custom sins to personalize your examination'**
+  String get noCustomSinsDesc;
+
+  /// No description provided for @customVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom (Edited)'**
+  String get customVersion;
+
+  /// No description provided for @searchCustomSins.
+  ///
+  /// In en, this message translates to:
+  /// **'Search custom sins...'**
+  String get searchCustomSins;
+
+  /// No description provided for @addButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addButton;
+
+  /// No description provided for @updateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get updateButton;
+
+  /// No description provided for @deleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
+  /// No description provided for @addYourOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your own...'**
+  String get addYourOwn;
+
+  /// No description provided for @tutorialCustomSinDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap here to add your own personal notes for this commandment.'**
+  String get tutorialCustomSinDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

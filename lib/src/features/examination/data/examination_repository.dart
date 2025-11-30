@@ -1,6 +1,7 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,10 +28,19 @@ Future<List<CommandmentWithQuestions>> examinationData(Ref ref) async {
         (tbl) => tbl.languageCode.equals(contentLanguage.languageCode),
       )).get();
 
+  // Get custom sins grouped by commandment
+  final customSinsRepo = ref.read(userCustomSinsRepositoryProvider);
+  final customSinsGrouped =
+      await customSinsRepo.getCustomSinsGroupedByCommandment();
+
   return commandments.map((c) {
     final relatedQuestions =
         questions.where((q) => q.commandmentId == c.id).toList();
-    return CommandmentWithQuestions(c, relatedQuestions);
+
+    // Get custom sins for this commandment
+    final customSins = customSinsGrouped[c.code] ?? [];
+
+    return CommandmentWithQuestions(c, relatedQuestions, customSins);
   }).toList();
 }
 
@@ -41,6 +51,7 @@ class ExaminationRepository {
 class CommandmentWithQuestions {
   final Commandment commandment;
   final List<ExaminationQuestion> questions;
+  final List<UserCustomSin> customSins;
 
-  CommandmentWithQuestions(this.commandment, this.questions);
+  CommandmentWithQuestions(this.commandment, this.questions, this.customSins);
 }

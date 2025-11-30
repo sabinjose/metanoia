@@ -349,4 +349,79 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get nextButton => 'അടുത്തത്';
+
+  @override
+  String get customSins => 'സ്വന്തം പാപങ്ങൾ';
+
+  @override
+  String get manageCustomSins => 'സ്വന്തം പാപങ്ങൾ കൈകാര്യം ചെയ്യുക';
+
+  @override
+  String get addCustomSin => 'പാപം ചേർക്കുക';
+
+  @override
+  String get editCustomSin => 'പാപം തിരുത്തുക';
+
+  @override
+  String get deleteCustomSin => 'പാപം നീക്കം ചെയ്യുക';
+
+  @override
+  String get sinDescription => 'പാപത്തിന്റെ വിവരണം';
+
+  @override
+  String get sinDescriptionHint => 'നിങ്ങൾ ഓർക്കാൻ ആഗ്രഹിക്കുന്ന പാപം വിവരിക്കുക';
+
+  @override
+  String get sinDescriptionRequired => 'ദയവായി പാപത്തിന്റെ വിവരണം നൽകുക';
+
+  @override
+  String get optionalNote => 'അധിക വിവരം (ഓപ്ഷണൽ)';
+
+  @override
+  String get optionalNoteHint => 'അധിക വിശദാംശങ്ങൾ ചേർക്കുക';
+
+  @override
+  String get selectCommandment => 'കൽപ്പന തിരഞ്ഞെടുക്കുക (ഓപ്ഷണൽ)';
+
+  @override
+  String get noCommandment => 'പൊതു / കൽപ്പനയില്ല';
+
+  @override
+  String get customSinAdded => 'പാപം ചേർത്തു';
+
+  @override
+  String get customSinUpdated => 'പാപം പുതുക്കി';
+
+  @override
+  String get customSinDeleted => 'പാപം നീക്കം ചെയ്തു';
+
+  @override
+  String get deleteCustomSinConfirm => 'ഈ പാപം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?';
+
+  @override
+  String get noCustomSins => 'ഇതുവരെ സ്വന്തം പാപങ്ങളില്ല';
+
+  @override
+  String get noCustomSinsDesc => 'നിങ്ങളുടെ പരിശോധന വ്യക്തിഗതമാക്കാൻ സ്വന്തം പാപങ്ങൾ ചേർക്കുക';
+
+  @override
+  String get customVersion => 'സ്വന്തം (തിരുത്തിയത്)';
+
+  @override
+  String get searchCustomSins => 'സ്വന്തം പാപങ്ങൾ തിരയുക...';
+
+  @override
+  String get addButton => 'ചേർക്കുക';
+
+  @override
+  String get updateButton => 'പുതുക്കുക';
+
+  @override
+  String get deleteButton => 'നീക്കം ചെയ്യുക';
+
+  @override
+  String get addYourOwn => 'സ്വന്തമായി ചേർക്കുക...';
+
+  @override
+  String get tutorialCustomSinDesc => 'ഈ കൽപ്പനയ്ക്കായി നിങ്ങളുടെ സ്വന്തം കുറിപ്പുകൾ ചേർക്കാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.';
 }

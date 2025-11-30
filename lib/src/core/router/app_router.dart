@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_history_screen.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_screen.dart';
+import 'package:confessionapp/src/features/examination/presentation/custom_sins_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/faq_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/guide_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/prayers_screen.dart';
@@ -72,6 +73,13 @@ GoRouter goRouter(Ref ref) {
                 pageBuilder:
                     (context, state) =>
                         const NoTransitionPage(child: ExaminationScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'custom-sins',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const CustomSinsScreen(),
+                  ),
+                ],
               ),
             ],
           ),

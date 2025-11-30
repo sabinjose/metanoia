@@ -361,4 +361,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nextButton => 'Next';
+
+  @override
+  String get customSins => 'Custom Sins';
+
+  @override
+  String get manageCustomSins => 'Manage Custom Sins';
+
+  @override
+  String get addCustomSin => 'Add Custom Sin';
+
+  @override
+  String get editCustomSin => 'Edit Custom Sin';
+
+  @override
+  String get deleteCustomSin => 'Delete Custom Sin';
+
+  @override
+  String get sinDescription => 'Sin Description';
+
+  @override
+  String get sinDescriptionHint => 'Describe the sin you want to remember';
+
+  @override
+  String get sinDescriptionRequired => 'Please enter a sin description';
+
+  @override
+  String get optionalNote => 'Optional Note';
+
+  @override
+  String get optionalNoteHint => 'Add any additional details';
+
+  @override
+  String get selectCommandment => 'Select Commandment (Optional)';
+
+  @override
+  String get noCommandment => 'General / No Commandment';
+
+  @override
+  String get customSinAdded => 'Custom sin added';
+
+  @override
+  String get customSinUpdated => 'Custom sin updated';
+
+  @override
+  String get customSinDeleted => 'Custom sin deleted';
+
+  @override
+  String get deleteCustomSinConfirm => 'Are you sure you want to delete this custom sin?';
+
+  @override
+  String get noCustomSins => 'No custom sins yet';
+
+  @override
+  String get noCustomSinsDesc => 'Add custom sins to personalize your examination';
+
+  @override
+  String get customVersion => 'Custom (Edited)';
+
+  @override
+  String get searchCustomSins => 'Search custom sins...';
+
+  @override
+  String get addButton => 'Add';
+
+  @override
+  String get updateButton => 'Update';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get addYourOwn => 'Add your own...';
+
+  @override
+  String get tutorialCustomSinDesc => 'Tap here to add your own personal notes for this commandment.';
 }
