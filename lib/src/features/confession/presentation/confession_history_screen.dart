@@ -1,6 +1,7 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:flutter/material.dart';
@@ -292,6 +293,7 @@ class _ConfessionHistoryScreenState
         onDateUpdated: () {
           ref.invalidate(finishedConfessionsProvider);
           ref.invalidate(lastFinishedConfessionProvider);
+          ref.invalidate(confessionAnalyticsProvider);
         },
       ),
     );
