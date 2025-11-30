@@ -27,7 +27,7 @@ class ConfessionAnalyticsRepository {
   Future<ConfessionAnalytics> getAnalytics() async {
     final confessions = await (_db.select(_db.confessions)
           ..where((t) => t.isFinished.equals(true))
-          ..orderBy([(t) => OrderingTerm.asc(t.finishedAt)]))
+          ..orderBy([(t) => OrderingTerm.asc(t.date)]))
         .get();
 
     if (confessions.isEmpty) {
@@ -36,8 +36,8 @@ class ConfessionAnalyticsRepository {
 
     // Calculate statistics
     final totalConfessions = confessions.length;
-    final firstConfession = confessions.first.finishedAt ?? confessions.first.date;
-    final lastConfession = confessions.last.finishedAt ?? confessions.last.date;
+    final firstConfession = confessions.first.date;
+    final lastConfession = confessions.last.date;
 
     // Calculate average days between confessions
     double? averageDaysBetween;
@@ -88,9 +88,8 @@ class ConfessionAnalyticsRepository {
       final nextMonth = DateTime(now.year, now.month - i + 1, 1);
 
       final count = confessions.where((c) {
-        final date = c.finishedAt ?? c.date;
-        return date.isAfter(month.subtract(const Duration(days: 1))) &&
-            date.isBefore(nextMonth);
+        return c.date.isAfter(month.subtract(const Duration(days: 1))) &&
+            c.date.isBefore(nextMonth);
       }).length;
 
       result.add(MonthlyConfessionData(
@@ -102,22 +101,27 @@ class ConfessionAnalyticsRepository {
     return result;
   }
 
-  /// Calculate current streak (weeks with at least one confession)
+  /// Calculate current streak (consecutive weeks with at least one confession)
   int _calculateCurrentStreak(List<Confession> confessions) {
     if (confessions.isEmpty) return 0;
 
     final now = DateTime.now();
     int streak = 0;
 
+    // Get start of current week (Monday at 00:00:00)
+    final today = DateTime(now.year, now.month, now.day);
+    // DateTime.weekday: Monday = 1, Sunday = 7
+    final currentWeekStart = today.subtract(Duration(days: today.weekday - 1));
+
     // Check each week going backwards
     for (int weeksAgo = 0; weeksAgo < 52; weeksAgo++) {
-      final weekStart = now.subtract(Duration(days: now.weekday - 1 + (weeksAgo * 7)));
+      final weekStart = currentWeekStart.subtract(Duration(days: weeksAgo * 7));
       final weekEnd = weekStart.add(const Duration(days: 7));
 
       final hasConfessionInWeek = confessions.any((c) {
-        final date = c.finishedAt ?? c.date;
-        return date.isAfter(weekStart.subtract(const Duration(days: 1))) &&
-            date.isBefore(weekEnd);
+        final confessionDate = DateTime(c.date.year, c.date.month, c.date.day);
+        return !confessionDate.isBefore(weekStart) &&
+            confessionDate.isBefore(weekEnd);
       });
 
       if (hasConfessionInWeek) {

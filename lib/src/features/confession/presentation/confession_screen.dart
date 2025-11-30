@@ -886,8 +886,7 @@ class _EmptyConfessionView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   ...recentHistory.map((confession) {
-                    final date = confession.confession.finishedAt ??
-                        confession.confession.date;
+                    final date = confession.confession.date;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Row(
