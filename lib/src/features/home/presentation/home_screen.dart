@@ -254,66 +254,141 @@ class _DailyQuoteCard extends ConsumerWidget {
     final quoteAsync = ref.watch(randomQuoteProvider(locale));
 
     return Container(
-      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: [
+          // Primary glow shadow
           BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: theme.colorScheme.primary.withValues(alpha: 0.4),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+            spreadRadius: -4,
+          ),
+          // Subtle bottom shadow for depth
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
-        image: DecorationImage(
-          image: const AssetImage('assets/images/pattern_bg.png'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            theme.colorScheme.primary.withValues(alpha: 0.8),
-            BlendMode.srcOver,
-          ),
-          onError: (_, __) {}, // Fail gracefully if image missing
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: Stack(
+          children: [
+            // Gradient background
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primary.withValues(alpha: 0.85),
+                    theme.colorScheme.tertiary.withValues(alpha: 0.6),
+                  ],
+                  stops: const [0.0, 0.6, 1.0],
+                ),
+              ),
+            ),
+            // Decorative circles for visual interest
+            Positioned(
+              top: -30,
+              right: -30,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.08),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -40,
+              left: -20,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.05),
+                ),
+              ),
+            ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(28),
+              child: quoteAsync.when(
+                data: (quote) => Column(
+                  children: [
+                    // Quote icon with glow effect
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.format_quote_rounded,
+                        color: theme.colorScheme.onPrimary,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Quote text
+                    Text(
+                      quote.quote,
+                      style: GoogleFonts.merriweather(
+                        color: theme.colorScheme.onPrimary,
+                        fontSize: 17,
+                        fontStyle: FontStyle.italic,
+                        height: 1.6,
+                        letterSpacing: 0.3,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    // Divider
+                    Container(
+                      width: 40,
+                      height: 2,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Author
+                    Text(
+                      quote.author,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+                loading: () => SizedBox(
+                  height: 150,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
+                      strokeWidth: 2.5,
+                    ),
+                  ),
+                ),
+                error: (_, __) => const SizedBox(),
+              ),
+            ),
+          ],
         ),
       ),
-      child: quoteAsync.when(
-        data:
-            (quote) => Column(
-              children: [
-                Icon(
-                  Icons.format_quote,
-                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                  size: 32,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  quote.quote,
-                  style: GoogleFonts.merriweather(
-                    color: theme.colorScheme.onPrimary,
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  quote.author,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-        loading:
-            () => const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
-        error:
-            (_, __) =>
-                const SizedBox(), // Should be handled by provider fallback
-      ),
-    ).animate().fadeIn().scale(begin: const Offset(0.95, 0.95));
+    ).animate().fadeIn(duration: 400.ms).scale(
+          begin: const Offset(0.95, 0.95),
+          curve: Curves.easeOutBack,
+        );
   }
 }
 
