@@ -162,8 +162,7 @@ class _ConfessionHistoryScreenState
                                       children: [
                                         Text(
                                           dateFormat.format(
-                                            confession.confession.finishedAt ??
-                                                confession.confession.date,
+                                            confession.confession.date,
                                           ),
                                           style: Theme.of(
                                             context,
