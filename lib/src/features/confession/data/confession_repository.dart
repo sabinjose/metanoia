@@ -111,6 +111,14 @@ class ConfessionRepository {
       );
     });
   }
+
+  /// Update the date of a confession
+  Future<void> updateConfessionDate(int confessionId, DateTime newDate) async {
+    await (_db.update(_db.confessions)
+      ..where((tbl) => tbl.id.equals(confessionId))).write(
+      ConfessionsCompanion(date: Value(newDate)),
+    );
+  }
 }
 
 class ConfessionWithItems {

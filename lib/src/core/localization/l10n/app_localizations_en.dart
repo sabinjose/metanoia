@@ -654,4 +654,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAll => 'Delete All';
+
+  @override
+  String get editDate => 'Edit Date';
+
+  @override
+  String get confessionDate => 'Confession Date';
+
+  @override
+  String get dateUpdated => 'Date updated';
 }

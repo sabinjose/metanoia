@@ -205,5 +205,8 @@
   "skipOnboardingTitle": "Skip Introduction?",
   "skipOnboardingMessage": "You can always access help and settings later from the app menu.",
   "confessionHistoryTitle": "Confession History",
-  "deleteAll": "Delete All"
+  "deleteAll": "Delete All",
+  "editDate": "Edit Date",
+  "confessionDate": "Confession Date",
+  "dateUpdated": "Date updated"
 }

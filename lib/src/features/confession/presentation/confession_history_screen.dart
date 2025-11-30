@@ -289,6 +289,10 @@ class _ConfessionHistoryScreenState
         onPenanceUpdated: () {
           ref.invalidate(pendingPenancesProvider);
         },
+        onDateUpdated: () {
+          ref.invalidate(finishedConfessionsProvider);
+          ref.invalidate(lastFinishedConfessionProvider);
+        },
       ),
     );
   }
@@ -297,10 +301,12 @@ class _ConfessionHistoryScreenState
 class _ConfessionDetailsSheet extends ConsumerStatefulWidget {
   final ConfessionWithItems confession;
   final VoidCallback onPenanceUpdated;
+  final VoidCallback onDateUpdated;
 
   const _ConfessionDetailsSheet({
     required this.confession,
     required this.onPenanceUpdated,
+    required this.onDateUpdated,
   });
 
   @override
@@ -310,11 +316,19 @@ class _ConfessionDetailsSheet extends ConsumerStatefulWidget {
 
 class _ConfessionDetailsSheetState
     extends ConsumerState<_ConfessionDetailsSheet> {
+  late DateTime _currentDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentDate = widget.confession.confession.date;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final dateFormat = DateFormat('MMMM dd, yyyy • hh:mm a');
+    final dateFormat = DateFormat('MMMM dd, yyyy');
     final penanceAsync = ref.watch(
       penanceForConfessionProvider(widget.confession.confession.id),
     );
@@ -355,17 +369,27 @@ class _ConfessionDetailsSheetState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Confession Details',
+                          l10n.confessionDate,
                           style: theme.textTheme.titleLarge
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          dateFormat.format(
-                            widget.confession.confession.finishedAt ??
-                                widget.confession.confession.date,
-                          ),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
+                        GestureDetector(
+                          onTap: () => _showEditDatePicker(context, l10n),
+                          child: Row(
+                            children: [
+                              Text(
+                                dateFormat.format(_currentDate),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -735,6 +759,54 @@ class _ConfessionDetailsSheetState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.penanceCompleted)),
       );
+    }
+  }
+
+  Future<void> _showEditDatePicker(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final theme = Theme.of(context);
+    final now = DateTime.now();
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _currentDate,
+      firstDate: DateTime(2000),
+      lastDate: now, // Cannot select future dates
+      helpText: l10n.confessionDate,
+      builder: (context, child) {
+        return Theme(
+          data: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(
+              primary: theme.colorScheme.primary,
+              onPrimary: theme.colorScheme.onPrimary,
+              surface: theme.colorScheme.surface,
+              onSurface: theme.colorScheme.onSurface,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null && pickedDate != _currentDate && context.mounted) {
+      await ref.read(confessionRepositoryProvider).updateConfessionDate(
+            widget.confession.confession.id,
+            pickedDate,
+          );
+
+      setState(() {
+        _currentDate = pickedDate;
+      });
+
+      widget.onDateUpdated();
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.dateUpdated)),
+        );
+      }
     }
   }
 }

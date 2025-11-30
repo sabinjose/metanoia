@@ -642,4 +642,13 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get deleteAll => 'എല്ലാം ഇല്ലാതാക്കുക';
+
+  @override
+  String get editDate => 'തീയതി മാറ്റുക';
+
+  @override
+  String get confessionDate => 'കുമ്പസാര തീയതി';
+
+  @override
+  String get dateUpdated => 'തീയതി അപ്‌ഡേറ്റ് ചെയ്തു';
 }

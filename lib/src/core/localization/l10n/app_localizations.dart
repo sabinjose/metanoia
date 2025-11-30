@@ -1288,6 +1288,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete All'**
   String get deleteAll;
+
+  /// No description provided for @editDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Date'**
+  String get editDate;
+
+  /// No description provided for @confessionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Confession Date'**
+  String get confessionDate;
+
+  /// No description provided for @dateUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Date updated'**
+  String get dateUpdated;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
