@@ -651,4 +651,12 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get dateUpdated => 'തീയതി അപ്‌ഡേറ്റ് ചെയ്തു';
+
+  @override
+  String get changeDateConfirmTitle => 'തീയതി മാറ്റണോ?';
+
+  @override
+  String changeDateConfirmMessage(Object date) {
+    return 'കുമ്പസാര തീയതി $date ആയി മാറ്റണോ?';
+  }
 }

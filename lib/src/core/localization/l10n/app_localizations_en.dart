@@ -663,4 +663,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dateUpdated => 'Date updated';
+
+  @override
+  String get changeDateConfirmTitle => 'Change Date?';
+
+  @override
+  String changeDateConfirmMessage(Object date) {
+    return 'Change confession date to $date?';
+  }
 }

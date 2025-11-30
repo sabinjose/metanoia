@@ -208,5 +208,7 @@
   "deleteAll": "Delete All",
   "editDate": "Edit Date",
   "confessionDate": "Confession Date",
-  "dateUpdated": "Date updated"
+  "dateUpdated": "Date updated",
+  "changeDateConfirmTitle": "Change Date?",
+  "changeDateConfirmMessage": "Change confession date to {date}?"
 }

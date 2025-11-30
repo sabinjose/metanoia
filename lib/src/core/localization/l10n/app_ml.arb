@@ -165,5 +165,7 @@
   "deleteAll": "എല്ലാം ഇല്ലാതാക്കുക",
   "editDate": "തീയതി മാറ്റുക",
   "confessionDate": "കുമ്പസാര തീയതി",
-  "dateUpdated": "തീയതി അപ്‌ഡേറ്റ് ചെയ്തു"
+  "dateUpdated": "തീയതി അപ്‌ഡേറ്റ് ചെയ്തു",
+  "changeDateConfirmTitle": "തീയതി മാറ്റണോ?",
+  "changeDateConfirmMessage": "കുമ്പസാര തീയതി {date} ആയി മാറ്റണോ?"
 }

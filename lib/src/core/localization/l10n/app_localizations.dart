@@ -1306,6 +1306,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date updated'**
   String get dateUpdated;
+
+  /// No description provided for @changeDateConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Date?'**
+  String get changeDateConfirmTitle;
+
+  /// No description provided for @changeDateConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change confession date to {date}?'**
+  String changeDateConfirmMessage(Object date);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

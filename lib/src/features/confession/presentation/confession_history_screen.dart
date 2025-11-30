@@ -791,21 +791,44 @@ class _ConfessionDetailsSheetState
     );
 
     if (pickedDate != null && pickedDate != _currentDate && context.mounted) {
-      await ref.read(confessionRepositoryProvider).updateConfessionDate(
-            widget.confession.confession.id,
-            pickedDate,
+      final dateFormat = DateFormat('MMMM dd, yyyy');
+      final formattedDate = dateFormat.format(pickedDate);
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.changeDateConfirmTitle),
+          content: Text(l10n.changeDateConfirmMessage(formattedDate)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(l10n.updateButton),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true && context.mounted) {
+        await ref.read(confessionRepositoryProvider).updateConfessionDate(
+              widget.confession.confession.id,
+              pickedDate,
+            );
+
+        setState(() {
+          _currentDate = pickedDate;
+        });
+
+        widget.onDateUpdated();
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.dateUpdated)),
           );
-
-      setState(() {
-        _currentDate = pickedDate;
-      });
-
-      widget.onDateUpdated();
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.dateUpdated)),
-        );
+        }
       }
     }
   }
