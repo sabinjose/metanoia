@@ -565,4 +565,21 @@ class AppLocalizationsMl extends AppLocalizations {
   String questionsSelectedInSection(Object count) {
     return '$count selected';
   }
+
+  @override
+  String get examinationSummary => 'പരിശോധനാ സംഗ്രഹം';
+
+  @override
+  String selectedCount(Object count) {
+    return '$count ഇനങ്ങൾ തിരഞ്ഞെടുത്തു';
+  }
+
+  @override
+  String get noSinsSelected => 'പാപങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല';
+
+  @override
+  String get continueEditing => 'തുടരുക';
+
+  @override
+  String get proceedToConfess => 'മുന്നോട്ട്';
 }

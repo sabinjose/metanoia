@@ -2,8 +2,11 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'examination_controller.g.dart';
+
+const kLastExaminationPageKey = 'last_examination_page';
 
 @riverpod
 class ExaminationController extends _$ExaminationController {
@@ -197,6 +200,10 @@ class ExaminationController extends _$ExaminationController {
     state = {};
     _draftConfessionId = null;
     lastSavedAt = null;
+
+    // Clear the saved examination page position
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(kLastExaminationPageKey);
   }
 
   Future<void> clearDraft() async {
@@ -215,5 +222,9 @@ class ExaminationController extends _$ExaminationController {
     }
 
     state = {};
+
+    // Clear the saved examination page position
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(kLastExaminationPageKey);
   }
 }

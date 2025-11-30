@@ -183,5 +183,10 @@
   "nextCommandment": "Next",
   "finishExamination": "Finish",
   "noQuestionsSelected": "No questions selected in this section",
-  "questionsSelectedInSection": "{count} selected"
+  "questionsSelectedInSection": "{count} selected",
+  "examinationSummary": "Examination Summary",
+  "selectedCount": "{count} items selected",
+  "noSinsSelected": "No sins selected",
+  "continueEditing": "Continue Editing",
+  "proceedToConfess": "Proceed"
 }

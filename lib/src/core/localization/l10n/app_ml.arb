@@ -140,5 +140,10 @@
   "updateButton": "പുതുക്കുക",
   "deleteButton": "നീക്കം ചെയ്യുക",
   "addYourOwn": "സ്വന്തമായി ചേർക്കുക...",
-  "tutorialCustomSinDesc": "ഈ കൽപ്പനയ്ക്കായി നിങ്ങളുടെ സ്വന്തം കുറിപ്പുകൾ ചേർക്കാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക."
+  "tutorialCustomSinDesc": "ഈ കൽപ്പനയ്ക്കായി നിങ്ങളുടെ സ്വന്തം കുറിപ്പുകൾ ചേർക്കാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.",
+  "examinationSummary": "പരിശോധനാ സംഗ്രഹം",
+  "selectedCount": "{count} ഇനങ്ങൾ തിരഞ്ഞെടുത്തു",
+  "noSinsSelected": "പാപങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല",
+  "continueEditing": "തുടരുക",
+  "proceedToConfess": "മുന്നോട്ട്"
 }

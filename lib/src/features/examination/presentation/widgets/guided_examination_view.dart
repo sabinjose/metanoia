@@ -1,10 +1,13 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
-import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
+import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart'
+    show examinationControllerProvider, kLastExaminationPageKey;
+import 'package:confessionapp/src/features/examination/presentation/widgets/examination_summary_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Guided examination view - one commandment at a time with horizontal navigation
 class GuidedExaminationView extends ConsumerStatefulWidget {
@@ -32,12 +35,38 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _loadLastPosition();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadLastPosition() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastPage = prefs.getInt(kLastExaminationPageKey) ?? 0;
+
+    // Ensure the page is within bounds
+    final validPage = lastPage.clamp(0, widget.data.length - 1);
+
+    if (validPage > 0 && mounted) {
+      setState(() {
+        _currentPage = validPage;
+      });
+      // Jump to the saved position after the widget is built
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_pageController.hasClients) {
+          _pageController.jumpToPage(validPage);
+        }
+      });
+    }
+  }
+
+  Future<void> _saveCurrentPosition() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(kLastExaminationPageKey, _currentPage);
   }
 
   void _goToPage(int page) {
@@ -80,6 +109,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
               setState(() {
                 _currentPage = page;
               });
+              _saveCurrentPosition();
               HapticUtils.selectionClick();
             },
             itemCount: widget.data.length,
@@ -124,6 +154,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
             data: widget.data,
             onStepTapped: _goToPage,
             getSelectedCountForItem: _getSelectedCountForItem,
+            getTooltipForItem: (item) => _getTooltipForItem(item, l10n),
           ),
           const SizedBox(height: 12),
 
@@ -251,7 +282,9 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
             Expanded(
               child: isLastPage
                   ? FilledButton.icon(
-                      onPressed: hasSelections ? widget.onFinish : null,
+                      onPressed: hasSelections
+                          ? () => _showSummarySheet(context, selectedQuestions)
+                          : null,
                       icon: const Icon(Icons.check),
                       label: Text(l10n.finishExamination),
                       style: FilledButton.styleFrom(
@@ -287,6 +320,31 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
       if (selectedQuestions.containsKey(-s.id)) count++;
     }
     return count;
+  }
+
+  String _getTooltipForItem(CommandmentWithQuestions item, AppLocalizations l10n) {
+    if (item.isGeneral) {
+      return l10n.noCommandment;
+    }
+    return item.commandment?.customTitle ??
+        '${l10n.commandment} ${item.commandment?.commandmentNo}';
+  }
+
+  void _showSummarySheet(BuildContext context, Map<int, String> selectedQuestions) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ExaminationSummarySheet(
+        data: widget.data,
+        selectedQuestions: selectedQuestions,
+        onConfirm: () {
+          Navigator.pop(context);
+          widget.onFinish();
+        },
+        onCancel: () => Navigator.pop(context),
+      ),
+    );
   }
 }
 
@@ -531,6 +589,7 @@ class _MilestoneProgressBar extends StatelessWidget {
   final List<CommandmentWithQuestions> data;
   final Function(int) onStepTapped;
   final int Function(CommandmentWithQuestions, Map<int, String>) getSelectedCountForItem;
+  final String Function(CommandmentWithQuestions) getTooltipForItem;
 
   const _MilestoneProgressBar({
     required this.totalSteps,
@@ -539,6 +598,7 @@ class _MilestoneProgressBar extends StatelessWidget {
     required this.data,
     required this.onStepTapped,
     required this.getSelectedCountForItem,
+    required this.getTooltipForItem,
   });
 
   @override
@@ -586,6 +646,7 @@ class _MilestoneProgressBar extends StatelessWidget {
       final isCompleted = i < currentStep;
       final isCurrent = i == currentStep;
       final hasSelections = getSelectedCountForItem(data[i], selectedQuestions) > 0;
+      final tooltipMessage = getTooltipForItem(data[i]);
 
       // Add connecting line before dot (except for first)
       if (i > 0 && spacing != null) {
@@ -620,6 +681,7 @@ class _MilestoneProgressBar extends StatelessWidget {
           isCompleted: isCompleted,
           isCurrent: isCurrent,
           hasSelections: hasSelections,
+          tooltipMessage: tooltipMessage,
           onTap: () => onStepTapped(i),
         ),
       );
@@ -636,6 +698,7 @@ class _MilestoneDot extends StatelessWidget {
   final bool isCompleted;
   final bool isCurrent;
   final bool hasSelections;
+  final String tooltipMessage;
   final VoidCallback onTap;
 
   const _MilestoneDot({
@@ -644,6 +707,7 @@ class _MilestoneDot extends StatelessWidget {
     required this.isCompleted,
     required this.isCurrent,
     required this.hasSelections,
+    required this.tooltipMessage,
     required this.onTap,
   });
 
@@ -697,33 +761,38 @@ class _MilestoneDot extends StatelessWidget {
       child = null;
     }
 
-    return GestureDetector(
-      onTap: () {
-        HapticUtils.selectionClick();
-        onTap();
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: borderColor,
-            width: isCurrent ? 2.5 : 1.5,
+    return Tooltip(
+      message: tooltipMessage,
+      preferBelow: true,
+      triggerMode: TooltipTriggerMode.longPress,
+      child: GestureDetector(
+        onTap: () {
+          HapticUtils.selectionClick();
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: borderColor,
+              width: isCurrent ? 2.5 : 1.5,
+            ),
+            boxShadow: isCurrent
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: 6,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : null,
           ),
-          boxShadow: isCurrent
-              ? [
-                  BoxShadow(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                    blurRadius: 6,
-                    spreadRadius: 1,
-                  ),
-                ]
-              : null,
+          child: Center(child: child),
         ),
-        child: Center(child: child),
       ),
     );
   }

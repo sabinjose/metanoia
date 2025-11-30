@@ -1162,6 +1162,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} selected'**
   String questionsSelectedInSection(Object count);
+
+  /// No description provided for @examinationSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Examination Summary'**
+  String get examinationSummary;
+
+  /// No description provided for @selectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items selected'**
+  String selectedCount(Object count);
+
+  /// No description provided for @noSinsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No sins selected'**
+  String get noSinsSelected;
+
+  /// No description provided for @continueEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Editing'**
+  String get continueEditing;
+
+  /// No description provided for @proceedToConfess.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed'**
+  String get proceedToConfess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -577,4 +577,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String questionsSelectedInSection(Object count) {
     return '$count selected';
   }
+
+  @override
+  String get examinationSummary => 'Examination Summary';
+
+  @override
+  String selectedCount(Object count) {
+    return '$count items selected';
+  }
+
+  @override
+  String get noSinsSelected => 'No sins selected';
+
+  @override
+  String get continueEditing => 'Continue Editing';
+
+  @override
+  String get proceedToConfess => 'Proceed';
 }
