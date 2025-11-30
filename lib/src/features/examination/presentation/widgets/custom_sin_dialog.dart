@@ -28,6 +28,7 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
   late TextEditingController _noteController;
   String? _selectedCommandmentCode;
   bool _isLoading = false;
+  bool _hasText = false;
 
   @override
   void initState() {
@@ -40,10 +41,20 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
     );
     _selectedCommandmentCode = widget.existingSin?.commandmentCode ??
         widget.initialCommandmentCode;
+    _hasText = _sinTextController.text.trim().isNotEmpty;
+    _sinTextController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final hasText = _sinTextController.text.trim().isNotEmpty;
+    if (hasText != _hasText) {
+      setState(() => _hasText = hasText);
+    }
   }
 
   @override
   void dispose() {
+    _sinTextController.removeListener(_onTextChanged);
     _sinTextController.dispose();
     _noteController.dispose();
     super.dispose();
@@ -206,7 +217,7 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
                   ),
                   const SizedBox(width: 8),
                   FilledButton(
-                    onPressed: _isLoading ? null : _saveSin,
+                    onPressed: _isLoading || !_hasText ? null : _saveSin,
                     child:
                         _isLoading
                             ? const SizedBox(
