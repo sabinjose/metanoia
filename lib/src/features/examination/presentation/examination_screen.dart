@@ -518,7 +518,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                       ),
                                     ),
                                   );
-                                }).toList(),
+                                }),
                                 // Custom sins for this commandment
                                 ...item.customSins.map((customSin) {
                                   // Use negative ID for custom sins
