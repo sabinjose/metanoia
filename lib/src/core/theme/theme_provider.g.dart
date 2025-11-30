@@ -7,7 +7,7 @@ part of 'theme_provider.dart';
 // **************************************************************************
 
 String _$themeModeControllerHash() =>
-    r'0d9732e6dc4042e3fa142a6ac860bc9edec3aae6';
+    r'302d2a98d5d219fbba8fc91955bcc9d25b88baba';
 
 /// See also [ThemeModeController].
 @ProviderFor(ThemeModeController)

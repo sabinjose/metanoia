@@ -182,8 +182,8 @@ class AppTheme {
       onPrimaryContainer: Color(0xFFE8DFF5), // Very light lavender
       secondary: _secondaryDark,
       onSecondary: Color(0xFF1C1626), // Dark purple text on gold
-      secondaryContainer: Color(0xFF6B5427), // Muted gold-brown
-      onSecondaryContainer: Color(0xFFFFF4D9), // Very light gold
+      secondaryContainer: Color(0xFF4A3D5F), // Purple-tinted (was gold-brown)
+      onSecondaryContainer: Color(0xFFE8DFF5), // Light lavender (was light gold)
       tertiary: _tertiaryDark,
       onTertiary: Color(0xFF1C1626),
       tertiaryContainer: Color(0xFF4A3C5F), // Muted purple
@@ -232,10 +232,10 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: _secondaryDark,
-          foregroundColor: const Color(0xFF1A1A1A),
+          backgroundColor: _primaryDark,
+          foregroundColor: Colors.white,
           elevation: 2,
-          shadowColor: _secondaryDark.withValues(alpha: 0.3),
+          shadowColor: _primaryDark.withValues(alpha: 0.3),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -248,8 +248,8 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: _secondaryDark,
-        foregroundColor: Color(0xFF1A1A1A),
+        backgroundColor: _primaryDark,
+        foregroundColor: Colors.white,
         elevation: 4,
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -258,7 +258,7 @@ class AppTheme {
             return GoogleFonts.lato(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: _secondaryDark,
+              color: _primaryDark,
             );
           }
           return GoogleFonts.lato(
@@ -266,6 +266,39 @@ class AppTheme {
             fontWeight: FontWeight.normal,
             color: const Color(0xFFE6E1E5),
           );
+        }),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return _primaryDark.withValues(alpha: 0.3);
+            }
+            return Colors.transparent;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return _primaryDark;
+            }
+            return const Color(0xFFE6E1E5);
+          }),
+          side: WidgetStateProperty.all(
+            const BorderSide(color: Color(0xFF463F4E)),
+          ),
+        ),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryDark;
+          }
+          return const Color(0xFF9D92A3);
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryDark.withValues(alpha: 0.5);
+          }
+          return const Color(0xFF463F4E);
         }),
       ),
     );
