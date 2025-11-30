@@ -96,17 +96,77 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final showBack = _currentPage > 0;
 
     return Scaffold(
-      body: SafeArea(
-        top: true,
-        bottom: false,
-        child: Column(
-          children: [
-            // Top bar with back and skip
-            if (_currentPage > 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      body: Stack(
+        children: [
+          // Pages (full screen, behind the top bar)
+          Positioned.fill(
+            child: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              children: [
+                // Page 0: Metanoia Intro
+                MetanoiaIntroPage(onNext: _nextPage),
+                // Page 1: Welcome
+                WelcomePage(onNext: _nextPage),
+                // Pages 2-5: Features (flattened)
+                FeaturePage(
+                  icon: Icons.assignment_outlined,
+                  title: l10n.examineTitle,
+                  description: l10n.examineDescription,
+                  color: theme.colorScheme.primary,
+                  onNext: _nextPage,
+                  buttonText: l10n.nextButton,
+                ),
+                FeaturePage(
+                  icon: Icons.church_outlined,
+                  title: l10n.confessTitle,
+                  description: l10n.confessDescription,
+                  color: theme.colorScheme.secondary,
+                  onNext: _nextPage,
+                  buttonText: l10n.nextButton,
+                ),
+                FeaturePage(
+                  icon: Icons.menu_book_outlined,
+                  title: l10n.prayersTitle,
+                  description: l10n.prayersDescription,
+                  color: theme.colorScheme.tertiary,
+                  onNext: _nextPage,
+                  buttonText: l10n.nextButton,
+                ),
+                FeaturePage(
+                  icon: Icons.notifications_outlined,
+                  title: l10n.reminders,
+                  description: l10n.remindersDescription,
+                  color: theme.colorScheme.error,
+                  onNext: _nextPage,
+                  buttonText: l10n.nextButton,
+                ),
+                // Page 6: Language Selection
+                ContentLanguagePage(onNext: _completeOnboarding),
+              ],
+            ),
+          ),
+
+          // Transparent top bar overlay (back, progress dots, skip)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 8.0,
+                ),
                 child: Row(
                   children: [
+                    // Back button
                     if (showBack)
                       IconButton(
                         onPressed: _previousPage,
@@ -115,7 +175,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       )
                     else
                       const SizedBox(width: 48),
-                    const Spacer(),
+
+                    // Progress dots (centered)
+                    Expanded(
+                      child: _ProgressDots(
+                        currentPage: _currentPage,
+                        totalPages: _totalPages,
+                      ),
+                    ),
+
+                    // Skip button
                     if (showSkip)
                       TextButton(
                         onPressed: _skipOnboarding,
@@ -126,72 +195,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ],
                 ),
               ),
-
-            // Progress indicator (after intro page)
-            if (_currentPage > 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: _ProgressDots(
-                  currentPage: _currentPage - 1, // Exclude intro from dots
-                  totalPages: _totalPages - 1,
-                ),
-              ),
-
-            // Pages
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                children: [
-                  // Page 0: Metanoia Intro
-                  MetanoiaIntroPage(onNext: _nextPage),
-                  // Page 1: Welcome
-                  WelcomePage(onNext: _nextPage),
-                  // Pages 2-5: Features (flattened)
-                  FeaturePage(
-                    icon: Icons.assignment_outlined,
-                    title: l10n.examineTitle,
-                    description: l10n.examineDescription,
-                    color: theme.colorScheme.primary,
-                    onNext: _nextPage,
-                    buttonText: l10n.nextButton,
-                  ),
-                  FeaturePage(
-                    icon: Icons.church_outlined,
-                    title: l10n.confessTitle,
-                    description: l10n.confessDescription,
-                    color: theme.colorScheme.secondary,
-                    onNext: _nextPage,
-                    buttonText: l10n.nextButton,
-                  ),
-                  FeaturePage(
-                    icon: Icons.menu_book_outlined,
-                    title: l10n.prayersTitle,
-                    description: l10n.prayersDescription,
-                    color: theme.colorScheme.tertiary,
-                    onNext: _nextPage,
-                    buttonText: l10n.nextButton,
-                  ),
-                  FeaturePage(
-                    icon: Icons.notifications_outlined,
-                    title: l10n.reminders,
-                    description: l10n.remindersDescription,
-                    color: theme.colorScheme.error,
-                    onNext: _nextPage,
-                    buttonText: l10n.nextButton,
-                  ),
-                  // Page 6: Language Selection
-                  ContentLanguagePage(onNext: _completeOnboarding),
-                ],
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
