@@ -207,7 +207,7 @@ class _CustomSinsScreenState extends ConsumerState<CustomSinsScreen> {
             ),
           ),
         ),
-        ...sins.map((sin) => _buildSinCard(context, sin)).toList(),
+        ...sins.map((sin) => _buildSinCard(context, sin)),
         const SizedBox(height: 8),
       ],
     );

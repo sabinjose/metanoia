@@ -1,9 +1,11 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/guide/presentation/faq_screen.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
@@ -33,6 +35,7 @@ class GuideScreen extends ConsumerWidget {
               Card(
                 child: InkWell(
                   onTap: () {
+                    HapticUtils.lightImpact();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const FaqScreen(),
@@ -65,17 +68,17 @@ class GuideScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-              ),
+              ).animate().fadeIn().slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
-              ...guideItems.map(
-                (item) => Padding(
+              ...guideItems.asMap().entries.map(
+                (entry) => Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: _buildSectionCard(
                     context,
-                    item.title,
-                    _getIcon(context, item.icon),
-                    item.content,
-                  ),
+                    entry.value.title,
+                    _getIcon(context, entry.value.icon),
+                    entry.value.content,
+                  ).animate().fadeIn(delay: (100 * (entry.key + 1)).ms).slideY(begin: 0.1, end: 0),
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/services/reminder_service.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -175,6 +176,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
               selected: {themeMode},
               onSelectionChanged: (Set<ThemeMode> newSelection) {
+                HapticUtils.selectionClick();
                 ref
                     .read(themeModeControllerProvider.notifier)
                     .setTheme(newSelection.first);
@@ -200,6 +202,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ],
                     selected: {locale?.languageCode ?? 'system'},
                     onSelectionChanged: (Set<String> newSelection) {
+                      HapticUtils.selectionClick();
                       final value = newSelection.first;
                       ref
                           .read(languageControllerProvider.notifier)
@@ -234,6 +237,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ],
                         selected: {contentLanguage},
                         onSelectionChanged: (Set<Locale> newSelection) {
+                          HapticUtils.selectionClick();
                           ref
                               .read(contentLanguageControllerProvider.notifier)
                               .setLanguage(newSelection.first);
@@ -253,10 +257,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               data:
                   (value) => SwitchListTile(
                     value: value,
-                    onChanged:
-                        (newValue) => ref
-                            .read(keepHistorySettingsProvider.notifier)
-                            .toggle(newValue),
+                    onChanged: (newValue) {
+                      HapticUtils.selectionClick();
+                      ref
+                          .read(keepHistorySettingsProvider.notifier)
+                          .toggle(newValue);
+                    },
                     title: Text(
                       value ? l10n.onTheDay : l10n.off,
                       style: Theme.of(context).textTheme.titleSmall,
@@ -291,6 +297,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         Switch(
                           value: isEnabled,
                           onChanged: (value) {
+                            HapticUtils.selectionClick();
                             if (value) {
                               // Default to Weekly if turning on
                               ref

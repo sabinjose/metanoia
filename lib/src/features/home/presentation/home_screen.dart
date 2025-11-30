@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -61,6 +62,18 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
     }
   }
 
+  Future<void> _onRefresh() async {
+    HapticUtils.lightImpact();
+    // Get the current content language
+    final contentLanguageAsync = ref.read(contentLanguageControllerProvider);
+    final locale =
+        contentLanguageAsync.valueOrNull ?? Localizations.localeOf(context);
+    // Invalidate the quote provider to fetch a new random quote
+    ref.invalidate(randomQuoteProvider(locale));
+    // Wait a bit for the animation to feel natural
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -79,7 +92,10 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
           ),
         ),
         child: SafeArea(
-          child: CustomScrollView(
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            color: theme.colorScheme.primary,
+            child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -99,7 +115,10 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.settings_outlined),
-                            onPressed: () => context.push('/settings'),
+                            onPressed: () {
+                              HapticUtils.lightImpact();
+                              context.push('/settings');
+                            },
                             tooltip: l10n.settingsTitle,
                           ),
                         ],
@@ -215,6 +234,7 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
           ),
+          ),
         ),
       ),
     );
@@ -241,63 +261,53 @@ class _DailyQuoteCard extends ConsumerWidget {
         boxShadow: [
           BoxShadow(
             color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            blurRadius: 12,
+            blurRadius: 16,
             offset: const Offset(0, 6),
           ),
         ],
-        image: DecorationImage(
-          image: const AssetImage('assets/images/pattern_bg.png'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            theme.colorScheme.primary.withValues(alpha: 0.8),
-            BlendMode.srcOver,
-          ),
-          onError: (_, __) {}, // Fail gracefully if image missing
-        ),
       ),
       child: quoteAsync.when(
-        data:
-            (quote) => Column(
-              children: [
-                Icon(
-                  Icons.format_quote,
-                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                  size: 32,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  quote.quote,
-                  style: GoogleFonts.merriweather(
-                    color: theme.colorScheme.onPrimary,
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  quote.author,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+        data: (quote) => Column(
+          children: [
+            Icon(
+              Icons.format_quote,
+              color: theme.colorScheme.onPrimary.withValues(alpha: 0.7),
+              size: 32,
             ),
-        loading:
-            () => const Center(
-              child: CircularProgressIndicator(color: Colors.white),
+            const SizedBox(height: 16),
+            Text(
+              quote.quote,
+              style: GoogleFonts.merriweather(
+                color: theme.colorScheme.onPrimary,
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
             ),
-        error:
-            (_, __) =>
-                const SizedBox(), // Should be handled by provider fallback
+            const SizedBox(height: 16),
+            Text(
+              quote.author,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        loading: () => const SizedBox(
+          height: 120,
+          child: Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          ),
+        ),
+        error: (_, __) => const SizedBox(),
       ),
     ).animate().fadeIn().scale(begin: const Offset(0.95, 0.95));
   }
 }
 
-class _HomeCard extends StatelessWidget {
+class _HomeCard extends StatefulWidget {
   const _HomeCard({
     this.icon,
     this.customIcon,
@@ -317,45 +327,103 @@ class _HomeCard extends StatelessWidget {
   final Duration delay;
 
   @override
+  State<_HomeCard> createState() => _HomeCardState();
+}
+
+class _HomeCardState extends State<_HomeCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    _controller.reverse();
+    HapticUtils.lightImpact();
+    widget.onTap();
+  }
+
+  void _onTapCancel() {
+    _controller.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final backgroundColor = color ?? theme.colorScheme.surfaceContainerHighest;
-    final foregroundColor = textColor ?? theme.colorScheme.onSurfaceVariant;
+    final backgroundColor =
+        widget.color ?? theme.colorScheme.surfaceContainerHighest;
+    final foregroundColor =
+        widget.textColor ?? theme.colorScheme.onSurfaceVariant;
 
-    return Material(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(20),
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration:
-                  customIcon != null
-                      ? null
-                      : BoxDecoration(
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          );
+        },
+        child: Material(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(20),
+          elevation: 0,
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: widget.customIcon != null
+                    ? null
+                    : BoxDecoration(
                         color: foregroundColor.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-              child: customIcon ?? Icon(icon, size: 32, color: foregroundColor),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              label,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: foregroundColor,
-                fontWeight: FontWeight.bold,
+                child: widget.customIcon ??
+                    Icon(widget.icon, size: 32, color: foregroundColor),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                widget.label,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: foregroundColor,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
-    ).animate().fadeIn(delay: delay).slideY(begin: 0.2, end: 0);
+    ).animate().fadeIn(delay: widget.delay).slideY(begin: 0.2, end: 0);
   }
 }
 
@@ -447,13 +515,15 @@ class _NextReminderCard extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap:
-            () => context.push(
-              Uri(
-                path: '/settings',
-                queryParameters: {'scrollTo': 'reminders'},
-              ).toString(),
-            ),
+        onTap: () {
+          HapticUtils.lightImpact();
+          context.push(
+            Uri(
+              path: '/settings',
+              queryParameters: {'scrollTo': 'reminders'},
+            ).toString(),
+          );
+        },
         borderRadius: BorderRadius.circular(20),
         child: Container(
           padding: const EdgeInsets.all(16),

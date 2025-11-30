@@ -1,4 +1,6 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
@@ -103,23 +105,20 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        l10n.selected(selectedQuestions.length),
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    AnimatedCountBadge(
+                      count: selectedQuestions.length,
+                      label: l10n.selected(selectedQuestions.length),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      textColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      textStyle:
+                          Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     if (controller.lastSavedAt != null)
                       Padding(
@@ -428,6 +427,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
+                                        HapticUtils.selectionClick();
                                         if (!isSelected) {
                                           ref
                                               .read(
@@ -518,7 +518,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                       ),
                                     ),
                                   );
-                                }).toList(),
+                                }),
                                 // Custom sins for this commandment
                                 ...item.customSins.map((customSin) {
                                   // Use negative ID for custom sins
@@ -529,6 +529,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
+                                        HapticUtils.selectionClick();
                                         if (!isSelected) {
                                           ref
                                               .read(
@@ -688,7 +689,10 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     final row = Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => _showAddCustomSinDialog(context, commandmentCode),
+        onTap: () {
+          HapticUtils.lightImpact();
+          _showAddCustomSinDialog(context, commandmentCode);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 20,

@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
@@ -22,12 +23,14 @@ class _FeaturesOverviewPageState extends State<FeaturesOverviewPage> {
   }
 
   void _nextPage() {
+    HapticUtils.lightImpact();
     if (_currentPage < _totalPages - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
+      HapticUtils.mediumImpact();
       widget.onComplete();
     }
   }

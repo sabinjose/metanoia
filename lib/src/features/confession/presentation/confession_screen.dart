@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -29,7 +30,10 @@ class ConfessionScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.history),
             tooltip: l10n.viewHistory,
-            onPressed: () => context.go('/confess/history'),
+            onPressed: () {
+              HapticUtils.lightImpact();
+              context.go('/confess/history');
+            },
           ),
         ],
       ),
@@ -71,6 +75,7 @@ class ConfessionScreen extends ConsumerWidget {
                   const SizedBox(height: 32),
                   FilledButton.icon(
                     onPressed: () {
+                      HapticUtils.mediumImpact();
                       context.go('/examine');
                     },
                     icon: const Icon(Icons.assignment_outlined),

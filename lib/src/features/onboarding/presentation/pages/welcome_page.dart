@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -249,7 +250,10 @@ class _WelcomePageState extends State<WelcomePage>
                       ],
                     ),
                     child: FilledButton(
-                      onPressed: widget.onNext,
+                      onPressed: () {
+                        HapticUtils.mediumImpact();
+                        widget.onNext();
+                      },
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 48,

@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -120,8 +121,10 @@ class ConfessionHistoryScreen extends ConsumerWidget {
                         ),
                       ),
                       child: InkWell(
-                        onTap:
-                            () => _showConfessionDetails(context, confession),
+                        onTap: () {
+                          HapticUtils.lightImpact();
+                          _showConfessionDetails(context, confession);
+                        },
                         borderRadius: BorderRadius.circular(16),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
