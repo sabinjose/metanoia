@@ -594,4 +594,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proceedToConfess => 'Proceed';
+
+  @override
+  String get clearDraftTitle => 'Clear Draft?';
+
+  @override
+  String get clearDraftMessage => 'This will remove all selected questions. Are you sure?';
+
+  @override
+  String get clearDraft => 'Clear Draft';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String draftRestored(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Restored $count items from your last session',
+      one: 'Restored 1 item from your last session',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
+  String minutesAgo(Object count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get noQuestionsInSection => 'No questions in this section';
 }

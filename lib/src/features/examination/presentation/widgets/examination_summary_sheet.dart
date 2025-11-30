@@ -24,7 +24,7 @@ class ExaminationSummarySheet extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     // Group selected questions by commandment
-    final groupedSelections = _groupSelectionsByCommandment();
+    final groupedSelections = _groupSelectionsByCommandment(l10n);
 
     return Container(
       constraints: BoxConstraints(
@@ -161,14 +161,14 @@ class ExaminationSummarySheet extends StatelessWidget {
     );
   }
 
-  Map<String, List<String>> _groupSelectionsByCommandment() {
+  Map<String, List<String>> _groupSelectionsByCommandment(AppLocalizations l10n) {
     final Map<String, List<String>> grouped = {};
 
     for (final item in data) {
       final commandmentTitle = item.isGeneral
-          ? 'General'
+          ? l10n.general
           : item.commandment?.customTitle ??
-              'Commandment ${item.commandment?.commandmentNo}';
+              '${l10n.commandment} ${item.commandment?.commandmentNo}';
 
       // Check standard questions
       for (final q in item.questions) {

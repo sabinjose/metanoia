@@ -145,5 +145,16 @@
   "selectedCount": "{count} ഇനങ്ങൾ തിരഞ്ഞെടുത്തു",
   "noSinsSelected": "പാപങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല",
   "continueEditing": "തുടരുക",
-  "proceedToConfess": "മുന്നോട്ട്"
+  "proceedToConfess": "മുന്നോട്ട്",
+  "clearDraftTitle": "ഡ്രാഫ്റ്റ് മായ്ക്കണോ?",
+  "clearDraftMessage": "തിരഞ്ഞെടുത്ത എല്ലാ ചോദ്യങ്ങളും നീക്കം ചെയ്യും. തുടരണോ?",
+  "clearDraft": "ഡ്രാഫ്റ്റ് മായ്ക്കുക",
+  "cancel": "റദ്ദാക്കുക",
+  "clear": "മായ്ക്കുക",
+  "draftRestored": "{count, plural, =1{കഴിഞ്ഞ സെഷനിൽ നിന്ന് 1 ഇനം പുനഃസ്ഥാപിച്ചു} other{കഴിഞ്ഞ സെഷനിൽ നിന്ന് {count} ഇനങ്ങൾ പുനഃസ്ഥാപിച്ചു}}",
+  "justNow": "ഇപ്പോൾ",
+  "minutesAgo": "{count} മി. മുമ്പ്",
+  "hoursAgo": "{count} മ. മുമ്പ്",
+  "general": "പൊതുവായത്",
+  "noQuestionsInSection": "ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല"
 }

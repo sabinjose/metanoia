@@ -582,4 +582,46 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get proceedToConfess => 'മുന്നോട്ട്';
+
+  @override
+  String get clearDraftTitle => 'ഡ്രാഫ്റ്റ് മായ്ക്കണോ?';
+
+  @override
+  String get clearDraftMessage => 'തിരഞ്ഞെടുത്ത എല്ലാ ചോദ്യങ്ങളും നീക്കം ചെയ്യും. തുടരണോ?';
+
+  @override
+  String get clearDraft => 'ഡ്രാഫ്റ്റ് മായ്ക്കുക';
+
+  @override
+  String get clear => 'മായ്ക്കുക';
+
+  @override
+  String draftRestored(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'കഴിഞ്ഞ സെഷനിൽ നിന്ന് $count ഇനങ്ങൾ പുനഃസ്ഥാപിച്ചു',
+      one: 'കഴിഞ്ഞ സെഷനിൽ നിന്ന് 1 ഇനം പുനഃസ്ഥാപിച്ചു',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get justNow => 'ഇപ്പോൾ';
+
+  @override
+  String minutesAgo(Object count) {
+    return '$count മി. മുമ്പ്';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '$count മ. മുമ്പ്';
+  }
+
+  @override
+  String get general => 'പൊതുവായത്';
+
+  @override
+  String get noQuestionsInSection => 'ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല';
 }

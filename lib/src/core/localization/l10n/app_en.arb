@@ -188,5 +188,16 @@
   "selectedCount": "{count} items selected",
   "noSinsSelected": "No sins selected",
   "continueEditing": "Continue Editing",
-  "proceedToConfess": "Proceed"
+  "proceedToConfess": "Proceed",
+  "clearDraftTitle": "Clear Draft?",
+  "clearDraftMessage": "This will remove all selected questions. Are you sure?",
+  "clearDraft": "Clear Draft",
+  "cancel": "Cancel",
+  "clear": "Clear",
+  "draftRestored": "{count, plural, =1{Restored 1 item from your last session} other{Restored {count} items from your last session}}",
+  "justNow": "Just now",
+  "minutesAgo": "{count}m ago",
+  "hoursAgo": "{count}h ago",
+  "general": "General",
+  "noQuestionsInSection": "No questions in this section"
 }

@@ -266,7 +266,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
       child: SafeArea(
         child: Row(
           children: [
-            // Previous button
+            // Previous button - icon on left (natural for "back")
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: isFirstPage ? null : _previousPage,
@@ -278,7 +278,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
               ),
             ),
             const SizedBox(width: 12),
-            // Next / Finish button
+            // Next / Finish button - icon on right for "forward" direction
             Expanded(
               child: isLastPage
                   ? FilledButton.icon(
@@ -291,12 +291,18 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     )
-                  : FilledButton.icon(
+                  : FilledButton(
                       onPressed: _nextPage,
-                      icon: const Icon(Icons.chevron_right),
-                      label: Text(l10n.nextCommandment),
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(l10n.nextCommandment),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.chevron_right),
+                        ],
                       ),
                     ),
             ),
@@ -362,6 +368,8 @@ class _CommandmentPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final allItems = <Widget>[];
 
     // Standard questions
@@ -414,6 +422,33 @@ class _CommandmentPage extends ConsumerWidget {
         _AddYourOwnTile(
           onTap: () => onAddCustomSin(
             item.isGeneral ? null : item.commandment?.code,
+          ),
+        ),
+      );
+    }
+
+    // Empty state if no questions and no add option
+    if (allItems.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                size: 48,
+                color: theme.colorScheme.primary.withValues(alpha: 0.5),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.noQuestionsInSection,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       );

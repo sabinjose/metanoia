@@ -28,17 +28,16 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     // Show snackbar after first frame if draft was restored
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = ref.read(examinationControllerProvider.notifier);
+      final l10n = AppLocalizations.of(context)!;
       if (controller.isDraftRestored && !_hasShownRestoreSnackbar) {
         _hasShownRestoreSnackbar = true;
         final count = ref.read(examinationControllerProvider).length;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Restored $count question${count == 1 ? '' : 's'} from your last session',
-            ),
+            content: Text(l10n.draftRestored(count)),
             duration: const Duration(seconds: 3),
             action: SnackBarAction(
-              label: 'Clear',
+              label: l10n.clear,
               onPressed: () async {
                 await controller.clearDraft();
               },
@@ -86,7 +85,7 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0),
                         child: Text(
-                          _getTimeAgo(controller.lastSavedAt!),
+                          _getTimeAgo(controller.lastSavedAt!, l10n),
                           style: Theme.of(
                             context,
                           ).textTheme.labelSmall?.copyWith(
@@ -106,18 +105,16 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                   context: context,
                   builder:
                       (context) => AlertDialog(
-                        title: const Text('Clear Draft?'),
-                        content: const Text(
-                          'This will remove all selected questions. Are you sure?',
-                        ),
+                        title: Text(l10n.clearDraftTitle),
+                        content: Text(l10n.clearDraftMessage),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context, false),
-                            child: const Text('Cancel'),
+                            child: Text(l10n.cancel),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
-                            child: const Text('Clear'),
+                            child: Text(l10n.clear),
                           ),
                         ],
                       ),
@@ -142,36 +139,17 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                     ),
                   ),
                   if (selectedQuestions.isNotEmpty)
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'clear',
                       child: Row(
                         children: [
-                          Icon(Icons.delete_outline),
-                          SizedBox(width: 8),
-                          Text('Clear Draft'),
+                          const Icon(Icons.delete_outline),
+                          const SizedBox(width: 8),
+                          Text(l10n.clearDraft),
                         ],
                       ),
                     ),
                 ],
-          ),
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed:
-                selectedQuestions.isEmpty
-                    ? null
-                    : () async {
-                      final controller = ref.read(
-                        examinationControllerProvider.notifier,
-                      );
-                      await controller.saveConfession();
-                      // Invalidate the confession provider so it refreshes
-                      ref.invalidate(activeConfessionProvider);
-                      if (context.mounted) {
-                        context.go('/confess');
-                        // Clear the examination state after navigation
-                        await controller.clearAfterSave();
-                      }
-                    },
           ),
         ],
       ),
@@ -200,16 +178,16 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     }
   }
 
-  String _getTimeAgo(DateTime dateTime) {
+  String _getTimeAgo(DateTime dateTime, AppLocalizations l10n) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inSeconds < 60) {
-      return 'Just now';
+      return l10n.justNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return l10n.minutesAgo(difference.inMinutes);
     } else {
-      return '${difference.inHours}h ago';
+      return l10n.hoursAgo(difference.inHours);
     }
   }
 

@@ -1192,6 +1192,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Proceed'**
   String get proceedToConfess;
+
+  /// No description provided for @clearDraftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Draft?'**
+  String get clearDraftTitle;
+
+  /// No description provided for @clearDraftMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove all selected questions. Are you sure?'**
+  String get clearDraftMessage;
+
+  /// No description provided for @clearDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Draft'**
+  String get clearDraft;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @draftRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Restored 1 item from your last session} other{Restored {count} items from your last session}}'**
+  String draftRestored(num count);
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String minutesAgo(Object count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgo(Object count);
+
+  /// No description provided for @general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// No description provided for @noQuestionsInSection.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions in this section'**
+  String get noQuestionsInSection;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
