@@ -1,6 +1,7 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,25 +29,11 @@ class FaqScreen extends ConsumerWidget {
       body: faqsAsync.when(
         data: (faqs) {
           if (faqs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.help_outline,
-                    size: 64,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No FAQs available',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
-              ),
-            );
+            return EmptyState(
+              icon: Icons.help_outline,
+              title: l10n.noFaqContent,
+              subtitle: l10n.noFaqContentDesc,
+            ).animate().fadeIn().scale();
           }
 
           // Group FAQs by heading
@@ -133,6 +120,7 @@ class FaqScreen extends ConsumerWidget {
                                                 context,
                                               ).colorScheme.onPrimaryContainer,
                                           fontWeight: FontWeight.bold,
+                                          height: 1.0,
                                         ),
                                       ),
                                     ),
@@ -194,6 +182,7 @@ class FaqScreen extends ConsumerWidget {
                                                       .colorScheme
                                                       .onSecondaryContainer,
                                               fontWeight: FontWeight.bold,
+                                              height: 1.0,
                                             ),
                                           ),
                                         ),

@@ -167,5 +167,12 @@
   "confessionDate": "കുമ്പസാര തീയതി",
   "dateUpdated": "തീയതി അപ്‌ഡേറ്റ് ചെയ്തു",
   "changeDateConfirmTitle": "തീയതി മാറ്റണോ?",
-  "changeDateConfirmMessage": "കുമ്പസാര തീയതി {date} ആയി മാറ്റണോ?"
+  "changeDateConfirmMessage": "കുമ്പസാര തീയതി {date} ആയി മാറ്റണോ?",
+
+  "noGuideContent": "ഗൈഡ് ഉള്ളടക്കം ലഭ്യമല്ല",
+  "noGuideContentDesc": "ഗൈഡ് ഉള്ളടക്കം ഇവിടെ ദൃശ്യമാകും",
+  "noFaqContent": "FAQ-കൾ ലഭ്യമല്ല",
+  "noFaqContentDesc": "പതിവ് ചോദ്യങ്ങൾ ഇവിടെ ദൃശ്യമാകും",
+  "faqSubtitle": "കുമ്പസാരത്തെക്കുറിച്ചുള്ള പതിവ് ചോദ്യങ്ങൾ",
+  "tapToExpand": "കൂടുതൽ വായിക്കാൻ ടാപ്പ് ചെയ്യുക"
 }

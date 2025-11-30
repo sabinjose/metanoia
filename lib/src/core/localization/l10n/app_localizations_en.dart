@@ -671,4 +671,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String changeDateConfirmMessage(Object date) {
     return 'Change confession date to $date?';
   }
+
+  @override
+  String get noGuideContent => 'No guide content available';
+
+  @override
+  String get noGuideContentDesc => 'Guide content will appear here';
+
+  @override
+  String get noFaqContent => 'No FAQs available';
+
+  @override
+  String get noFaqContentDesc => 'Frequently asked questions will appear here';
+
+  @override
+  String get faqSubtitle => 'Frequently asked questions about confession';
+
+  @override
+  String get tapToExpand => 'Tap to read more';
 }

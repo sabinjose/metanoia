@@ -1318,6 +1318,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change confession date to {date}?'**
   String changeDateConfirmMessage(Object date);
+
+  /// No description provided for @noGuideContent.
+  ///
+  /// In en, this message translates to:
+  /// **'No guide content available'**
+  String get noGuideContent;
+
+  /// No description provided for @noGuideContentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide content will appear here'**
+  String get noGuideContentDesc;
+
+  /// No description provided for @noFaqContent.
+  ///
+  /// In en, this message translates to:
+  /// **'No FAQs available'**
+  String get noFaqContent;
+
+  /// No description provided for @noFaqContentDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently asked questions will appear here'**
+  String get noFaqContentDesc;
+
+  /// No description provided for @faqSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently asked questions about confession'**
+  String get faqSubtitle;
+
+  /// No description provided for @tapToExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to read more'**
+  String get tapToExpand;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -210,5 +210,12 @@
   "confessionDate": "Confession Date",
   "dateUpdated": "Date updated",
   "changeDateConfirmTitle": "Change Date?",
-  "changeDateConfirmMessage": "Change confession date to {date}?"
+  "changeDateConfirmMessage": "Change confession date to {date}?",
+
+  "noGuideContent": "No guide content available",
+  "noGuideContentDesc": "Guide content will appear here",
+  "noFaqContent": "No FAQs available",
+  "noFaqContentDesc": "Frequently asked questions will appear here",
+  "faqSubtitle": "Frequently asked questions about confession",
+  "tapToExpand": "Tap to read more"
 }

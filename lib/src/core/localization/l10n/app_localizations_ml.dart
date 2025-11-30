@@ -659,4 +659,22 @@ class AppLocalizationsMl extends AppLocalizations {
   String changeDateConfirmMessage(Object date) {
     return 'കുമ്പസാര തീയതി $date ആയി മാറ്റണോ?';
   }
+
+  @override
+  String get noGuideContent => 'ഗൈഡ് ഉള്ളടക്കം ലഭ്യമല്ല';
+
+  @override
+  String get noGuideContentDesc => 'ഗൈഡ് ഉള്ളടക്കം ഇവിടെ ദൃശ്യമാകും';
+
+  @override
+  String get noFaqContent => 'FAQ-കൾ ലഭ്യമല്ല';
+
+  @override
+  String get noFaqContentDesc => 'പതിവ് ചോദ്യങ്ങൾ ഇവിടെ ദൃശ്യമാകും';
+
+  @override
+  String get faqSubtitle => 'കുമ്പസാരത്തെക്കുറിച്ചുള്ള പതിവ് ചോദ്യങ്ങൾ';
+
+  @override
+  String get tapToExpand => 'കൂടുതൽ വായിക്കാൻ ടാപ്പ് ചെയ്യുക';
 }
