@@ -53,7 +53,6 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     final l10n = AppLocalizations.of(context)!;
     final examinationDataAsync = ref.watch(examinationDataProvider);
     final selectedQuestions = ref.watch(examinationControllerProvider);
-    final controller = ref.watch(examinationControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -62,40 +61,20 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           if (selectedQuestions.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedCountBadge(
-                      count: selectedQuestions.length,
-                      label: l10n.selected(selectedQuestions.length),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
-                      textColor:
-                          Theme.of(context).colorScheme.onPrimaryContainer,
-                      textStyle:
-                          Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                          ),
+              child: AnimatedCountBadge(
+                count: selectedQuestions.length,
+                label: l10n.selected(selectedQuestions.length),
+                backgroundColor:
+                    Theme.of(context).colorScheme.primaryContainer,
+                textColor:
+                    Theme.of(context).colorScheme.onPrimaryContainer,
+                textStyle:
+                    Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
                     ),
-                    if (controller.lastSavedAt != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
-                        child: Text(
-                          _getTimeAgo(controller.lastSavedAt!, l10n),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.labelSmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
               ),
             ).animate().fadeIn().scale(),
           PopupMenuButton<String>(
@@ -120,7 +99,7 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                       ),
                 );
                 if (confirmed == true && context.mounted) {
-                  await controller.clearDraft();
+                  await ref.read(examinationControllerProvider.notifier).clearDraft();
                 }
               } else if (value == 'custom_sins') {
                 context.push('/examine/custom-sins');
@@ -175,19 +154,6 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
       context.go('/confess');
       // Clear the examination state after navigation
       await controller.clearAfterSave();
-    }
-  }
-
-  String _getTimeAgo(DateTime dateTime, AppLocalizations l10n) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inSeconds < 60) {
-      return l10n.justNow;
-    } else if (difference.inMinutes < 60) {
-      return l10n.minutesAgo(difference.inMinutes);
-    } else {
-      return l10n.hoursAgo(difference.inHours);
     }
   }
 
