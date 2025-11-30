@@ -28,39 +28,18 @@ class _FeaturePageState extends State<FeaturePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-      ),
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack),
-      ),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.2, 0.8, curve: Curves.easeOutCubic),
-      ),
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
     );
 
     _controller.forward();
@@ -76,18 +55,8 @@ class _FeaturePageState extends State<FeaturePage>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Opacity(
-        opacity: _fadeAnimation.value,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Transform.scale(
-            scale: _scaleAnimation.value,
-            child: child,
-          ),
-        ),
-      ),
+    return FadeTransition(
+      opacity: _fadeAnimation,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
         child: Column(
