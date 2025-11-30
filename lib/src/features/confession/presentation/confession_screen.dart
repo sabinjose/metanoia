@@ -29,7 +29,7 @@ class ConfessionScreen extends ConsumerWidget {
         title: Text(l10n.confessTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.healing),
+            icon: const Icon(Icons.checklist),
             tooltip: l10n.penanceTracker,
             onPressed: () {
               HapticUtils.lightImpact();
@@ -423,7 +423,7 @@ class ConfessionScreen extends ConsumerWidget {
         title: Row(
           children: [
             Icon(
-              Icons.healing,
+              Icons.checklist,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 8),

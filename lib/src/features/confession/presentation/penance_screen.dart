@@ -76,7 +76,7 @@ class PenanceScreen extends ConsumerWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.check_circle_outline,
+              Icons.task_alt,
               size: 64,
               color: theme.colorScheme.primary,
             ),
@@ -237,7 +237,7 @@ class _PenanceCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
-                    Icons.healing,
+                    Icons.checklist,
                     color: theme.colorScheme.primary,
                     size: 20,
                   ),

@@ -1,16 +1,25 @@
+import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
+import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:intl/intl.dart';
 
-class ConfessionHistoryScreen extends ConsumerWidget {
+class ConfessionHistoryScreen extends ConsumerStatefulWidget {
   const ConfessionHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConfessionHistoryScreen> createState() =>
+      _ConfessionHistoryScreenState();
+}
+
+class _ConfessionHistoryScreenState
+    extends ConsumerState<ConfessionHistoryScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -24,7 +33,7 @@ class ConfessionHistoryScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.delete_sweep),
             tooltip: 'Delete All',
-            onPressed: () => _showDeleteAllDialog(context, ref),
+            onPressed: () => _showDeleteAllDialog(context),
           ),
         ],
       ),
@@ -227,23 +236,23 @@ class ConfessionHistoryScreen extends ConsumerWidget {
     );
   }
 
-  void _showDeleteAllDialog(BuildContext context, WidgetRef ref) {
+  void _showDeleteAllDialog(BuildContext context) {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
+          (dialogContext) => AlertDialog(
             title: const Text('Delete All Confessions?'),
             content: const Text(
               'This will permanently delete all your confession history. This action cannot be undone.',
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(dialogContext),
                 child: const Text('Cancel'),
               ),
               FilledButton(
                 onPressed: () async {
-                  Navigator.pop(context); // Close dialog
+                  Navigator.pop(dialogContext); // Close dialog
                   await ref
                       .read(confessionRepositoryProvider)
                       .deleteAllFinishedConfessions();
@@ -257,7 +266,7 @@ class ConfessionHistoryScreen extends ConsumerWidget {
                   }
                 },
                 style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
+                  backgroundColor: Theme.of(dialogContext).colorScheme.error,
                 ),
                 child: const Text('Delete All'),
               ),
@@ -270,119 +279,444 @@ class ConfessionHistoryScreen extends ConsumerWidget {
     BuildContext context,
     ConfessionWithItems confession,
   ) {
-    final dateFormat = DateFormat('MMMM dd, yyyy • hh:mm a');
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => DraggableScrollableSheet(
-            initialChildSize: 0.7,
-            minChildSize: 0.5,
-            maxChildSize: 0.95,
-            builder:
-                (context, scrollController) => Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
+      builder: (context) => _ConfessionDetailsSheet(
+        confession: confession,
+        onPenanceUpdated: () {
+          ref.invalidate(pendingPenancesProvider);
+        },
+      ),
+    );
+  }
+}
+
+class _ConfessionDetailsSheet extends ConsumerStatefulWidget {
+  final ConfessionWithItems confession;
+  final VoidCallback onPenanceUpdated;
+
+  const _ConfessionDetailsSheet({
+    required this.confession,
+    required this.onPenanceUpdated,
+  });
+
+  @override
+  ConsumerState<_ConfessionDetailsSheet> createState() =>
+      _ConfessionDetailsSheetState();
+}
+
+class _ConfessionDetailsSheetState
+    extends ConsumerState<_ConfessionDetailsSheet> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final dateFormat = DateFormat('MMMM dd, yyyy • hh:mm a');
+    final penanceAsync = ref.watch(
+      penanceForConfessionProvider(widget.confession.confession.id),
+    );
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      builder: (context, scrollController) => Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.church,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Confession Details',
+                          style: theme.textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          dateFormat.format(
+                            widget.confession.confession.finishedAt ??
+                                widget.confession.confession.date,
+                          ),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.church,
-                              color: Theme.of(context).colorScheme.primary,
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: ListView(
+                controller: scrollController,
+                padding: const EdgeInsets.all(20),
+                children: [
+                  // Penance Section
+                  penanceAsync.when(
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                    data: (penance) => _buildPenanceSection(
+                      context,
+                      l10n,
+                      theme,
+                      penance,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Items header
+                  Text(
+                    '${widget.confession.items.length} item${widget.confession.items.length != 1 ? 's' : ''} confessed',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Confession items
+                  ...widget.confession.items.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${index + 1}.',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Confession Details',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    dateFormat.format(
-                                      confession.confession.finishedAt ??
-                                          confession.confession.date,
-                                    ),
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium?.copyWith(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              item.content,
+                              style: theme.textTheme.bodyLarge,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      const Divider(height: 1),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          padding: const EdgeInsets.all(20),
-                          itemCount: confession.items.length,
-                          itemBuilder: (context, index) {
-                            final item = confession.items[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${index + 1}.',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium?.copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      item.content,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPenanceSection(
+    BuildContext context,
+    AppLocalizations l10n,
+    ThemeData theme,
+    Penance? penance,
+  ) {
+    if (penance == null) {
+      // No penance - show add button
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant,
+            style: BorderStyle.solid,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.checklist,
+                  size: 20,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.penance,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _showAddPenanceDialog(context, l10n),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.addPenance),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Has penance - show it
+    final dateFormat = DateFormat('MMM dd, yyyy');
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: penance.isCompleted
+            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: penance.isCompleted
+              ? theme.colorScheme.primary.withValues(alpha: 0.3)
+              : theme.colorScheme.outlineVariant,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                penance.isCompleted ? Icons.task_alt : Icons.checklist,
+                size: 20,
+                color: penance.isCompleted
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                l10n.penance,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: penance.isCompleted
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const Spacer(),
+              if (penance.isCompleted)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'Completed',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+            ],
           ),
+          const SizedBox(height: 12),
+          Text(
+            penance.description,
+            style: theme.textTheme.bodyMedium,
+          ),
+          if (penance.isCompleted && penance.completedAt != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              l10n.completedOn(dateFormat.format(penance.completedAt!)),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          if (!penance.isCompleted) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: () => _completePenance(penance.id, l10n),
+                    icon: const Icon(Icons.check, size: 18),
+                    label: Text(l10n.markAsComplete),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: () =>
+                      _showEditPenanceDialog(context, l10n, penance),
+                  icon: const Icon(Icons.edit, size: 20),
+                  tooltip: l10n.editPenance,
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
     );
+  }
+
+  Future<void> _showAddPenanceDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final controller = TextEditingController();
+
+    final result = await showDialog<String?>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.checklist,
+              color: Theme.of(dialogContext).colorScheme.primary,
+            ),
+            const SizedBox(width: 8),
+            Text(l10n.addPenance),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.penanceDescription,
+              style: Theme.of(dialogContext).textTheme.bodyMedium?.copyWith(
+                    color:
+                        Theme.of(dialogContext).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: l10n.penanceHint,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              autofocus: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(dialogContext, controller.text.trim()),
+            child: Text(l10n.savePenance),
+          ),
+        ],
+      ),
+    );
+
+    if (result != null && result.isNotEmpty && context.mounted) {
+      await ref
+          .read(penanceRepositoryProvider)
+          .addPenance(widget.confession.confession.id, result);
+      ref.invalidate(
+        penanceForConfessionProvider(widget.confession.confession.id),
+      );
+      widget.onPenanceUpdated();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.penanceAdded)),
+        );
+      }
+    }
+  }
+
+  Future<void> _showEditPenanceDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+    Penance penance,
+  ) async {
+    final controller = TextEditingController(text: penance.description);
+
+    final result = await showDialog<String?>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.editPenance),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: l10n.penanceDescription,
+            border: const OutlineInputBorder(),
+          ),
+          maxLines: 3,
+          textCapitalization: TextCapitalization.sentences,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(dialogContext, controller.text.trim()),
+            child: Text(l10n.updateButton),
+          ),
+        ],
+      ),
+    );
+
+    if (result != null && result.isNotEmpty && context.mounted) {
+      await ref.read(penanceRepositoryProvider).updatePenance(
+            penance.id,
+            result,
+          );
+      ref.invalidate(
+        penanceForConfessionProvider(widget.confession.confession.id),
+      );
+      widget.onPenanceUpdated();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.penanceUpdated)),
+        );
+      }
+    }
+  }
+
+  Future<void> _completePenance(int penanceId, AppLocalizations l10n) async {
+    HapticUtils.mediumImpact();
+    await ref.read(penanceRepositoryProvider).completePenance(penanceId);
+    ref.invalidate(
+      penanceForConfessionProvider(widget.confession.confession.id),
+    );
+    widget.onPenanceUpdated();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.penanceCompleted)),
+      );
+    }
   }
 }
