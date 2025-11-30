@@ -916,6 +916,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap here to add your own personal notes for this commandment.'**
   String get tutorialCustomSinDesc;
+
+  /// No description provided for @penance.
+  ///
+  /// In en, this message translates to:
+  /// **'Penance'**
+  String get penance;
+
+  /// No description provided for @penanceTracker.
+  ///
+  /// In en, this message translates to:
+  /// **'Penance Tracker'**
+  String get penanceTracker;
+
+  /// No description provided for @addPenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Penance'**
+  String get addPenance;
+
+  /// No description provided for @editPenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Penance'**
+  String get editPenance;
+
+  /// No description provided for @penanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'What penance were you given?'**
+  String get penanceDescription;
+
+  /// No description provided for @penanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Say 3 Hail Marys, Read a Scripture passage...'**
+  String get penanceHint;
+
+  /// No description provided for @penanceAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Penance added'**
+  String get penanceAdded;
+
+  /// No description provided for @penanceUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Penance updated'**
+  String get penanceUpdated;
+
+  /// No description provided for @penanceCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Penance completed! God bless you.'**
+  String get penanceCompleted;
+
+  /// No description provided for @markAsComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Complete'**
+  String get markAsComplete;
+
+  /// No description provided for @pendingPenances.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Penances'**
+  String get pendingPenances;
+
+  /// No description provided for @noPendingPenances.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending penances'**
+  String get noPendingPenances;
+
+  /// No description provided for @noPendingPenancesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'All your penances are completed. God bless!'**
+  String get noPendingPenancesDesc;
+
+  /// No description provided for @completedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed on {date}'**
+  String completedOn(Object date);
+
+  /// No description provided for @assignedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned on {date}'**
+  String assignedOn(Object date);
+
+  /// No description provided for @skipPenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skipPenance;
+
+  /// No description provided for @savePenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Penance'**
+  String get savePenance;
+
+  /// No description provided for @insights.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights'**
+  String get insights;
+
+  /// No description provided for @confessionInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Confession Insights'**
+  String get confessionInsights;
+
+  /// No description provided for @totalConfessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Confessions'**
+  String get totalConfessions;
+
+  /// No description provided for @averageFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Frequency'**
+  String get averageFrequency;
+
+  /// No description provided for @everyXDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {count} days'**
+  String everyXDays(Object count);
+
+  /// No description provided for @daysSinceLastConfession.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Since Last'**
+  String get daysSinceLastConfession;
+
+  /// No description provided for @currentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Streak'**
+  String get currentStreak;
+
+  /// No description provided for @weeksStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 week} other{{count} weeks}}'**
+  String weeksStreak(num count);
+
+  /// No description provided for @monthlyActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Activity'**
+  String get monthlyActivity;
+
+  /// No description provided for @confessionsThisYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Confessions This Year'**
+  String get confessionsThisYear;
+
+  /// No description provided for @noInsightsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No insights yet'**
+  String get noInsightsYet;
+
+  /// No description provided for @noInsightsYetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your first confession to see your spiritual journey stats'**
+  String get noInsightsYetDesc;
+
+  /// No description provided for @totalItemsConfessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Items Confessed'**
+  String get totalItemsConfessed;
+
+  /// No description provided for @firstConfession.
+  ///
+  /// In en, this message translates to:
+  /// **'First Confession'**
+  String get firstConfession;
+
+  /// No description provided for @spiritualJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Spiritual Journey'**
+  String get spiritualJourney;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

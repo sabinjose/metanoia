@@ -424,4 +424,114 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get tutorialCustomSinDesc => 'ഈ കൽപ്പനയ്ക്കായി നിങ്ങളുടെ സ്വന്തം കുറിപ്പുകൾ ചേർക്കാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.';
+
+  @override
+  String get penance => 'Penance';
+
+  @override
+  String get penanceTracker => 'Penance Tracker';
+
+  @override
+  String get addPenance => 'Add Penance';
+
+  @override
+  String get editPenance => 'Edit Penance';
+
+  @override
+  String get penanceDescription => 'What penance were you given?';
+
+  @override
+  String get penanceHint => 'e.g., Say 3 Hail Marys, Read a Scripture passage...';
+
+  @override
+  String get penanceAdded => 'Penance added';
+
+  @override
+  String get penanceUpdated => 'Penance updated';
+
+  @override
+  String get penanceCompleted => 'Penance completed! God bless you.';
+
+  @override
+  String get markAsComplete => 'Mark as Complete';
+
+  @override
+  String get pendingPenances => 'Pending Penances';
+
+  @override
+  String get noPendingPenances => 'No pending penances';
+
+  @override
+  String get noPendingPenancesDesc => 'All your penances are completed. God bless!';
+
+  @override
+  String completedOn(Object date) {
+    return 'Completed on $date';
+  }
+
+  @override
+  String assignedOn(Object date) {
+    return 'Assigned on $date';
+  }
+
+  @override
+  String get skipPenance => 'Skip';
+
+  @override
+  String get savePenance => 'Save Penance';
+
+  @override
+  String get insights => 'Insights';
+
+  @override
+  String get confessionInsights => 'Confession Insights';
+
+  @override
+  String get totalConfessions => 'Total Confessions';
+
+  @override
+  String get averageFrequency => 'Average Frequency';
+
+  @override
+  String everyXDays(Object count) {
+    return 'Every $count days';
+  }
+
+  @override
+  String get daysSinceLastConfession => 'Days Since Last';
+
+  @override
+  String get currentStreak => 'Current Streak';
+
+  @override
+  String weeksStreak(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks',
+      one: '1 week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get monthlyActivity => 'Monthly Activity';
+
+  @override
+  String get confessionsThisYear => 'Confessions This Year';
+
+  @override
+  String get noInsightsYet => 'No insights yet';
+
+  @override
+  String get noInsightsYetDesc => 'Complete your first confession to see your spiritual journey stats';
+
+  @override
+  String get totalItemsConfessed => 'Total Items Confessed';
+
+  @override
+  String get firstConfession => 'First Confession';
+
+  @override
+  String get spiritualJourney => 'Your Spiritual Journey';
 }

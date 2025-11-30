@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_history_screen.dart';
+import 'package:confessionapp/src/features/confession/presentation/insights_screen.dart';
+import 'package:confessionapp/src/features/confession/presentation/penance_screen.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_screen.dart';
 import 'package:confessionapp/src/features/examination/presentation/custom_sins_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/faq_screen.dart';
@@ -97,6 +99,16 @@ GoRouter goRouter(Ref ref) {
                     parentNavigatorKey: rootNavigatorKey,
                     builder:
                         (context, state) => const ConfessionHistoryScreen(),
+                  ),
+                  GoRoute(
+                    path: 'penance',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const PenanceScreen(),
+                  ),
+                  GoRoute(
+                    path: 'insights',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const InsightsScreen(),
                   ),
                 ],
               ),

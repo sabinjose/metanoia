@@ -2,6 +2,7 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
+import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
@@ -27,6 +28,22 @@ class ConfessionScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.confessTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.healing),
+            tooltip: l10n.penanceTracker,
+            onPressed: () {
+              HapticUtils.lightImpact();
+              context.go('/confess/penance');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.insights),
+            tooltip: l10n.insights,
+            onPressed: () {
+              HapticUtils.lightImpact();
+              context.go('/confess/insights');
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.history),
             tooltip: l10n.viewHistory,
@@ -267,6 +284,14 @@ class ConfessionScreen extends ConsumerWidget {
                                   ),
                                   FilledButton(
                                     onPressed: () async {
+                                      Navigator.pop(context); // Close confirmation dialog
+
+                                      // Show penance input dialog
+                                      final penanceText = await _showPenanceInputDialog(
+                                        context,
+                                        l10n,
+                                      );
+
                                       final keepHistory = await ref.read(
                                         keepHistorySettingsProvider.future,
                                       );
@@ -276,11 +301,19 @@ class ConfessionScreen extends ConsumerWidget {
                                             data.confession.id,
                                             keepHistory: keepHistory,
                                           );
+
+                                      // Save penance if provided
+                                      if (penanceText != null && penanceText.isNotEmpty) {
+                                        await ref
+                                            .read(penanceRepositoryProvider)
+                                            .addPenance(data.confession.id, penanceText);
+                                        ref.invalidate(pendingPenancesProvider);
+                                      }
+
                                       // Refresh the active confession state
                                       ref.invalidate(activeConfessionProvider);
 
                                       if (context.mounted) {
-                                        Navigator.pop(context);
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
@@ -375,6 +408,63 @@ class ConfessionScreen extends ConsumerWidget {
         );
       }
     }
+  }
+
+  Future<String?> _showPenanceInputDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final controller = TextEditingController();
+
+    return showDialog<String?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.healing,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: 8),
+            Text(l10n.addPenance),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.penanceDescription,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: l10n.penanceHint,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              autofocus: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, null),
+            child: Text(l10n.skipPenance),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: Text(l10n.savePenance),
+          ),
+        ],
+      ),
+    );
   }
 }
 

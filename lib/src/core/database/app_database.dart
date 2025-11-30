@@ -25,13 +25,14 @@ part 'app_database.g.dart';
     GuideItems,
     Prayers,
     UserCustomSins,
+    Penances,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -119,6 +120,10 @@ class AppDatabase extends _$AppDatabase {
       if (from < 12) {
         // Add UserCustomSins table for user-created custom sins
         await m.createTable(userCustomSins);
+      }
+      if (from < 13) {
+        // Add Penances table for penance tracking
+        await m.createTable(penances);
       }
 
       // Sync content after any upgrade to ensure latest JSON data is applied
