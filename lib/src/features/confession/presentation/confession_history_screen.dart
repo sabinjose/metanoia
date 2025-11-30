@@ -28,18 +28,10 @@ class ConfessionHistoryScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: FutureBuilder<List<ConfessionWithItems>>(
-        future: ref.read(confessionRepositoryProvider).getFinishedConfessions(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          final confessions = snapshot.data ?? [];
+      body: ref.watch(finishedConfessionsProvider).when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => Center(child: Text('Error: $error')),
+        data: (confessions) {
 
           if (confessions.isEmpty) {
             return Center(
@@ -103,6 +95,8 @@ class ConfessionHistoryScreen extends ConsumerWidget {
                   await ref
                       .read(confessionRepositoryProvider)
                       .deleteConfession(confession.confession.id);
+                  // Refresh the list
+                  ref.invalidate(finishedConfessionsProvider);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Confession deleted')),
@@ -253,12 +247,12 @@ class ConfessionHistoryScreen extends ConsumerWidget {
                   await ref
                       .read(confessionRepositoryProvider)
                       .deleteAllFinishedConfessions();
+                  // Refresh the list
+                  ref.invalidate(finishedConfessionsProvider);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('All confessions deleted')),
                     );
-                    // Refresh the screen
-                    (context as Element).markNeedsBuild();
                   }
                 },
                 style: FilledButton.styleFrom(

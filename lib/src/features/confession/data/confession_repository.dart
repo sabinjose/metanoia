@@ -23,6 +23,12 @@ Future<Confession?> lastFinishedConfession(Ref ref) async {
       .getSingleOrNull();
 }
 
+@riverpod
+Future<List<ConfessionWithItems>> finishedConfessions(Ref ref) async {
+  final repo = ref.watch(confessionRepositoryProvider);
+  return repo.getFinishedConfessions();
+}
+
 class ConfessionRepository {
   final AppDatabase _db;
 

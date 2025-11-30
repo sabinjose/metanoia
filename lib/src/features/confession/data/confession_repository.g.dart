@@ -44,5 +44,25 @@ final lastFinishedConfessionProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LastFinishedConfessionRef = AutoDisposeFutureProviderRef<Confession?>;
+String _$finishedConfessionsHash() =>
+    r'd77e0dc40023ffae5f73f1a02fa18c3d9d85267d';
+
+/// See also [finishedConfessions].
+@ProviderFor(finishedConfessions)
+final finishedConfessionsProvider =
+    AutoDisposeFutureProvider<List<ConfessionWithItems>>.internal(
+  finishedConfessions,
+  name: r'finishedConfessionsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$finishedConfessionsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FinishedConfessionsRef
+    = AutoDisposeFutureProviderRef<List<ConfessionWithItems>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
