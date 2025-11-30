@@ -116,7 +116,8 @@ class _CustomSinsScreenState extends ConsumerState<CustomSinsScreen> {
                     final commandments = cmdSnapshot.data ?? [];
                     final commandmentMap = {
                       for (var c in commandments)
-                        c.commandment.code: c.commandment,
+                        if (c.commandment != null)
+                          c.commandment!.code: c.commandment,
                     };
 
                     // Filter sins by search query

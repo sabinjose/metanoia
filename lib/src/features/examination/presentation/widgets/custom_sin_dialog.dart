@@ -152,12 +152,14 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              ...commandmentsWithQuestions.map((c) {
+                              ...commandmentsWithQuestions
+                                  .where((c) => c.commandment != null)
+                                  .map((c) {
                                 return DropdownMenuItem<String?>(
-                                  value: c.commandment.code,
+                                  value: c.commandment!.code,
                                   child: Text(
-                                    c.commandment.customTitle ??
-                                        c.commandment.content,
+                                    c.commandment!.customTitle ??
+                                        c.commandment!.content,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),

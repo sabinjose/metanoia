@@ -33,7 +33,7 @@ Future<List<CommandmentWithQuestions>> examinationData(Ref ref) async {
   final customSinsGrouped =
       await customSinsRepo.getCustomSinsGroupedByCommandment();
 
-  return commandments.map((c) {
+  final result = commandments.map((c) {
     final relatedQuestions =
         questions.where((q) => q.commandmentId == c.id).toList();
 
@@ -42,6 +42,14 @@ Future<List<CommandmentWithQuestions>> examinationData(Ref ref) async {
 
     return CommandmentWithQuestions(c, relatedQuestions, customSins);
   }).toList();
+
+  // Add "General" section if there are uncategorized custom sins
+  final generalCustomSins = customSinsGrouped[null] ?? [];
+  if (generalCustomSins.isNotEmpty) {
+    result.add(CommandmentWithQuestions.general(generalCustomSins));
+  }
+
+  return result;
 }
 
 class ExaminationRepository {
@@ -49,9 +57,17 @@ class ExaminationRepository {
 }
 
 class CommandmentWithQuestions {
-  final Commandment commandment;
+  final Commandment? commandment;
   final List<ExaminationQuestion> questions;
   final List<UserCustomSin> customSins;
+  final bool isGeneral;
 
-  CommandmentWithQuestions(this.commandment, this.questions, this.customSins);
+  CommandmentWithQuestions(this.commandment, this.questions, this.customSins)
+      : isGeneral = false;
+
+  /// Creates a "General" section for uncategorized custom sins
+  CommandmentWithQuestions.general(this.customSins)
+      : commandment = null,
+        questions = const [],
+        isGeneral = true;
 }

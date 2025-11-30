@@ -277,7 +277,13 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                     _searchQuery.isEmpty
                         ? data
                         : data.where((item) {
-                          return item.commandment.content
+                          // For general section, search in custom sins
+                          if (item.isGeneral) {
+                            return item.customSins.any(
+                              (s) => s.sinText.toLowerCase().contains(_searchQuery),
+                            );
+                          }
+                          return (item.commandment?.content ?? '')
                                   .toLowerCase()
                                   .contains(_searchQuery) ||
                               item.questions.any(
@@ -360,8 +366,10 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      item.commandment.customTitle ??
-                                          '${l10n.commandment} ${item.commandment.commandmentNo}',
+                                      item.isGeneral
+                                          ? l10n.noCommandment
+                                          : item.commandment?.customTitle ??
+                                              '${l10n.commandment} ${item.commandment?.commandmentNo}',
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleMedium?.copyWith(
@@ -402,16 +410,17 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                 ],
                               ),
                               subtitle:
-                                  (item.commandment.customTitle != null &&
-                                          item.commandment.customTitle ==
-                                              item.commandment.content)
+                                  item.isGeneral ||
+                                          (item.commandment?.customTitle != null &&
+                                              item.commandment?.customTitle ==
+                                                  item.commandment?.content)
                                       ? null
                                       : Padding(
                                         padding: const EdgeInsets.only(
                                           top: 8.0,
                                         ),
                                         child: Text(
-                                          item.commandment.content,
+                                          item.commandment?.content ?? '',
                                           style:
                                               Theme.of(
                                                 context,
@@ -634,9 +643,10 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                   );
                                 }),
                                 // Add your own row - with tutorial showcase on first item only
+                                // For general section, pass null to indicate no commandment
                                 _buildAddYourOwnRow(
                                   context,
-                                  item.commandment.code ?? 'general',
+                                  item.isGeneral ? null : (item.commandment?.code ?? 'general'),
                                   showShowcase: index == 0,
                                 ),
                               ],
@@ -680,7 +690,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
   Widget _buildAddYourOwnRow(
     BuildContext context,
-    String commandmentCode, {
+    String? commandmentCode, {
     bool showShowcase = false,
   }) {
     final l10n = AppLocalizations.of(context)!;
@@ -753,7 +763,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
   Future<void> _showAddCustomSinDialog(
     BuildContext context,
-    String commandmentCode,
+    String? commandmentCode,
   ) async {
     final l10n = AppLocalizations.of(context)!;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -768,10 +778,13 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
         final repository = ref.read(userCustomSinsRepositoryProvider);
 
         // Override the commandment code with the one from the current section
+        // If commandmentCode is null, it means this is the general section
         final updatedResult = UserCustomSinsCompanion(
           sinText: result.sinText,
           note: result.note,
-          commandmentCode: drift.Value(commandmentCode),
+          commandmentCode: commandmentCode != null
+              ? drift.Value(commandmentCode)
+              : const drift.Value.absent(),
           originalQuestionId: result.originalQuestionId,
         );
 
