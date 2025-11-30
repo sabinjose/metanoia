@@ -62,6 +62,18 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
     }
   }
 
+  Future<void> _onRefresh() async {
+    HapticUtils.lightImpact();
+    // Get the current content language
+    final contentLanguageAsync = ref.read(contentLanguageControllerProvider);
+    final locale =
+        contentLanguageAsync.valueOrNull ?? Localizations.localeOf(context);
+    // Invalidate the quote provider to fetch a new random quote
+    ref.invalidate(randomQuoteProvider(locale));
+    // Wait a bit for the animation to feel natural
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -80,7 +92,10 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
           ),
         ),
         child: SafeArea(
-          child: CustomScrollView(
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            color: theme.colorScheme.primary,
+            child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -218,6 +233,7 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
+          ),
           ),
         ),
       ),
