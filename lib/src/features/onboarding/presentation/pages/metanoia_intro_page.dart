@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -260,7 +261,10 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                   ],
                                 ),
                                 child: IconButton.filled(
-                                  onPressed: widget.onNext,
+                                  onPressed: () {
+                                    HapticUtils.mediumImpact();
+                                    widget.onNext();
+                                  },
                                   icon: const Icon(Icons.arrow_forward_rounded),
                                   iconSize: 28,
                                   style: IconButton.styleFrom(

@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
@@ -136,6 +137,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
                         locale: const Locale('en'),
                         isSelected: selectedLanguage.languageCode == 'en',
                         onTap: () {
+                          HapticUtils.selectionClick();
                           ref
                               .read(contentLanguageControllerProvider.notifier)
                               .setLanguage(const Locale('en'));
@@ -147,6 +149,7 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
                         locale: const Locale('ml'),
                         isSelected: selectedLanguage.languageCode == 'ml',
                         onTap: () {
+                          HapticUtils.selectionClick();
                           ref
                               .read(contentLanguageControllerProvider.notifier)
                               .setLanguage(const Locale('ml'));
@@ -179,7 +182,10 @@ class _ContentLanguagePageState extends ConsumerState<ContentLanguagePage>
               width: double.infinity,
               constraints: const BoxConstraints(maxWidth: 400),
               child: FilledButton(
-                onPressed: widget.onNext,
+                onPressed: () {
+                  HapticUtils.mediumImpact();
+                  widget.onNext();
+                },
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
