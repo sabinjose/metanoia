@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -63,44 +64,10 @@ class PenanceScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.task_alt,
-              size: 64,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            l10n.noPendingPenances,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: Text(
-              l10n.noPendingPenancesDesc,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
+    return EmptyState(
+      icon: Icons.task_alt,
+      title: l10n.noPendingPenances,
+      subtitle: l10n.noPendingPenancesDesc,
     ).animate().fadeIn().scale();
   }
 

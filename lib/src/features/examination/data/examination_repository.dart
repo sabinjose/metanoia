@@ -8,11 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 part 'examination_repository.g.dart';
 
 @riverpod
-ExaminationRepository examinationRepository(Ref ref) {
-  return ExaminationRepository(ref.watch(appDatabaseProvider));
-}
-
-@riverpod
 Future<List<CommandmentWithQuestions>> examinationData(Ref ref) async {
   final db = ref.watch(appDatabaseProvider);
   final contentLanguage = await ref.watch(
@@ -50,10 +45,6 @@ Future<List<CommandmentWithQuestions>> examinationData(Ref ref) async {
   }
 
   return result;
-}
-
-class ExaminationRepository {
-  ExaminationRepository(AppDatabase db);
 }
 
 class CommandmentWithQuestions {

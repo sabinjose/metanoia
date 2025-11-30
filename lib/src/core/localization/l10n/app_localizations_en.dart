@@ -648,4 +648,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get skipOnboardingMessage => 'You can always access help and settings later from the app menu.';
+
+  @override
+  String get confessionHistoryTitle => 'Confession History';
+
+  @override
+  String get deleteAll => 'Delete All';
 }

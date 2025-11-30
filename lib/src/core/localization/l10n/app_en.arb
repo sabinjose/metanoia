@@ -203,5 +203,7 @@
   "skip": "Skip",
   "back": "Back",
   "skipOnboardingTitle": "Skip Introduction?",
-  "skipOnboardingMessage": "You can always access help and settings later from the app menu."
+  "skipOnboardingMessage": "You can always access help and settings later from the app menu.",
+  "confessionHistoryTitle": "Confession History",
+  "deleteAll": "Delete All"
 }

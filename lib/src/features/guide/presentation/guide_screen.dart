@@ -2,12 +2,12 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
-import 'package:confessionapp/src/features/guide/presentation/faq_screen.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class GuideScreen extends ConsumerWidget {
   const GuideScreen({super.key});
@@ -36,11 +36,7 @@ class GuideScreen extends ConsumerWidget {
                 child: InkWell(
                   onTap: () {
                     HapticUtils.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const FaqScreen(),
-                      ),
-                    );
+                    context.push('/guide/faq');
                   },
                   borderRadius: BorderRadius.circular(16),
                   child: Padding(
@@ -55,7 +51,7 @@ class GuideScreen extends ConsumerWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Text(
-                            'Frequently Asked Questions',
+                            l10n.faqTitle,
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),

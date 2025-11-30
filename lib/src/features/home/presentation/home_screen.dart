@@ -1,7 +1,8 @@
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
-import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
+import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart'
+    show ReminderFrequency, reminderSettingsProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';

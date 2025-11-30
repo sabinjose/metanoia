@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -56,44 +57,10 @@ class InsightsScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context, AppLocalizations l10n) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.insights,
-              size: 64,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Text(
-            l10n.noInsightsYet,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: Text(
-              l10n.noInsightsYetDesc,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
+    return EmptyState(
+      icon: Icons.insights,
+      title: l10n.noInsightsYet,
+      subtitle: l10n.noInsightsYetDesc,
     ).animate().fadeIn().scale();
   }
 

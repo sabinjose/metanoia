@@ -1276,6 +1276,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can always access help and settings later from the app menu.'**
   String get skipOnboardingMessage;
+
+  /// No description provided for @confessionHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confession History'**
+  String get confessionHistoryTitle;
+
+  /// No description provided for @deleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All'**
+  String get deleteAll;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

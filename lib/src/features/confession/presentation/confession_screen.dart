@@ -3,7 +3,8 @@ import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
-import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
+import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart'
+    show keepHistorySettingsProvider;
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/widgets/custom_sin_dialog.dart';
@@ -83,31 +84,11 @@ class _CustomSinsScreenState extends ConsumerState<CustomSinsScreen> {
                 final groupedSins = snapshot.data ?? {};
 
                 if (groupedSins.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.note_add_outlined,
-                          size: 64,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.noCustomSins,
-                          style: theme.textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          l10n.noCustomSinsDesc,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ).animate().fadeIn(duration: 300.ms).scale(delay: 100.ms),
-                  );
+                  return EmptyState(
+                    icon: Icons.note_add_outlined,
+                    title: l10n.noCustomSins,
+                    subtitle: l10n.noCustomSinsDesc,
+                  ).animate().fadeIn(duration: 300.ms).scale(delay: 100.ms);
                 }
 
                 return FutureBuilder<List<CommandmentWithQuestions>>(

@@ -636,4 +636,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get skipOnboardingMessage => 'ആപ്പ് മെനുവിൽ നിന്ന് പിന്നീട് സഹായവും ക്രമീകരണങ്ങളും എപ്പോൾ വേണമെങ്കിലും ആക്സസ് ചെയ്യാം.';
+
+  @override
+  String get confessionHistoryTitle => 'കുമ്പസാര ചരിത്രം';
+
+  @override
+  String get deleteAll => 'എല്ലാം ഇല്ലാതാക്കുക';
 }

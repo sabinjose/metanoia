@@ -6,26 +6,6 @@ part of 'examination_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$examinationRepositoryHash() =>
-    r'a0b564f3e4236c3494eb7c5cc262e06ca22be535';
-
-/// See also [examinationRepository].
-@ProviderFor(examinationRepository)
-final examinationRepositoryProvider =
-    AutoDisposeProvider<ExaminationRepository>.internal(
-  examinationRepository,
-  name: r'examinationRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$examinationRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ExaminationRepositoryRef
-    = AutoDisposeProviderRef<ExaminationRepository>;
 String _$examinationDataHash() => r'a9753ea61a9296314c66528a13d6552388af41d3';
 
 /// See also [examinationData].

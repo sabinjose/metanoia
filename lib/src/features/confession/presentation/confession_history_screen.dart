@@ -20,10 +20,11 @@ class _ConfessionHistoryScreenState
     extends ConsumerState<ConfessionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Confession History',
+          l10n.confessionHistoryTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -32,7 +33,7 @@ class _ConfessionHistoryScreenState
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_sweep),
-            tooltip: 'Delete All',
+            tooltip: l10n.deleteAll,
             onPressed: () => _showDeleteAllDialog(context),
           ),
         ],
