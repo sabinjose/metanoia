@@ -3,6 +3,7 @@ import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
@@ -24,7 +25,10 @@ class PrayersScreen extends ConsumerWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final prayer = prayers[index];
-              return _buildPrayerCard(context, prayer.title, prayer.content);
+              return _buildPrayerCard(context, prayer.title, prayer.content)
+                  .animate()
+                  .fadeIn(delay: (50 * index).ms)
+                  .slideY(begin: 0.1, end: 0);
             },
           );
         },
