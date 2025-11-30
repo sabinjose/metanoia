@@ -1,6 +1,7 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
+import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
@@ -208,6 +209,8 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                           examinationControllerProvider.notifier,
                         );
                         await controller.saveConfession();
+                        // Invalidate the confession provider so it refreshes
+                        ref.invalidate(activeConfessionProvider);
                         if (context.mounted) {
                           context.go('/confess');
                           // Clear the examination state after navigation
