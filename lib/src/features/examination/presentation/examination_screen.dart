@@ -5,7 +5,6 @@ import 'package:confessionapp/src/features/examination/data/examination_reposito
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:confessionapp/src/features/examination/presentation/widgets/custom_sin_dialog.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -770,25 +769,17 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
     final result = await showDialog<UserCustomSinsCompanion>(
       context: context,
-      builder: (context) => const CustomSinDialog(),
+      builder: (context) => CustomSinDialog(
+        initialCommandmentCode: commandmentCode,
+      ),
     );
 
     if (result != null && mounted) {
       try {
         final repository = ref.read(userCustomSinsRepositoryProvider);
 
-        // Override the commandment code with the one from the current section
-        // If commandmentCode is null, it means this is the general section
-        final updatedResult = UserCustomSinsCompanion(
-          sinText: result.sinText,
-          note: result.note,
-          commandmentCode: commandmentCode != null
-              ? drift.Value(commandmentCode)
-              : const drift.Value.absent(),
-          originalQuestionId: result.originalQuestionId,
-        );
-
-        await repository.insertCustomSin(updatedResult);
+        // Use the commandment code from the dialog result (user's selection)
+        await repository.insertCustomSin(result);
 
         if (mounted) {
           scaffoldMessenger.showSnackBar(

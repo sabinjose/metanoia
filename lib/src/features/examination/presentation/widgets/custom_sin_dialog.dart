@@ -9,12 +9,14 @@ class CustomSinDialog extends ConsumerStatefulWidget {
   final UserCustomSin? existingSin;
   final int? originalQuestionId;
   final String? initialText;
+  final String? initialCommandmentCode;
 
   const CustomSinDialog({
     super.key,
     this.existingSin,
     this.originalQuestionId,
     this.initialText,
+    this.initialCommandmentCode,
   });
 
   @override
@@ -36,7 +38,8 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
     _noteController = TextEditingController(
       text: widget.existingSin?.note ?? '',
     );
-    _selectedCommandmentCode = widget.existingSin?.commandmentCode;
+    _selectedCommandmentCode = widget.existingSin?.commandmentCode ??
+        widget.initialCommandmentCode;
   }
 
   @override
