@@ -42,7 +42,7 @@ class ConfessionScreen extends ConsumerWidget {
                       HapticUtils.lightImpact();
                       context.go('/confess/penance');
                     },
-                    icon: const Icon(Icons.checklist, size: 18),
+                    icon: const Icon(Icons.healing, size: 18),
                     label: Text(l10n.penance),
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -52,7 +52,7 @@ class ConfessionScreen extends ConsumerWidget {
                 );
               }
               return IconButton(
-                icon: const Icon(Icons.checklist),
+                icon: const Icon(Icons.healing),
                 tooltip: l10n.penanceTracker,
                 onPressed: () {
                   HapticUtils.lightImpact();
