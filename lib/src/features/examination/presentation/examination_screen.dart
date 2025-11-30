@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
@@ -428,6 +429,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
+                                        HapticUtils.selectionClick();
                                         if (!isSelected) {
                                           ref
                                               .read(
@@ -529,6 +531,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
+                                        HapticUtils.selectionClick();
                                         if (!isSelected) {
                                           ref
                                               .read(
@@ -688,7 +691,10 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     final row = Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => _showAddCustomSinDialog(context, commandmentCode),
+        onTap: () {
+          HapticUtils.lightImpact();
+          _showAddCustomSinDialog(context, commandmentCode);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 20,

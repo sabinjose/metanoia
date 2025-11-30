@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -99,7 +100,10 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.settings_outlined),
-                            onPressed: () => context.push('/settings'),
+                            onPressed: () {
+                              HapticUtils.lightImpact();
+                              context.push('/settings');
+                            },
                             tooltip: l10n.settingsTitle,
                           ),
                         ],
@@ -328,7 +332,10 @@ class _HomeCard extends StatelessWidget {
       elevation: 0,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          HapticUtils.lightImpact();
+          onTap();
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -447,13 +454,15 @@ class _NextReminderCard extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap:
-            () => context.push(
-              Uri(
-                path: '/settings',
-                queryParameters: {'scrollTo': 'reminders'},
-              ).toString(),
-            ),
+        onTap: () {
+          HapticUtils.lightImpact();
+          context.push(
+            Uri(
+              path: '/settings',
+              queryParameters: {'scrollTo': 'reminders'},
+            ).toString(),
+          );
+        },
         borderRadius: BorderRadius.circular(20),
         child: Container(
           padding: const EdgeInsets.all(16),
