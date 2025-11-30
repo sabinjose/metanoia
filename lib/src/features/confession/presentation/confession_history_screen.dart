@@ -562,7 +562,11 @@ class _ConfessionDetailsSheetState
                 IconButton(
                   onPressed: () =>
                       _showEditPenanceDialog(context, l10n, penance),
-                  icon: const Icon(Icons.edit, size: 18),
+                  icon: Icon(
+                    Icons.edit,
+                    size: 18,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   tooltip: l10n.editPenance,
                   visualDensity: VisualDensity.compact,
                 ),
