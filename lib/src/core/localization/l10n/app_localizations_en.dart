@@ -201,6 +201,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get selectedLabel => 'selected';
+
+  @override
   String get searchPlaceholder => 'Search commandments or questions...';
 
   @override
@@ -546,4 +549,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get spiritualJourney => 'Your Spiritual Journey';
+
+  @override
+  String get listView => 'List';
+
+  @override
+  String get guidedView => 'Guided';
+
+  @override
+  String commandmentProgress(Object current, Object total) {
+    return '$current of $total';
+  }
+
+  @override
+  String get previousCommandment => 'Previous';
+
+  @override
+  String get nextCommandment => 'Next';
+
+  @override
+  String get finishExamination => 'Finish';
+
+  @override
+  String get noQuestionsSelected => 'No questions selected in this section';
+
+  @override
+  String questionsSelectedInSection(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get examinationSummary => 'Examination Summary';
+
+  @override
+  String selectedCount(Object count) {
+    return '$count items selected';
+  }
+
+  @override
+  String get noSinsSelected => 'No sins selected';
+
+  @override
+  String get continueEditing => 'Continue Editing';
+
+  @override
+  String get proceedToConfess => 'Proceed';
+
+  @override
+  String get clearDraftTitle => 'Clear Draft?';
+
+  @override
+  String get clearDraftMessage => 'This will remove all selected questions. Are you sure?';
+
+  @override
+  String get clearDraft => 'Clear Draft';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String draftRestored(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Restored $count items from your last session',
+      one: 'Restored 1 item from your last session',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
+  String minutesAgo(Object count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get noQuestionsInSection => 'No questions in this section';
 }

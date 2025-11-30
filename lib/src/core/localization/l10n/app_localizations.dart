@@ -443,6 +443,12 @@ abstract class AppLocalizations {
   /// **'{count} selected'**
   String selected(Object count);
 
+  /// No description provided for @selectedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'selected'**
+  String get selectedLabel;
+
   /// No description provided for @searchPlaceholder.
   ///
   /// In en, this message translates to:
@@ -1108,6 +1114,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Spiritual Journey'**
   String get spiritualJourney;
+
+  /// No description provided for @listView.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get listView;
+
+  /// No description provided for @guidedView.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided'**
+  String get guidedView;
+
+  /// No description provided for @commandmentProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} of {total}'**
+  String commandmentProgress(Object current, Object total);
+
+  /// No description provided for @previousCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previousCommandment;
+
+  /// No description provided for @nextCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextCommandment;
+
+  /// No description provided for @finishExamination.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finishExamination;
+
+  /// No description provided for @noQuestionsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions selected in this section'**
+  String get noQuestionsSelected;
+
+  /// No description provided for @questionsSelectedInSection.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String questionsSelectedInSection(Object count);
+
+  /// No description provided for @examinationSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Examination Summary'**
+  String get examinationSummary;
+
+  /// No description provided for @selectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items selected'**
+  String selectedCount(Object count);
+
+  /// No description provided for @noSinsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No sins selected'**
+  String get noSinsSelected;
+
+  /// No description provided for @continueEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Editing'**
+  String get continueEditing;
+
+  /// No description provided for @proceedToConfess.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed'**
+  String get proceedToConfess;
+
+  /// No description provided for @clearDraftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Draft?'**
+  String get clearDraftTitle;
+
+  /// No description provided for @clearDraftMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove all selected questions. Are you sure?'**
+  String get clearDraftMessage;
+
+  /// No description provided for @clearDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Draft'**
+  String get clearDraft;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @draftRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Restored 1 item from your last session} other{Restored {count} items from your last session}}'**
+  String draftRestored(num count);
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String minutesAgo(Object count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgo(Object count);
+
+  /// No description provided for @general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// No description provided for @noQuestionsInSection.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions in this section'**
+  String get noQuestionsInSection;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

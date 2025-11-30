@@ -1,48 +1,26 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
-import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:confessionapp/src/features/examination/presentation/widgets/custom_sin_dialog.dart';
+import 'package:confessionapp/src/features/examination/presentation/widgets/guided_examination_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:showcaseview/showcaseview.dart';
-import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
-import 'package:confessionapp/src/core/theme/app_showcase.dart';
 
-class ExaminationScreen extends StatelessWidget {
+class ExaminationScreen extends ConsumerStatefulWidget {
   const ExaminationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    return ShowCaseWidget(
-      blurValue: 1,
-      builder: (context) => const _ExaminationContent(),
-      autoPlayDelay: const Duration(seconds: 3),
-    );
-  }
+  ConsumerState<ExaminationScreen> createState() => _ExaminationScreenState();
 }
 
-class _ExaminationContent extends ConsumerStatefulWidget {
-  const _ExaminationContent();
-
-  @override
-  ConsumerState<_ExaminationContent> createState() =>
-      _ExaminationContentState();
-}
-
-class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
-  String _searchQuery = '';
+class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   bool _hasShownRestoreSnackbar = false;
-  final GlobalKey _searchKey = GlobalKey();
-  final GlobalKey _checkKey = GlobalKey();
-  final GlobalKey _addCustomKey = GlobalKey();
 
   @override
   void initState() {
@@ -50,17 +28,16 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     // Show snackbar after first frame if draft was restored
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = ref.read(examinationControllerProvider.notifier);
+      final l10n = AppLocalizations.of(context)!;
       if (controller.isDraftRestored && !_hasShownRestoreSnackbar) {
         _hasShownRestoreSnackbar = true;
         final count = ref.read(examinationControllerProvider).length;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Restored $count question${count == 1 ? '' : 's'} from your last session',
-            ),
+            content: Text(l10n.draftRestored(count)),
             duration: const Duration(seconds: 3),
             action: SnackBarAction(
-              label: 'Clear',
+              label: l10n.clear,
               onPressed: () async {
                 await controller.clearDraft();
               },
@@ -68,23 +45,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
           ),
         );
       }
-      _checkAndShowTutorial();
     });
-  }
-
-  Future<void> _checkAndShowTutorial() async {
-    final controller = ref.read(tutorialControllerProvider.notifier);
-    final shouldShow = await controller.shouldShowExaminationTutorial();
-
-    if (shouldShow && mounted) {
-      // ignore: deprecated_member_use
-      ShowCaseWidget.of(context).startShowCase([
-        _searchKey,
-        _addCustomKey,
-        _checkKey,
-      ]);
-      await controller.markExaminationTutorialShown();
-    }
   }
 
   @override
@@ -92,7 +53,6 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     final l10n = AppLocalizations.of(context)!;
     final examinationDataAsync = ref.watch(examinationDataProvider);
     final selectedQuestions = ref.watch(examinationControllerProvider);
-    final controller = ref.watch(examinationControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -101,40 +61,20 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
           if (selectedQuestions.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedCountBadge(
-                      count: selectedQuestions.length,
-                      label: l10n.selected(selectedQuestions.length),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
-                      textColor:
-                          Theme.of(context).colorScheme.onPrimaryContainer,
-                      textStyle:
-                          Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                          ),
+              child: AnimatedCountBadge(
+                count: selectedQuestions.length,
+                label: l10n.selected(selectedQuestions.length),
+                backgroundColor:
+                    Theme.of(context).colorScheme.primaryContainer,
+                textColor:
+                    Theme.of(context).colorScheme.onPrimaryContainer,
+                textStyle:
+                    Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
                     ),
-                    if (controller.lastSavedAt != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
-                        child: Text(
-                          _getTimeAgo(controller.lastSavedAt!),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.labelSmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
               ),
             ).animate().fadeIn().scale(),
           PopupMenuButton<String>(
@@ -144,24 +84,22 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                   context: context,
                   builder:
                       (context) => AlertDialog(
-                        title: const Text('Clear Draft?'),
-                        content: const Text(
-                          'This will remove all selected questions. Are you sure?',
-                        ),
+                        title: Text(l10n.clearDraftTitle),
+                        content: Text(l10n.clearDraftMessage),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context, false),
-                            child: const Text('Cancel'),
+                            child: Text(l10n.cancel),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
-                            child: const Text('Clear'),
+                            child: Text(l10n.clear),
                           ),
                         ],
                       ),
                 );
                 if (confirmed == true && context.mounted) {
-                  await controller.clearDraft();
+                  await ref.read(examinationControllerProvider.notifier).clearDraft();
                 }
               } else if (value == 'custom_sins') {
                 context.push('/examine/custom-sins');
@@ -180,601 +118,43 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                     ),
                   ),
                   if (selectedQuestions.isNotEmpty)
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'clear',
                       child: Row(
                         children: [
-                          Icon(Icons.delete_outline),
-                          SizedBox(width: 8),
-                          Text('Clear Draft'),
+                          const Icon(Icons.delete_outline),
+                          const SizedBox(width: 8),
+                          Text(l10n.clearDraft),
                         ],
                       ),
                     ),
                 ],
           ),
-          AppShowcase(
-            showcaseKey: _checkKey,
-            title: l10n.finishConfession,
-            description: l10n.tutorialFinishDesc,
-            shapeBorder: const CircleBorder(),
-            currentStep: 3,
-            totalSteps: 3,
-            child: IconButton(
-              icon: const Icon(Icons.check),
-              onPressed:
-                  selectedQuestions.isEmpty
-                      ? null
-                      : () async {
-                        final controller = ref.read(
-                          examinationControllerProvider.notifier,
-                        );
-                        await controller.saveConfession();
-                        // Invalidate the confession provider so it refreshes
-                        ref.invalidate(activeConfessionProvider);
-                        if (context.mounted) {
-                          context.go('/confess');
-                          // Clear the examination state after navigation
-                          await controller.clearAfterSave();
-                        }
-                      },
-            ),
-          ),
         ],
       ),
-      body: Column(
-        children: [
-          // Search bar
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: AppShowcase(
-              showcaseKey: _searchKey,
-              title: l10n.searchPlaceholder,
-              description: l10n.tutorialSearchDesc,
-              shapeBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              currentStep: 1,
-              totalSteps: 3,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: l10n.searchPlaceholder,
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon:
-                      _searchQuery.isNotEmpty
-                          ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              setState(() {
-                                _searchQuery = '';
-                              });
-                            },
-                          )
-                          : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor:
-                      Theme.of(context).colorScheme.surfaceContainerHighest,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value.toLowerCase();
-                  });
-                },
-              ),
-            ),
-          ),
-          // Examination list
-          Expanded(
-            child: examinationDataAsync.when(
-              data: (data) {
-                // Filter data based on search query
-                final filteredData =
-                    _searchQuery.isEmpty
-                        ? data
-                        : data.where((item) {
-                          // For general section, search in custom sins
-                          if (item.isGeneral) {
-                            return item.customSins.any(
-                              (s) => s.sinText.toLowerCase().contains(_searchQuery),
-                            );
-                          }
-                          return (item.commandment?.content ?? '')
-                                  .toLowerCase()
-                                  .contains(_searchQuery) ||
-                              item.questions.any(
-                                (q) => q.question.toLowerCase().contains(
-                                  _searchQuery,
-                                ),
-                              );
-                        }).toList();
-
-                if (filteredData.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.noResults,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filteredData.length,
-                  itemBuilder: (context, index) {
-                    final item = filteredData[index];
-                    final commandmentQuestions = item.questions;
-                    final commandmentCustomSins = item.customSins;
-
-                    // Count selected questions
-                    final selectedQuestionsCount =
-                        commandmentQuestions
-                            .where((q) => selectedQuestions.containsKey(q.id))
-                            .length;
-
-                    // Count selected custom sins (using negative IDs)
-                    final selectedCustomSinsCount =
-                        commandmentCustomSins
-                            .where((s) => selectedQuestions.containsKey(-s.id))
-                            .length;
-
-                    final selectedCount =
-                        selectedQuestionsCount + selectedCustomSinsCount;
-                    final totalCount =
-                        commandmentQuestions.length +
-                        commandmentCustomSins.length;
-
-                    return Card(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          elevation: 0,
-                          color: Theme.of(context).colorScheme.surface,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color:
-                                  Theme.of(context).colorScheme.outlineVariant,
-                              width: 1,
-                            ),
-                          ),
-                          child: Theme(
-                            data: Theme.of(
-                              context,
-                            ).copyWith(dividerColor: Colors.transparent),
-                            child: ExpansionTile(
-                              tilePadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12,
-                              ),
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item.isGeneral
-                                          ? l10n.noCommandment
-                                          : item.commandment?.customTitle ??
-                                              '${l10n.commandment} ${item.commandment?.commandmentNo}',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium?.copyWith(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  if (selectedCount > 0)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primaryContainer,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        '$selectedCount/$totalCount',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.labelSmall?.copyWith(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimaryContainer,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              subtitle:
-                                  item.isGeneral ||
-                                          (item.commandment?.customTitle != null &&
-                                              item.commandment?.customTitle ==
-                                                  item.commandment?.content)
-                                      ? null
-                                      : Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0,
-                                        ),
-                                        child: Text(
-                                          item.commandment?.content ?? '',
-                                          style:
-                                              Theme.of(
-                                                context,
-                                              ).textTheme.bodyMedium,
-                                        ),
-                                      ),
-                              children: [
-                                // Standard questions
-                                ...commandmentQuestions.map((q) {
-                                  final isSelected = selectedQuestions
-                                      .containsKey(q.id);
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        HapticUtils.selectionClick();
-                                        if (!isSelected) {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .selectQuestion(q.id, q.question);
-                                        } else {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .unselectQuestion(q.id);
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              isSelected
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primaryContainer
-                                                      .withValues(alpha: 0.3)
-                                                  : null,
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outlineVariant
-                                                  .withValues(alpha: 0.5),
-                                              width: 0.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 2.0,
-                                              ),
-                                              child: Icon(
-                                                isSelected
-                                                    ? Icons.check_box
-                                                    : Icons
-                                                        .check_box_outline_blank,
-                                                color:
-                                                    isSelected
-                                                        ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurfaceVariant,
-                                                size: 24,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Text(
-                                                q.question,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodyLarge?.copyWith(
-                                                  color:
-                                                      isSelected
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurfaceVariant,
-                                                  fontWeight:
-                                                      isSelected
-                                                          ? FontWeight.w500
-                                                          : FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                                // Custom sins for this commandment
-                                ...item.customSins.map((customSin) {
-                                  // Use negative ID for custom sins
-                                  final customSinId = -customSin.id;
-                                  final isSelected = selectedQuestions
-                                      .containsKey(customSinId);
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        HapticUtils.selectionClick();
-                                        if (!isSelected) {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .selectQuestion(
-                                                customSinId,
-                                                customSin.sinText,
-                                              );
-                                        } else {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .unselectQuestion(customSinId);
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              isSelected
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer
-                                                      .withValues(alpha: 0.3)
-                                                  : null,
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outlineVariant
-                                                  .withValues(alpha: 0.5),
-                                              width: 0.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 2.0,
-                                              ),
-                                              child: Icon(
-                                                isSelected
-                                                    ? Icons.check_box
-                                                    : Icons
-                                                        .check_box_outline_blank,
-                                                color:
-                                                    isSelected
-                                                        ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.secondary
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurfaceVariant,
-                                                size: 24,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Icon(
-                                              Icons.auto_awesome,
-                                              size: 16,
-                                              color:
-                                                  Theme.of(
-                                                    context,
-                                                  ).colorScheme.secondary,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: Text(
-                                                customSin.sinText,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodyLarge?.copyWith(
-                                                  color:
-                                                      isSelected
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurfaceVariant,
-                                                  fontWeight:
-                                                      isSelected
-                                                          ? FontWeight.w500
-                                                          : FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                                // Add your own row - only for commandments 1-11 (Ten Commandments + Precepts)
-                                // Not for Capital Sins, Sins against Holy Spirit, etc.
-                                if (_shouldShowAddYourOwn(item))
-                                  _buildAddYourOwnRow(
-                                    context,
-                                    item.isGeneral ? null : (item.commandment?.code ?? 'general'),
-                                    showShowcase: index == 0,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: (50 * index).ms)
-                        .slideY(begin: 0.1, end: 0);
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error:
-                  (error, stack) =>
-                      Center(child: Text('${l10n.error}: $error')),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getTimeAgo(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inSeconds < 60) {
-      return 'Saved just now';
-    } else if (difference.inMinutes < 60) {
-      final mins = difference.inMinutes;
-      return 'Saved $mins min${mins == 1 ? '' : 's'} ago';
-    } else if (difference.inHours < 24) {
-      final hours = difference.inHours;
-      return 'Saved $hours hr${hours == 1 ? '' : 's'} ago';
-    } else {
-      final days = difference.inDays;
-      return 'Saved $days day${days == 1 ? '' : 's'} ago';
-    }
-  }
-
-  /// Check if "Add your own..." should be shown for this item.
-  /// Only show for commandments 1-11 (Ten Commandments + Precepts of the Church)
-  /// and for the General section. Not for Capital Sins, etc.
-  bool _shouldShowAddYourOwn(CommandmentWithQuestions item) {
-    if (item.isGeneral) return true;
-
-    final commandmentNo = item.commandment?.commandmentNo;
-    if (commandmentNo == null) return false;
-
-    // Only show for commandments 1-11
-    return commandmentNo <= 11;
-  }
-
-  Widget _buildAddYourOwnRow(
-    BuildContext context,
-    String? commandmentCode, {
-    bool showShowcase = false,
-  }) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-
-    final row = Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          HapticUtils.lightImpact();
-          _showAddCustomSinDialog(context, commandmentCode);
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 14,
-          ),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.15),
-            border: Border(
-              top: BorderSide(
-                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-                width: 0.5,
-              ),
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.add_circle_outline,
-                color: theme.colorScheme.secondary,
-                size: 24,
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  l10n.addYourOwn,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: theme.colorScheme.secondary,
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: theme.colorScheme.secondary.withValues(alpha: 0.7),
-                size: 20,
-              ),
-            ],
-          ),
+      body: examinationDataAsync.when(
+        data: (data) => GuidedExaminationView(
+          data: data,
+          onFinish: () => _finishExamination(context, ref),
+          onAddCustomSin: (commandmentCode) =>
+              _showAddCustomSinDialog(context, commandmentCode),
         ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
       ),
     );
+  }
 
-    if (showShowcase) {
-      return AppShowcase(
-        showcaseKey: _addCustomKey,
-        title: l10n.addCustomSin,
-        description: l10n.tutorialCustomSinDesc,
-        shapeBorder: const RoundedRectangleBorder(),
-        currentStep: 2,
-        totalSteps: 3,
-        child: row,
-      );
+  Future<void> _finishExamination(BuildContext context, WidgetRef ref) async {
+    final controller = ref.read(examinationControllerProvider.notifier);
+    await controller.saveConfession();
+    // Invalidate the confession provider so it refreshes
+    ref.invalidate(activeConfessionProvider);
+    if (context.mounted) {
+      context.go('/confess');
+      // Clear the examination state after navigation
+      await controller.clearAfterSave();
     }
-
-    return row;
   }
 
   Future<void> _showAddCustomSinDialog(

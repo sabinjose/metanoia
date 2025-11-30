@@ -189,6 +189,9 @@ class AppLocalizationsMl extends AppLocalizations {
   }
 
   @override
+  String get selectedLabel => 'തിരഞ്ഞെടുത്തു';
+
+  @override
   String get searchPlaceholder => 'കൽപ്പനകളോ ചോദ്യങ്ങളോ തിരയുക...';
 
   @override
@@ -534,4 +537,91 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get spiritualJourney => 'Your Spiritual Journey';
+
+  @override
+  String get listView => 'List';
+
+  @override
+  String get guidedView => 'Guided';
+
+  @override
+  String commandmentProgress(Object current, Object total) {
+    return '$current of $total';
+  }
+
+  @override
+  String get previousCommandment => 'Previous';
+
+  @override
+  String get nextCommandment => 'Next';
+
+  @override
+  String get finishExamination => 'Finish';
+
+  @override
+  String get noQuestionsSelected => 'No questions selected in this section';
+
+  @override
+  String questionsSelectedInSection(Object count) {
+    return '$count selected';
+  }
+
+  @override
+  String get examinationSummary => 'പരിശോധനാ സംഗ്രഹം';
+
+  @override
+  String selectedCount(Object count) {
+    return '$count ഇനങ്ങൾ തിരഞ്ഞെടുത്തു';
+  }
+
+  @override
+  String get noSinsSelected => 'പാപങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല';
+
+  @override
+  String get continueEditing => 'തുടരുക';
+
+  @override
+  String get proceedToConfess => 'മുന്നോട്ട്';
+
+  @override
+  String get clearDraftTitle => 'ഡ്രാഫ്റ്റ് മായ്ക്കണോ?';
+
+  @override
+  String get clearDraftMessage => 'തിരഞ്ഞെടുത്ത എല്ലാ ചോദ്യങ്ങളും നീക്കം ചെയ്യും. തുടരണോ?';
+
+  @override
+  String get clearDraft => 'ഡ്രാഫ്റ്റ് മായ്ക്കുക';
+
+  @override
+  String get clear => 'മായ്ക്കുക';
+
+  @override
+  String draftRestored(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'കഴിഞ്ഞ സെഷനിൽ നിന്ന് $count ഇനങ്ങൾ പുനഃസ്ഥാപിച്ചു',
+      one: 'കഴിഞ്ഞ സെഷനിൽ നിന്ന് 1 ഇനം പുനഃസ്ഥാപിച്ചു',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get justNow => 'ഇപ്പോൾ';
+
+  @override
+  String minutesAgo(Object count) {
+    return '$count മി. മുമ്പ്';
+  }
+
+  @override
+  String hoursAgo(Object count) {
+    return '$count മ. മുമ്പ്';
+  }
+
+  @override
+  String get general => 'പൊതുവായത്';
+
+  @override
+  String get noQuestionsInSection => 'ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളില്ല';
 }
