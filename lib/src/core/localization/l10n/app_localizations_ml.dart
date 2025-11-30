@@ -534,4 +534,32 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get spiritualJourney => 'Your Spiritual Journey';
+
+  @override
+  String get listView => 'List';
+
+  @override
+  String get guidedView => 'Guided';
+
+  @override
+  String commandmentProgress(Object current, Object total) {
+    return '$current of $total';
+  }
+
+  @override
+  String get previousCommandment => 'Previous';
+
+  @override
+  String get nextCommandment => 'Next';
+
+  @override
+  String get finishExamination => 'Finish';
+
+  @override
+  String get noQuestionsSelected => 'No questions selected in this section';
+
+  @override
+  String questionsSelectedInSection(Object count) {
+    return '$count selected';
+  }
 }

@@ -173,5 +173,14 @@
   "noInsightsYetDesc": "Complete your first confession to see your spiritual journey stats",
   "totalItemsConfessed": "Total Items Confessed",
   "firstConfession": "First Confession",
-  "spiritualJourney": "Your Spiritual Journey"
+  "spiritualJourney": "Your Spiritual Journey",
+
+  "listView": "List",
+  "guidedView": "Guided",
+  "commandmentProgress": "{current} of {total}",
+  "previousCommandment": "Previous",
+  "nextCommandment": "Next",
+  "finishExamination": "Finish",
+  "noQuestionsSelected": "No questions selected in this section",
+  "questionsSelectedInSection": "{count} selected"
 }

@@ -2,10 +2,12 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
+import 'package:confessionapp/src/features/examination/data/examination_mode_provider.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:confessionapp/src/features/examination/presentation/widgets/custom_sin_dialog.dart';
+import 'package:confessionapp/src/features/examination/presentation/widgets/guided_examination_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -223,443 +225,78 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
       ),
       body: Column(
         children: [
-          // Search bar
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: AppShowcase(
-              showcaseKey: _searchKey,
-              title: l10n.searchPlaceholder,
-              description: l10n.tutorialSearchDesc,
-              shapeBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              currentStep: 1,
-              totalSteps: 3,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: l10n.searchPlaceholder,
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon:
-                      _searchQuery.isNotEmpty
-                          ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              setState(() {
-                                _searchQuery = '';
-                              });
-                            },
-                          )
-                          : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor:
-                      Theme.of(context).colorScheme.surfaceContainerHighest,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value.toLowerCase();
-                  });
-                },
-              ),
-            ),
-          ),
-          // Examination list
+          // Mode selector and search bar (only in list mode)
+          _buildModeSelector(context, l10n),
+
+          // Content based on mode
           Expanded(
             child: examinationDataAsync.when(
               data: (data) {
-                // Filter data based on search query
-                final filteredData =
-                    _searchQuery.isEmpty
-                        ? data
-                        : data.where((item) {
-                          // For general section, search in custom sins
-                          if (item.isGeneral) {
-                            return item.customSins.any(
-                              (s) => s.sinText.toLowerCase().contains(_searchQuery),
-                            );
-                          }
-                          return (item.commandment?.content ?? '')
-                                  .toLowerCase()
-                                  .contains(_searchQuery) ||
-                              item.questions.any(
-                                (q) => q.question.toLowerCase().contains(
-                                  _searchQuery,
-                                ),
-                              );
-                        }).toList();
+                final mode = ref.watch(examinationModeControllerProvider);
 
-                if (filteredData.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          l10n.noResults,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
+                if (mode == ExaminationMode.guided) {
+                  return GuidedExaminationView(
+                    data: data,
+                    onFinish: () => _finishExamination(context, ref),
+                    onAddCustomSin: (commandmentCode) => _showAddCustomSinDialog(context, commandmentCode),
                   );
                 }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filteredData.length,
-                  itemBuilder: (context, index) {
-                    final item = filteredData[index];
-                    final commandmentQuestions = item.questions;
-                    final commandmentCustomSins = item.customSins;
-
-                    // Count selected questions
-                    final selectedQuestionsCount =
-                        commandmentQuestions
-                            .where((q) => selectedQuestions.containsKey(q.id))
-                            .length;
-
-                    // Count selected custom sins (using negative IDs)
-                    final selectedCustomSinsCount =
-                        commandmentCustomSins
-                            .where((s) => selectedQuestions.containsKey(-s.id))
-                            .length;
-
-                    final selectedCount =
-                        selectedQuestionsCount + selectedCustomSinsCount;
-                    final totalCount =
-                        commandmentQuestions.length +
-                        commandmentCustomSins.length;
-
-                    return Card(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          elevation: 0,
-                          color: Theme.of(context).colorScheme.surface,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color:
-                                  Theme.of(context).colorScheme.outlineVariant,
-                              width: 1,
+                // List mode - show search bar and list
+                return Column(
+                  children: [
+                    // Search bar
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: AppShowcase(
+                        showcaseKey: _searchKey,
+                        title: l10n.searchPlaceholder,
+                        description: l10n.tutorialSearchDesc,
+                        shapeBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        currentStep: 1,
+                        totalSteps: 3,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: l10n.searchPlaceholder,
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon:
+                                _searchQuery.isNotEmpty
+                                    ? IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          _searchQuery = '';
+                                        });
+                                      },
+                                    )
+                                    : null,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor:
+                                Theme.of(context).colorScheme.surfaceContainerHighest,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
                             ),
                           ),
-                          child: Theme(
-                            data: Theme.of(
-                              context,
-                            ).copyWith(dividerColor: Colors.transparent),
-                            child: ExpansionTile(
-                              tilePadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12,
-                              ),
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item.isGeneral
-                                          ? l10n.noCommandment
-                                          : item.commandment?.customTitle ??
-                                              '${l10n.commandment} ${item.commandment?.commandmentNo}',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium?.copyWith(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  if (selectedCount > 0)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primaryContainer,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        '$selectedCount/$totalCount',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.labelSmall?.copyWith(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimaryContainer,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              subtitle:
-                                  item.isGeneral ||
-                                          (item.commandment?.customTitle != null &&
-                                              item.commandment?.customTitle ==
-                                                  item.commandment?.content)
-                                      ? null
-                                      : Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0,
-                                        ),
-                                        child: Text(
-                                          item.commandment?.content ?? '',
-                                          style:
-                                              Theme.of(
-                                                context,
-                                              ).textTheme.bodyMedium,
-                                        ),
-                                      ),
-                              children: [
-                                // Standard questions
-                                ...commandmentQuestions.map((q) {
-                                  final isSelected = selectedQuestions
-                                      .containsKey(q.id);
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        HapticUtils.selectionClick();
-                                        if (!isSelected) {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .selectQuestion(q.id, q.question);
-                                        } else {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .unselectQuestion(q.id);
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              isSelected
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .primaryContainer
-                                                      .withValues(alpha: 0.3)
-                                                  : null,
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outlineVariant
-                                                  .withValues(alpha: 0.5),
-                                              width: 0.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 2.0,
-                                              ),
-                                              child: Icon(
-                                                isSelected
-                                                    ? Icons.check_box
-                                                    : Icons
-                                                        .check_box_outline_blank,
-                                                color:
-                                                    isSelected
-                                                        ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.primary
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurfaceVariant,
-                                                size: 24,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Text(
-                                                q.question,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodyLarge?.copyWith(
-                                                  color:
-                                                      isSelected
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurfaceVariant,
-                                                  fontWeight:
-                                                      isSelected
-                                                          ? FontWeight.w500
-                                                          : FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                                // Custom sins for this commandment
-                                ...item.customSins.map((customSin) {
-                                  // Use negative ID for custom sins
-                                  final customSinId = -customSin.id;
-                                  final isSelected = selectedQuestions
-                                      .containsKey(customSinId);
-                                  return Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        HapticUtils.selectionClick();
-                                        if (!isSelected) {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .selectQuestion(
-                                                customSinId,
-                                                customSin.sinText,
-                                              );
-                                        } else {
-                                          ref
-                                              .read(
-                                                examinationControllerProvider
-                                                    .notifier,
-                                              )
-                                              .unselectQuestion(customSinId);
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              isSelected
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer
-                                                      .withValues(alpha: 0.3)
-                                                  : null,
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outlineVariant
-                                                  .withValues(alpha: 0.5),
-                                              width: 0.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 2.0,
-                                              ),
-                                              child: Icon(
-                                                isSelected
-                                                    ? Icons.check_box
-                                                    : Icons
-                                                        .check_box_outline_blank,
-                                                color:
-                                                    isSelected
-                                                        ? Theme.of(
-                                                          context,
-                                                        ).colorScheme.secondary
-                                                        : Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurfaceVariant,
-                                                size: 24,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Icon(
-                                              Icons.auto_awesome,
-                                              size: 16,
-                                              color:
-                                                  Theme.of(
-                                                    context,
-                                                  ).colorScheme.secondary,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: Text(
-                                                customSin.sinText,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodyLarge?.copyWith(
-                                                  color:
-                                                      isSelected
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                          : Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurfaceVariant,
-                                                  fontWeight:
-                                                      isSelected
-                                                          ? FontWeight.w500
-                                                          : FontWeight.normal,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                                // Add your own row - only for commandments 1-11 (Ten Commandments + Precepts)
-                                // Not for Capital Sins, Sins against Holy Spirit, etc.
-                                if (_shouldShowAddYourOwn(item))
-                                  _buildAddYourOwnRow(
-                                    context,
-                                    item.isGeneral ? null : (item.commandment?.code ?? 'general'),
-                                    showShowcase: index == 0,
-                                  ),
-                              ],
-                            ),
-                          ),
-                        )
-                        .animate()
-                        .fadeIn(delay: (50 * index).ms)
-                        .slideY(begin: 0.1, end: 0);
-                  },
+                          onChanged: (value) {
+                            setState(() {
+                              _searchQuery = value.toLowerCase();
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    // List content
+                    Expanded(
+                      child: _buildListContent(context, l10n, data, selectedQuestions),
+                    ),
+                  ],
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -671,6 +308,326 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
         ],
       ),
     );
+  }
+
+  Widget _buildModeSelector(BuildContext context, AppLocalizations l10n) {
+    final mode = ref.watch(examinationModeControllerProvider);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: SegmentedButton<ExaminationMode>(
+        segments: [
+          ButtonSegment<ExaminationMode>(
+            value: ExaminationMode.list,
+            label: Text(l10n.listView),
+            icon: const Icon(Icons.list, size: 18),
+          ),
+          ButtonSegment<ExaminationMode>(
+            value: ExaminationMode.guided,
+            label: Text(l10n.guidedView),
+            icon: const Icon(Icons.swipe, size: 18),
+          ),
+        ],
+        selected: {mode},
+        onSelectionChanged: (Set<ExaminationMode> newSelection) {
+          HapticUtils.selectionClick();
+          ref
+              .read(examinationModeControllerProvider.notifier)
+              .setMode(newSelection.first);
+        },
+        style: const ButtonStyle(
+          visualDensity: VisualDensity.compact,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListContent(
+    BuildContext context,
+    AppLocalizations l10n,
+    List<CommandmentWithQuestions> data,
+    Map<int, String> selectedQuestions,
+  ) {
+    // Filter data based on search query
+    final filteredData =
+        _searchQuery.isEmpty
+            ? data
+            : data.where((item) {
+              // For general section, search in custom sins
+              if (item.isGeneral) {
+                return item.customSins.any(
+                  (s) => s.sinText.toLowerCase().contains(_searchQuery),
+                );
+              }
+              return (item.commandment?.content ?? '')
+                      .toLowerCase()
+                      .contains(_searchQuery) ||
+                  item.questions.any(
+                    (q) => q.question.toLowerCase().contains(_searchQuery),
+                  );
+            }).toList();
+
+    if (filteredData.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 64,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurfaceVariant
+                  .withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.noResults,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: filteredData.length,
+      itemBuilder: (context, index) {
+        final item = filteredData[index];
+        final commandmentQuestions = item.questions;
+        final commandmentCustomSins = item.customSins;
+
+        // Count selected questions
+        final selectedQuestionsCount = commandmentQuestions
+            .where((q) => selectedQuestions.containsKey(q.id))
+            .length;
+
+        // Count selected custom sins (using negative IDs)
+        final selectedCustomSinsCount = commandmentCustomSins
+            .where((s) => selectedQuestions.containsKey(-s.id))
+            .length;
+
+        final selectedCount = selectedQuestionsCount + selectedCustomSinsCount;
+        final totalCount =
+            commandmentQuestions.length + commandmentCustomSins.length;
+
+        return Card(
+              margin: const EdgeInsets.only(bottom: 16),
+              elevation: 0,
+              color: Theme.of(context).colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                  width: 1,
+                ),
+              ),
+              child: Theme(
+                data:
+                    Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.isGeneral
+                              ? l10n.noCommandment
+                              : item.commandment?.customTitle ??
+                                  '${l10n.commandment} ${item.commandment?.commandmentNo}',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      if (selectedCount > 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '$selectedCount/$totalCount',
+                            style:
+                                Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  subtitle: item.isGeneral ||
+                          (item.commandment?.customTitle != null &&
+                              item.commandment?.customTitle ==
+                                  item.commandment?.content)
+                      ? null
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            item.commandment?.content ?? '',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                  children: [
+                    // Standard questions
+                    ...commandmentQuestions.map((q) {
+                      final isSelected = selectedQuestions.containsKey(q.id);
+                      return _buildQuestionTile(
+                        context,
+                        q.question,
+                        isSelected,
+                        false,
+                        () {
+                          HapticUtils.selectionClick();
+                          if (!isSelected) {
+                            ref
+                                .read(examinationControllerProvider.notifier)
+                                .selectQuestion(q.id, q.question);
+                          } else {
+                            ref
+                                .read(examinationControllerProvider.notifier)
+                                .unselectQuestion(q.id);
+                          }
+                        },
+                      );
+                    }),
+                    // Custom sins for this commandment
+                    ...item.customSins.map((customSin) {
+                      final customSinId = -customSin.id;
+                      final isSelected =
+                          selectedQuestions.containsKey(customSinId);
+                      return _buildQuestionTile(
+                        context,
+                        customSin.sinText,
+                        isSelected,
+                        true,
+                        () {
+                          HapticUtils.selectionClick();
+                          if (!isSelected) {
+                            ref
+                                .read(examinationControllerProvider.notifier)
+                                .selectQuestion(customSinId, customSin.sinText);
+                          } else {
+                            ref
+                                .read(examinationControllerProvider.notifier)
+                                .unselectQuestion(customSinId);
+                          }
+                        },
+                      );
+                    }),
+                    // Add your own row
+                    if (_shouldShowAddYourOwn(item))
+                      _buildAddYourOwnRow(
+                        context,
+                        item.isGeneral
+                            ? null
+                            : (item.commandment?.code ?? 'general'),
+                        showShowcase: index == 0,
+                      ),
+                  ],
+                ),
+              ),
+            )
+            .animate()
+            .fadeIn(delay: (50 * index).ms)
+            .slideY(begin: 0.1, end: 0);
+      },
+    );
+  }
+
+  Widget _buildQuestionTile(
+    BuildContext context,
+    String question,
+    bool isSelected,
+    bool isCustom,
+    VoidCallback onTap,
+  ) {
+    final theme = Theme.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? (isCustom
+                    ? theme.colorScheme.secondaryContainer.withValues(alpha: 0.3)
+                    : theme.colorScheme.primaryContainer.withValues(alpha: 0.3))
+                : null,
+            border: Border(
+              top: BorderSide(
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                width: 0.5,
+              ),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Icon(
+                  isSelected ? Icons.check_box : Icons.check_box_outline_blank,
+                  color: isSelected
+                      ? (isCustom
+                          ? theme.colorScheme.secondary
+                          : theme.colorScheme.primary)
+                      : theme.colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              if (isCustom) ...[
+                Icon(
+                  Icons.auto_awesome,
+                  size: 16,
+                  color: theme.colorScheme.secondary,
+                ),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Text(
+                  question,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: isSelected
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onSurfaceVariant,
+                    fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _finishExamination(BuildContext context, WidgetRef ref) async {
+    final controller = ref.read(examinationControllerProvider.notifier);
+    await controller.saveConfession();
+    // Invalidate the confession provider so it refreshes
+    ref.invalidate(activeConfessionProvider);
+    if (context.mounted) {
+      context.go('/confess');
+      // Clear the examination state after navigation
+      await controller.clearAfterSave();
+    }
   }
 
   String _getTimeAgo(DateTime dateTime) {

@@ -1108,6 +1108,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Spiritual Journey'**
   String get spiritualJourney;
+
+  /// No description provided for @listView.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get listView;
+
+  /// No description provided for @guidedView.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided'**
+  String get guidedView;
+
+  /// No description provided for @commandmentProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} of {total}'**
+  String commandmentProgress(Object current, Object total);
+
+  /// No description provided for @previousCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previousCommandment;
+
+  /// No description provided for @nextCommandment.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextCommandment;
+
+  /// No description provided for @finishExamination.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finishExamination;
+
+  /// No description provided for @noQuestionsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No questions selected in this section'**
+  String get noQuestionsSelected;
+
+  /// No description provided for @questionsSelectedInSection.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String questionsSelectedInSection(Object count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
