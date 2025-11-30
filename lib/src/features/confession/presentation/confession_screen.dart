@@ -29,13 +29,20 @@ class ConfessionScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.confessTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.checklist),
-            tooltip: l10n.penanceTracker,
-            onPressed: () {
-              HapticUtils.lightImpact();
-              context.go('/confess/penance');
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: FilledButton.tonalIcon(
+              onPressed: () {
+                HapticUtils.lightImpact();
+                context.go('/confess/penance');
+              },
+              icon: const Icon(Icons.checklist, size: 18),
+              label: Text(l10n.penance),
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                visualDensity: VisualDensity.compact,
+              ),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.insights),
