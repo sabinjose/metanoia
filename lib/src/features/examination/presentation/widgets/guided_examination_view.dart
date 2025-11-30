@@ -197,7 +197,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
+                  color: theme.colorScheme.secondaryContainer,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
@@ -206,7 +206,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
                     widget.data.length,
                   ),
                   style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: theme.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
