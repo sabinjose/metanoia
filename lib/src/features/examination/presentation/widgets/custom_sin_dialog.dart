@@ -155,8 +155,11 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              // Only show commandments 1-11 (Ten Commandments + Precepts)
                               ...commandmentsWithQuestions
-                                  .where((c) => c.commandment != null)
+                                  .where((c) =>
+                                      c.commandment != null &&
+                                      c.commandment!.commandmentNo <= 11)
                                   .map((c) {
                                 return DropdownMenuItem<String?>(
                                   value: c.commandment!.code,

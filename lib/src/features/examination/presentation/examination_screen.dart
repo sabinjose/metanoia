@@ -641,13 +641,14 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                                     ),
                                   );
                                 }),
-                                // Add your own row - with tutorial showcase on first item only
-                                // For general section, pass null to indicate no commandment
-                                _buildAddYourOwnRow(
-                                  context,
-                                  item.isGeneral ? null : (item.commandment?.code ?? 'general'),
-                                  showShowcase: index == 0,
-                                ),
+                                // Add your own row - only for commandments 1-11 (Ten Commandments + Precepts)
+                                // Not for Capital Sins, Sins against Holy Spirit, etc.
+                                if (_shouldShowAddYourOwn(item))
+                                  _buildAddYourOwnRow(
+                                    context,
+                                    item.isGeneral ? null : (item.commandment?.code ?? 'general'),
+                                    showShowcase: index == 0,
+                                  ),
                               ],
                             ),
                           ),
@@ -685,6 +686,19 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
       final days = difference.inDays;
       return 'Saved $days day${days == 1 ? '' : 's'} ago';
     }
+  }
+
+  /// Check if "Add your own..." should be shown for this item.
+  /// Only show for commandments 1-11 (Ten Commandments + Precepts of the Church)
+  /// and for the General section. Not for Capital Sins, etc.
+  bool _shouldShowAddYourOwn(CommandmentWithQuestions item) {
+    if (item.isGeneral) return true;
+
+    final commandmentNo = item.commandment?.commandmentNo;
+    if (commandmentNo == null) return false;
+
+    // Only show for commandments 1-11
+    return commandmentNo <= 11;
   }
 
   Widget _buildAddYourOwnRow(
