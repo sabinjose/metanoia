@@ -391,56 +391,96 @@ class ConfessionScreen extends ConsumerWidget {
     BuildContext context,
     AppLocalizations l10n,
   ) async {
-    final controller = TextEditingController();
-
     return showDialog<String?>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              Icons.checklist,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Text(l10n.addPenance),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.penanceDescription,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: l10n.penanceHint,
-                border: const OutlineInputBorder(),
-              ),
-              maxLines: 3,
-              textCapitalization: TextCapitalization.sentences,
-              autofocus: true,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: Text(l10n.skipPenance),
+      builder: (context) => _PenanceInputDialog(l10n: l10n),
+    );
+  }
+}
+
+class _PenanceInputDialog extends StatefulWidget {
+  final AppLocalizations l10n;
+
+  const _PenanceInputDialog({required this.l10n});
+
+  @override
+  State<_PenanceInputDialog> createState() => _PenanceInputDialogState();
+}
+
+class _PenanceInputDialogState extends State<_PenanceInputDialog> {
+  final _controller = TextEditingController();
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final hasText = _controller.text.trim().isNotEmpty;
+    if (hasText != _hasText) {
+      setState(() => _hasText = hasText);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTextChanged);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return AlertDialog(
+      title: Row(
+        children: [
+          Icon(
+            Icons.checklist,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: Text(l10n.savePenance),
+          const SizedBox(width: 8),
+          Text(l10n.addPenance),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.penanceDescription,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              hintText: l10n.penanceHint,
+              border: const OutlineInputBorder(),
+            ),
+            maxLines: 3,
+            textCapitalization: TextCapitalization.sentences,
+            autofocus: true,
           ),
         ],
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, null),
+          child: Text(l10n.skipPenance),
+        ),
+        FilledButton(
+          onPressed: _hasText
+              ? () => Navigator.pop(context, _controller.text.trim())
+              : null,
+          child: Text(l10n.savePenance),
+        ),
+      ],
     );
   }
 }

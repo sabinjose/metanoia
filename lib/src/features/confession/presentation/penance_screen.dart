@@ -77,44 +77,23 @@ class PenanceScreen extends ConsumerWidget {
     PenanceWithConfession item,
   ) {
     final l10n = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: item.penance.description);
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.editPenance),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: l10n.penanceDescription,
-            border: const OutlineInputBorder(),
-          ),
-          maxLines: 3,
-          textCapitalization: TextCapitalization.sentences,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () async {
-              if (controller.text.trim().isNotEmpty) {
-                await ref
-                    .read(penanceRepositoryProvider)
-                    .updatePenance(item.penance.id, controller.text.trim());
-                ref.invalidate(pendingPenancesProvider);
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.penanceUpdated)),
-                  );
-                }
-              }
-            },
-            child: Text(l10n.updateButton),
-          ),
-        ],
+      builder: (context) => _EditPenanceDialog(
+        l10n: l10n,
+        initialText: item.penance.description,
+        onSave: (text) async {
+          await ref
+              .read(penanceRepositoryProvider)
+              .updatePenance(item.penance.id, text);
+          ref.invalidate(pendingPenancesProvider);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.penanceUpdated)),
+            );
+          }
+        },
       ),
     );
   }
@@ -287,6 +266,90 @@ class _PenanceCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EditPenanceDialog extends StatefulWidget {
+  final AppLocalizations l10n;
+  final String initialText;
+  final Future<void> Function(String) onSave;
+
+  const _EditPenanceDialog({
+    required this.l10n,
+    required this.initialText,
+    required this.onSave,
+  });
+
+  @override
+  State<_EditPenanceDialog> createState() => _EditPenanceDialogState();
+}
+
+class _EditPenanceDialogState extends State<_EditPenanceDialog> {
+  late final TextEditingController _controller;
+  bool _hasText = false;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialText);
+    _hasText = _controller.text.trim().isNotEmpty;
+    _controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    final hasText = _controller.text.trim().isNotEmpty;
+    if (hasText != _hasText) {
+      setState(() => _hasText = hasText);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTextChanged);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return AlertDialog(
+      title: Text(l10n.editPenance),
+      content: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          labelText: l10n.penanceDescription,
+          border: const OutlineInputBorder(),
+        ),
+        maxLines: 3,
+        textCapitalization: TextCapitalization.sentences,
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isLoading ? null : () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _hasText && !_isLoading
+              ? () async {
+                  setState(() => _isLoading = true);
+                  await widget.onSave(_controller.text.trim());
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                }
+              : null,
+          child: _isLoading
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(l10n.updateButton),
+        ),
+      ],
     );
   }
 }
