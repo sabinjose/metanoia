@@ -1,6 +1,6 @@
-import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -57,56 +58,7 @@ class ConfessionScreen extends ConsumerWidget {
       body: confessionData.when(
         data: (data) {
           if (data == null || data.items.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primaryContainer.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.check_circle_outline,
-                      size: 64,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    l10n.noActiveConfession,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.startExaminationPrompt,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  FilledButton.icon(
-                    onPressed: () {
-                      HapticUtils.mediumImpact();
-                      context.go('/examine');
-                    },
-                    icon: const Icon(Icons.assignment_outlined),
-                    label: Text(l10n.startExamination),
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ).animate().fadeIn().scale();
+            return _EmptyConfessionView(l10n: l10n);
           }
 
           final items = data.items;
@@ -468,13 +420,6 @@ class ConfessionScreen extends ConsumerWidget {
   }
 }
 
-class ConfessionWithItems {
-  final Confession confession;
-  final List<ConfessionItem> items;
-
-  ConfessionWithItems(this.confession, this.items);
-}
-
 @riverpod
 Future<ConfessionWithItems?> activeConfession(Ref ref) async {
   final db = ref.watch(appDatabaseProvider);
@@ -496,4 +441,475 @@ Future<ConfessionWithItems?> activeConfession(Ref ref) async {
         ..where((tbl) => tbl.confessionId.equals(confession.id))).get();
 
   return ConfessionWithItems(confession, items);
+}
+
+class _EmptyConfessionView extends ConsumerWidget {
+  final AppLocalizations l10n;
+
+  const _EmptyConfessionView({required this.l10n});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final analyticsAsync = ref.watch(confessionAnalyticsProvider);
+    final penancesAsync = ref.watch(pendingPenancesProvider);
+    final historyAsync = ref.watch(finishedConfessionsProvider);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Header with icon and message
+          _buildHeader(context, theme),
+          const SizedBox(height: 24),
+
+          // Start Examination Button
+          FilledButton.icon(
+            onPressed: () {
+              HapticUtils.mediumImpact();
+              context.go('/examine');
+            },
+            icon: const Icon(Icons.assignment_outlined),
+            label: Text(l10n.startExamination),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1),
+          const SizedBox(height: 24),
+
+          // Analytics Summary (only if has data)
+          analyticsAsync.when(
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+            data: (analytics) {
+              if (!analytics.hasData) return const SizedBox.shrink();
+              return _buildAnalyticsSummary(context, theme, analytics);
+            },
+          ),
+
+          // Pending Penances
+          penancesAsync.when(
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+            data: (penances) {
+              if (penances.isEmpty) return const SizedBox.shrink();
+              return _buildPendingPenances(context, theme, penances, ref);
+            },
+          ),
+
+          // Recent History
+          historyAsync.when(
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+            data: (history) {
+              if (history.isEmpty) return const SizedBox.shrink();
+              return _buildRecentHistory(context, theme, history);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, ThemeData theme) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.check_circle_outline,
+            size: 48,
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          l10n.noActiveConfession,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          l10n.startExaminationPrompt,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ).animate().fadeIn().scale();
+  }
+
+  Widget _buildAnalyticsSummary(
+    BuildContext context,
+    ThemeData theme,
+    ConfessionAnalytics analytics,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            HapticUtils.lightImpact();
+            context.go('/confess/insights');
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Card(
+            elevation: 0,
+            color: theme.colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: theme.colorScheme.outlineVariant,
+                width: 1,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.insights,
+                        color: theme.colorScheme.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.insights,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _StatItem(
+                          icon: Icons.church,
+                          value: analytics.totalConfessions.toString(),
+                          label: l10n.totalConfessions,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      Expanded(
+                        child: _StatItem(
+                          icon: Icons.calendar_today,
+                          value: analytics.daysSinceLastConfession.toString(),
+                          label: l10n.daysSinceLastConfession,
+                          color: theme.colorScheme.secondary,
+                        ),
+                      ),
+                      Expanded(
+                        child: _StatItem(
+                          icon: Icons.local_fire_department,
+                          value: '${analytics.currentStreakWeeks}',
+                          label: l10n.currentStreak,
+                          color: Colors.orange,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1);
+  }
+
+  Widget _buildPendingPenances(
+    BuildContext context,
+    ThemeData theme,
+    List<PenanceWithConfession> penances,
+    WidgetRef ref,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            HapticUtils.lightImpact();
+            context.go('/confess/penance');
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Card(
+            elevation: 0,
+            color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: theme.colorScheme.error.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.error.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.checklist,
+                          color: theme.colorScheme.error,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.pendingPenances,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${penances.length} pending',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  // Show first penance
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            penances.first.penance.description,
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        FilledButton.tonal(
+                          onPressed: () async {
+                            HapticUtils.mediumImpact();
+                            await ref
+                                .read(penanceRepositoryProvider)
+                                .completePenance(penances.first.penance.id);
+                            ref.invalidate(pendingPenancesProvider);
+                          },
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          child: const Icon(Icons.check, size: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1);
+  }
+
+  Widget _buildRecentHistory(
+    BuildContext context,
+    ThemeData theme,
+    List<ConfessionWithItems> history,
+  ) {
+    final recentHistory = history.take(3).toList();
+    final dateFormat = DateFormat('MMM dd, yyyy');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            HapticUtils.lightImpact();
+            context.go('/confess/history');
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Card(
+            elevation: 0,
+            color: theme.colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: theme.colorScheme.outlineVariant,
+                width: 1,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.history,
+                        color: theme.colorScheme.secondary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.viewHistory,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.secondary,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${history.length} total',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ...recentHistory.map((confession) {
+                    final date = confession.confession.finishedAt ??
+                        confession.confession.date;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primaryContainer,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              size: 12,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              dateFormat.format(date),
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                          Text(
+                            '${confession.items.length} items',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1);
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
+
+  const _StatItem({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: color, size: 18),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
 }
