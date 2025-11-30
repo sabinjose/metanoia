@@ -301,7 +301,7 @@ class _DailyQuoteCard extends ConsumerWidget {
   }
 }
 
-class _HomeCard extends StatelessWidget {
+class _HomeCard extends StatefulWidget {
   const _HomeCard({
     this.icon,
     this.customIcon,
@@ -321,48 +321,103 @@ class _HomeCard extends StatelessWidget {
   final Duration delay;
 
   @override
+  State<_HomeCard> createState() => _HomeCardState();
+}
+
+class _HomeCardState extends State<_HomeCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    _controller.reverse();
+    HapticUtils.lightImpact();
+    widget.onTap();
+  }
+
+  void _onTapCancel() {
+    _controller.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final backgroundColor = color ?? theme.colorScheme.surfaceContainerHighest;
-    final foregroundColor = textColor ?? theme.colorScheme.onSurfaceVariant;
+    final backgroundColor =
+        widget.color ?? theme.colorScheme.surfaceContainerHighest;
+    final foregroundColor =
+        widget.textColor ?? theme.colorScheme.onSurfaceVariant;
 
-    return Material(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(20),
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          HapticUtils.lightImpact();
-          onTap();
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: child,
+          );
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration:
-                  customIcon != null
-                      ? null
-                      : BoxDecoration(
+        child: Material(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(20),
+          elevation: 0,
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: widget.customIcon != null
+                    ? null
+                    : BoxDecoration(
                         color: foregroundColor.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-              child: customIcon ?? Icon(icon, size: 32, color: foregroundColor),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              label,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: foregroundColor,
-                fontWeight: FontWeight.bold,
+                child: widget.customIcon ??
+                    Icon(widget.icon, size: 32, color: foregroundColor),
               ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                widget.label,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: foregroundColor,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
-    ).animate().fadeIn(delay: delay).slideY(begin: 0.2, end: 0);
+    ).animate().fadeIn(delay: widget.delay).slideY(begin: 0.2, end: 0);
   }
 }
 
