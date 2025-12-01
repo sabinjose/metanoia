@@ -682,8 +682,10 @@ class _AddYourOwnTile extends StatelessWidget {
   }
 }
 
-/// Milestone-style progress bar with tappable dots
-class _MilestoneProgressBar extends StatelessWidget {
+/// Milestone-style progress bar with scrollable numbered chips
+/// Displays commandment numbers in a horizontal scrollable row
+/// with clear visual states for current, completed, and pending items
+class _MilestoneProgressBar extends StatefulWidget {
   final int totalSteps;
   final int currentStep;
   final Map<int, String> selectedQuestions;
@@ -703,112 +705,116 @@ class _MilestoneProgressBar extends StatelessWidget {
   });
 
   @override
+  State<_MilestoneProgressBar> createState() => _MilestoneProgressBarState();
+}
+
+class _MilestoneProgressBarState extends State<_MilestoneProgressBar> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToCurrentStep();
+    });
+  }
+
+  @override
+  void didUpdateWidget(_MilestoneProgressBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentStep != widget.currentStep) {
+      _scrollToCurrentStep();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToCurrentStep() {
+    if (!_scrollController.hasClients) return;
+
+    // Each chip is approximately 36px wide with 8px spacing
+    const chipWidth = 36.0;
+    const spacing = 8.0;
+    final targetOffset = (widget.currentStep * (chipWidth + spacing)) -
+        (_scrollController.position.viewportDimension / 2) +
+        (chipWidth / 2);
+
+    _scrollController.animateTo(
+      targetOffset.clamp(0.0, _scrollController.position.maxScrollExtent),
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return SizedBox(
-      height: 32,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Calculate spacing based on available width
-          final availableWidth = constraints.maxWidth;
-          const dotSize = 20.0;
-          const minSpacing = 4.0;
-
-          // Check if we need scrolling
-          final totalRequiredWidth = (dotSize * totalSteps) + (minSpacing * (totalSteps - 1));
-          final needsScrolling = totalRequiredWidth > availableWidth;
-
-          if (needsScrolling) {
-            // Scrollable version for many steps
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: _buildDots(theme, dotSize, minSpacing),
-              ),
-            );
-          } else {
-            // Fit all dots evenly
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: _buildDots(theme, dotSize, null),
-            );
-          }
+      height: 40,
+      child: ShaderMask(
+        shaderCallback: (Rect bounds) {
+          return LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.transparent,
+              theme.colorScheme.surface,
+              theme.colorScheme.surface,
+              Colors.transparent,
+            ],
+            stops: const [0.0, 0.05, 0.95, 1.0],
+          ).createShader(bounds);
         },
+        blendMode: BlendMode.dstIn,
+        child: ListView.separated(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: widget.totalSteps,
+          separatorBuilder: (context, index) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            final hasSelections =
+                widget.getSelectedCountForItem(widget.data[index], widget.selectedQuestions) > 0;
+            final isCurrent = index == widget.currentStep;
+            final isPast = index < widget.currentStep;
+            final isGeneral = widget.data[index].isGeneral;
+
+            return _MilestoneChip(
+              label: isGeneral ? 'G' : '${widget.data[index].commandment?.commandmentNo ?? index + 1}',
+              isCurrent: isCurrent,
+              isPast: isPast,
+              hasSelections: hasSelections,
+              tooltip: widget.getTooltipForItem(widget.data[index]),
+              onTap: () => widget.onStepTapped(index),
+            );
+          },
+        ),
       ),
     );
   }
-
-  List<Widget> _buildDots(ThemeData theme, double dotSize, double? spacing) {
-    final List<Widget> dots = [];
-
-    for (int i = 0; i < totalSteps; i++) {
-      final isCompleted = i < currentStep;
-      final isCurrent = i == currentStep;
-      final hasSelections = getSelectedCountForItem(data[i], selectedQuestions) > 0;
-      final tooltipMessage = getTooltipForItem(data[i]);
-
-      // Add connecting line before dot (except for first)
-      if (i > 0 && spacing != null) {
-        dots.add(
-          Container(
-            width: spacing,
-            height: 2,
-            color: i <= currentStep
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant,
-          ),
-        );
-      } else if (i > 0) {
-        // For evenly spaced layout, add flexible line
-        dots.add(
-          Expanded(
-            child: Container(
-              height: 2,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              color: i <= currentStep
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outlineVariant,
-            ),
-          ),
-        );
-      }
-
-      dots.add(
-        _MilestoneDot(
-          index: i,
-          size: dotSize,
-          isCompleted: isCompleted,
-          isCurrent: isCurrent,
-          hasSelections: hasSelections,
-          tooltipMessage: tooltipMessage,
-          onTap: () => onStepTapped(i),
-        ),
-      );
-    }
-
-    return dots;
-  }
 }
 
-/// Individual milestone dot
-class _MilestoneDot extends StatelessWidget {
-  final int index;
-  final double size;
-  final bool isCompleted;
+/// Individual milestone chip showing commandment number with status
+class _MilestoneChip extends StatelessWidget {
+  final String label;
   final bool isCurrent;
+  final bool isPast;
   final bool hasSelections;
-  final String tooltipMessage;
+  final String tooltip;
   final VoidCallback onTap;
 
-  const _MilestoneDot({
-    required this.index,
-    required this.size,
-    required this.isCompleted,
+  const _MilestoneChip({
+    required this.label,
     required this.isCurrent,
+    required this.isPast,
     required this.hasSelections,
-    required this.tooltipMessage,
+    required this.tooltip,
     required this.onTap,
   });
 
@@ -817,55 +823,38 @@ class _MilestoneDot extends StatelessWidget {
     final theme = Theme.of(context);
 
     Color backgroundColor;
+    Color textColor;
     Color borderColor;
-    Widget? child;
+    double borderWidth;
 
     if (isCurrent) {
-      // Current step - highlighted
+      // Current - prominent primary color
       backgroundColor = theme.colorScheme.primary;
+      textColor = theme.colorScheme.onPrimary;
       borderColor = theme.colorScheme.primary;
-      child = Text(
-        '${index + 1}',
-        style: TextStyle(
-          color: theme.colorScheme.onPrimary,
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-          height: 1.0,
-        ),
-        textAlign: TextAlign.center,
-      );
-    } else if (isCompleted && hasSelections) {
-      // Completed with selections - checkmark
-      backgroundColor = theme.colorScheme.primary;
-      borderColor = theme.colorScheme.primary;
-      child = Icon(
-        Icons.check,
-        size: 12,
-        color: theme.colorScheme.onPrimary,
-      );
-    } else if (isCompleted) {
-      // Completed without selections - just filled
-      backgroundColor = theme.colorScheme.primary.withValues(alpha: 0.3);
-      borderColor = theme.colorScheme.primary;
-      child = null;
+      borderWidth = 2.0;
     } else if (hasSelections) {
-      // Not reached yet but has selections (from previous session)
-      backgroundColor = theme.colorScheme.primaryContainer;
-      borderColor = theme.colorScheme.primary;
-      child = Icon(
-        Icons.check,
-        size: 12,
-        color: theme.colorScheme.primary,
-      );
+      // Has selections - highlighted with secondary color
+      backgroundColor = theme.colorScheme.secondaryContainer;
+      textColor = theme.colorScheme.onSecondaryContainer;
+      borderColor = theme.colorScheme.secondary;
+      borderWidth = 1.5;
+    } else if (isPast) {
+      // Past without selections - muted
+      backgroundColor = theme.colorScheme.surfaceContainerHighest;
+      textColor = theme.colorScheme.onSurfaceVariant;
+      borderColor = theme.colorScheme.outline;
+      borderWidth = 1.0;
     } else {
-      // Not yet reached
+      // Future - outline only
       backgroundColor = theme.colorScheme.surface;
+      textColor = theme.colorScheme.onSurfaceVariant;
       borderColor = theme.colorScheme.outlineVariant;
-      child = null;
+      borderWidth = 1.0;
     }
 
     return Tooltip(
-      message: tooltipMessage,
+      message: tooltip,
       preferBelow: true,
       triggerMode: TooltipTriggerMode.longPress,
       child: GestureDetector(
@@ -875,26 +864,57 @@ class _MilestoneDot extends StatelessWidget {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: size,
-          height: size,
+          width: 36,
+          height: 36,
           decoration: BoxDecoration(
             color: backgroundColor,
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: borderColor,
-              width: isCurrent ? 2.5 : 1.5,
+              width: borderWidth,
             ),
             boxShadow: isCurrent
                 ? [
                     BoxShadow(
                       color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 6,
+                      blurRadius: 8,
                       spreadRadius: 1,
                     ),
                   ]
                 : null,
           ),
-          child: Center(child: child),
+          child: Stack(
+            children: [
+              // Commandment number
+              Center(
+                child: Text(
+                  label,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: textColor,
+                    fontWeight: isCurrent ? FontWeight.bold : FontWeight.w600,
+                  ),
+                ),
+              ),
+              // Selection indicator dot
+              if (hasSelections && !isCurrent)
+                Positioned(
+                  top: 2,
+                  right: 2,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.secondary,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: backgroundColor,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
