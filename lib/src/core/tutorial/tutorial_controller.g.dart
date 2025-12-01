@@ -7,7 +7,7 @@ part of 'tutorial_controller.dart';
 // **************************************************************************
 
 String _$tutorialControllerHash() =>
-    r'b208b8834ffb351d2e25a5bfb0eaa6287e3ebc9f';
+    r'bf79a67be84bef9000398b6701f87236e1a4daed';
 
 /// See also [TutorialController].
 @ProviderFor(TutorialController)

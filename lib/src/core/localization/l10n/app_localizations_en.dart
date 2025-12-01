@@ -267,10 +267,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tutorialGuideDesc => 'Read the guide and FAQs to learn more.';
 
   @override
+  String get tutorialSwipeDesc => 'Swipe left or right to navigate between commandments.';
+
+  @override
+  String get tutorialSelectDesc => 'Tap any question to select it for your confession.';
+
+  @override
+  String get tutorialFinishDesc => 'When done, tap here to finish and proceed to confession.';
+
+  @override
+  String get tutorialPenanceDesc => 'Track penances given by your confessor here.';
+
+  @override
+  String get tutorialInsightsDesc => 'View your confession journey statistics and streaks.';
+
+  @override
+  String get tutorialHistoryDesc => 'Access your past confessions and their dates.';
+
+  @override
   String get replayTutorial => 'Replay Tutorial';
 
   @override
   String get replayTutorialDesc => 'View the app tutorial again';
+
+  @override
+  String get tutorialReset => 'Tutorial reset! You\'ll see the guides again.';
 
   @override
   String get about => 'About';

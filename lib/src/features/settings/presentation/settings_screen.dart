@@ -2,6 +2,7 @@ import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/services/reminder_service.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
+import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -437,6 +438,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             icon: Icons.info_outline,
             child: Column(
               children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.replayTutorial),
+                  subtitle: Text(l10n.replayTutorialDesc),
+                  leading: const Icon(Icons.school_outlined),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    HapticUtils.lightImpact();
+                    await ref
+                        .read(tutorialControllerProvider.notifier)
+                        .resetTutorials();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.tutorialReset)),
+                      );
+                    }
+                  },
+                ),
+                const Divider(),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.shareApp),

@@ -7,6 +7,7 @@ part 'tutorial_controller.g.dart';
 class TutorialController extends _$TutorialController {
   static const _homeTutorialKey = 'home_tutorial_shown';
   static const _examinationTutorialKey = 'examination_tutorial_shown';
+  static const _confessionTutorialKey = 'confession_tutorial_shown';
 
   @override
   FutureOr<void> build() {}
@@ -21,6 +22,11 @@ class TutorialController extends _$TutorialController {
     return !(prefs.getBool(_examinationTutorialKey) ?? false);
   }
 
+  Future<bool> shouldShowConfessionTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    return !(prefs.getBool(_confessionTutorialKey) ?? false);
+  }
+
   Future<void> markHomeTutorialShown() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_homeTutorialKey, true);
@@ -31,9 +37,15 @@ class TutorialController extends _$TutorialController {
     await prefs.setBool(_examinationTutorialKey, true);
   }
 
+  Future<void> markConfessionTutorialShown() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_confessionTutorialKey, true);
+  }
+
   Future<void> resetTutorials() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_homeTutorialKey);
     await prefs.remove(_examinationTutorialKey);
+    await prefs.remove(_confessionTutorialKey);
   }
 }

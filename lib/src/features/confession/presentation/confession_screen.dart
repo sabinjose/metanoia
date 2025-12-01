@@ -1,4 +1,6 @@
 import 'package:confessionapp/src/core/database/database_provider.dart';
+import 'package:confessionapp/src/core/theme/app_showcase.dart';
+import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
@@ -15,14 +17,63 @@ import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 part 'confession_screen.g.dart';
 
-class ConfessionScreen extends ConsumerWidget {
+class ConfessionScreen extends StatelessWidget {
   const ConfessionScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    return ShowCaseWidget(
+      blurValue: 1,
+      enableAutoScroll: true,
+      builder: (context) => const _ConfessionScreenContent(),
+      autoPlayDelay: const Duration(seconds: 3),
+    );
+  }
+}
+
+class _ConfessionScreenContent extends ConsumerStatefulWidget {
+  const _ConfessionScreenContent();
+
+  @override
+  ConsumerState<_ConfessionScreenContent> createState() =>
+      _ConfessionScreenContentState();
+}
+
+class _ConfessionScreenContentState
+    extends ConsumerState<_ConfessionScreenContent> {
+  final GlobalKey _penanceKey = GlobalKey();
+  final GlobalKey _insightsKey = GlobalKey();
+  final GlobalKey _historyKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowTutorial();
+    });
+  }
+
+  Future<void> _checkAndShowTutorial() async {
+    final controller = ref.read(tutorialControllerProvider.notifier);
+    final shouldShow = await controller.shouldShowConfessionTutorial();
+
+    if (shouldShow && mounted) {
+      // ignore: deprecated_member_use
+      ShowCaseWidget.of(context).startShowCase([
+        _penanceKey,
+        _insightsKey,
+        _historyKey,
+      ]);
+      await controller.markConfessionTutorialShown();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final confessionData = ref.watch(activeConfessionProvider);
 
@@ -30,53 +81,77 @@ class ConfessionScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.confessTitle),
         actions: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final screenWidth = MediaQuery.of(context).size.width;
-              final showLabel = screenWidth > 360;
+          AppShowcase(
+            showcaseKey: _penanceKey,
+            title: l10n.penance,
+            description: l10n.tutorialPenanceDesc,
+            currentStep: 1,
+            totalSteps: 3,
+            shapeBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final screenWidth = MediaQuery.of(context).size.width;
+                final showLabel = screenWidth > 360;
 
-              if (showLabel) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: FilledButton.tonalIcon(
-                    onPressed: () {
-                      HapticUtils.lightImpact();
-                      context.go('/confess/penance');
-                    },
-                    icon: const Icon(Icons.healing, size: 18),
-                    label: Text(l10n.penance),
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      visualDensity: VisualDensity.compact,
+                if (showLabel) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: FilledButton.tonalIcon(
+                      onPressed: () {
+                        HapticUtils.lightImpact();
+                        context.go('/confess/penance');
+                      },
+                      icon: const Icon(Icons.healing, size: 18),
+                      label: Text(l10n.penance),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        visualDensity: VisualDensity.compact,
+                      ),
                     ),
-                  ),
+                  );
+                }
+                return IconButton(
+                  icon: const Icon(Icons.healing),
+                  tooltip: l10n.penanceTracker,
+                  onPressed: () {
+                    HapticUtils.lightImpact();
+                    context.go('/confess/penance');
+                  },
                 );
-              }
-              return IconButton(
-                icon: const Icon(Icons.healing),
-                tooltip: l10n.penanceTracker,
-                onPressed: () {
-                  HapticUtils.lightImpact();
-                  context.go('/confess/penance');
-                },
-              );
-            },
+              },
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.insights),
-            tooltip: l10n.insights,
-            onPressed: () {
-              HapticUtils.lightImpact();
-              context.go('/confess/insights');
-            },
+          AppShowcase(
+            showcaseKey: _insightsKey,
+            title: l10n.insights,
+            description: l10n.tutorialInsightsDesc,
+            currentStep: 2,
+            totalSteps: 3,
+            child: IconButton(
+              icon: const Icon(Icons.insights),
+              tooltip: l10n.insights,
+              onPressed: () {
+                HapticUtils.lightImpact();
+                context.go('/confess/insights');
+              },
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.history),
-            tooltip: l10n.viewHistory,
-            onPressed: () {
-              HapticUtils.lightImpact();
-              context.go('/confess/history');
-            },
+          AppShowcase(
+            showcaseKey: _historyKey,
+            title: l10n.viewHistory,
+            description: l10n.tutorialHistoryDesc,
+            currentStep: 3,
+            totalSteps: 3,
+            child: IconButton(
+              icon: const Icon(Icons.history),
+              tooltip: l10n.viewHistory,
+              onPressed: () {
+                HapticUtils.lightImpact();
+                context.go('/confess/history');
+              },
+            ),
           ),
         ],
       ),

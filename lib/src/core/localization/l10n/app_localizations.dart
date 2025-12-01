@@ -575,6 +575,42 @@ abstract class AppLocalizations {
   /// **'Read the guide and FAQs to learn more.'**
   String get tutorialGuideDesc;
 
+  /// No description provided for @tutorialSwipeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe left or right to navigate between commandments.'**
+  String get tutorialSwipeDesc;
+
+  /// No description provided for @tutorialSelectDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap any question to select it for your confession.'**
+  String get tutorialSelectDesc;
+
+  /// No description provided for @tutorialFinishDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When done, tap here to finish and proceed to confession.'**
+  String get tutorialFinishDesc;
+
+  /// No description provided for @tutorialPenanceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Track penances given by your confessor here.'**
+  String get tutorialPenanceDesc;
+
+  /// No description provided for @tutorialInsightsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'View your confession journey statistics and streaks.'**
+  String get tutorialInsightsDesc;
+
+  /// No description provided for @tutorialHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Access your past confessions and their dates.'**
+  String get tutorialHistoryDesc;
+
   /// No description provided for @replayTutorial.
   ///
   /// In en, this message translates to:
@@ -586,6 +622,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View the app tutorial again'**
   String get replayTutorialDesc;
+
+  /// No description provided for @tutorialReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutorial reset! You\'ll see the guides again.'**
+  String get tutorialReset;
 
   /// No description provided for @about.
   ///
