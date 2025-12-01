@@ -23,6 +23,7 @@ class ExaminationScreen extends ConsumerStatefulWidget {
 
 class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   bool _hasShownRestoreSnackbar = false;
+  bool _hasCheckedTutorial = false;
 
   // Showcase keys
   final GlobalKey _swipeKey = GlobalKey();
@@ -52,22 +53,24 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           ),
         );
       }
-
-      // Check if tutorial should be shown
-      _checkAndShowTutorial();
     });
   }
 
-  Future<void> _checkAndShowTutorial() async {
+  Future<void> _checkAndShowTutorial(BuildContext showcaseContext) async {
+    if (_hasCheckedTutorial) return;
+    _hasCheckedTutorial = true;
+
     final tutorialController = ref.read(tutorialControllerProvider.notifier);
     final shouldShow = await tutorialController.shouldShowExaminationTutorial();
     if (shouldShow && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ShowCaseWidget.of(context).startShowCase([
-          _swipeKey,
-          _selectKey,
-          _finishKey,
-        ]);
+        if (mounted) {
+          ShowCaseWidget.of(showcaseContext).startShowCase([
+            _swipeKey,
+            _selectKey,
+            _finishKey,
+          ]);
+        }
       });
       await tutorialController.markExaminationTutorialShown();
     }
@@ -81,7 +84,13 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
 
     return ShowCaseWidget(
       enableAutoScroll: true,
-      builder: (context) => Scaffold(
+      builder: (showcaseContext) {
+        // Check tutorial after the ShowCaseWidget is built
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkAndShowTutorial(showcaseContext);
+        });
+
+        return Scaffold(
         appBar: AppBar(
           title: Text(l10n.examinationTitle),
           actions: [
@@ -179,9 +188,9 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
         body: examinationDataAsync.when(
           data: (data) => GuidedExaminationView(
             data: data,
-            onFinish: () => _finishExamination(context, ref),
+            onFinish: () => _finishExamination(showcaseContext, ref),
             onAddCustomSin: (commandmentCode) =>
-                _showAddCustomSinDialog(context, commandmentCode),
+                _showAddCustomSinDialog(showcaseContext, commandmentCode),
             swipeShowcaseKey: _swipeKey,
             selectShowcaseKey: _selectKey,
             finishShowcaseKey: _finishKey,
@@ -189,7 +198,8 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
         ),
-      ),
+      );
+      },
     );
   }
 
