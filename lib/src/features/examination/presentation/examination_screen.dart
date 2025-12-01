@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
@@ -28,6 +29,8 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   // Showcase keys
   final GlobalKey _swipeKey = GlobalKey();
   final GlobalKey _selectKey = GlobalKey();
+  final GlobalKey _counterKey = GlobalKey();
+  final GlobalKey _menuKey = GlobalKey();
   final GlobalKey _finishKey = GlobalKey();
 
   @override
@@ -68,6 +71,8 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           ShowCaseWidget.of(showcaseContext).startShowCase([
             _swipeKey,
             _selectKey,
+            _counterKey,
+            _menuKey,
             _finishKey,
           ]);
         }
@@ -94,26 +99,55 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
         appBar: AppBar(
           title: Text(l10n.examinationTitle),
           actions: [
-            if (selectedQuestions.isNotEmpty)
-              Padding(
+            AppShowcase(
+              showcaseKey: _counterKey,
+              title: l10n.selected(0).split(' ').first,
+              description: l10n.tutorialCounterDesc,
+              currentStep: 3,
+              totalSteps: 5,
+              shapeBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: AnimatedCountBadge(
-                  count: selectedQuestions.length,
-                  label: l10n.selected(selectedQuestions.length),
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  textColor:
-                      Theme.of(context).colorScheme.onPrimaryContainer,
-                  textStyle:
-                      Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
+                child: selectedQuestions.isNotEmpty
+                    ? AnimatedCountBadge(
+                        count: selectedQuestions.length,
+                        label: l10n.selected(selectedQuestions.length),
+                        backgroundColor:
+                            Theme.of(showcaseContext).colorScheme.primaryContainer,
+                        textColor:
+                            Theme.of(showcaseContext).colorScheme.onPrimaryContainer,
+                        textStyle:
+                            Theme.of(showcaseContext).textTheme.labelLarge?.copyWith(
+                              color: Theme.of(showcaseContext)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ).animate().fadeIn().scale()
+                    : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(showcaseContext).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '0 ${l10n.selectedLabel}',
+                          style: Theme.of(showcaseContext).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(showcaseContext).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ),
-                ),
-              ).animate().fadeIn().scale(),
-            PopupMenuButton<String>(
+              ),
+            ),
+            AppShowcase(
+              showcaseKey: _menuKey,
+              title: l10n.quickActions,
+              description: l10n.tutorialMenuDesc,
+              currentStep: 4,
+              totalSteps: 5,
+              child: PopupMenuButton<String>(
               onSelected: (value) async {
                 if (value == 'clear') {
                   final confirmed = await showDialog<bool>(
@@ -182,6 +216,7 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                 ),
               ];
             },
+            ),
             ),
           ],
         ),

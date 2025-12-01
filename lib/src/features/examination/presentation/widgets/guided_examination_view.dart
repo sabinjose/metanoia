@@ -263,7 +263,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
         title: l10n.examineTitle,
         description: l10n.tutorialSwipeDesc,
         currentStep: 1,
-        totalSteps: 3,
+        totalSteps: 5,
         shapeBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -311,7 +311,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
           title: l10n.examineTitle,
           description: l10n.tutorialSelectDesc,
           currentStep: 2,
-          totalSteps: 3,
+          totalSteps: 5,
           shapeBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -486,8 +486,8 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
         showcaseKey: widget.finishShowcaseKey!,
         title: l10n.finishExamination,
         description: l10n.tutorialFinishDesc,
-        currentStep: 3,
-        totalSteps: 3,
+        currentStep: 5,
+        totalSteps: 5,
         shapeBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),

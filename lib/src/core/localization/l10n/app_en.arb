@@ -86,6 +86,8 @@
   "tutorialSwipeDesc": "Swipe left or right to navigate between commandments.",
   "tutorialSelectDesc": "Tap any question to select it for your confession.",
   "tutorialFinishDesc": "When done, tap here to finish and proceed to confession.",
+  "tutorialCounterDesc": "This shows how many items you've selected for confession.",
+  "tutorialMenuDesc": "Access custom sins and clear your selections from here.",
   "tutorialPenanceDesc": "Track penances given by your confessor here.",
   "tutorialInsightsDesc": "View your confession journey statistics and streaks.",
   "tutorialHistoryDesc": "Access your past confessions and their dates.",
