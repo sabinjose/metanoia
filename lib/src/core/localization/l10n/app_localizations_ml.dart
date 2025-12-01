@@ -255,22 +255,28 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tutorialGuideDesc => 'കൂടുതലറിയാൻ വഴികാട്ടിയും പതിവ് ചോദ്യങ്ങളും വായിക്കുക.';
 
   @override
-  String get tutorialSwipeDesc => 'Swipe left or right to navigate between commandments.';
+  String get tutorialSwipeDesc => 'കൽപ്പനകൾക്കിടയിൽ മാറാൻ ഇടത്തോട്ടോ വലത്തോട്ടോ സ്വൈപ്പ് ചെയ്യുക.';
 
   @override
-  String get tutorialSelectDesc => 'Tap any question to select it for your confession.';
+  String get tutorialSelectDesc => 'കുമ്പസാരത്തിനായി തിരഞ്ഞെടുക്കാൻ ഏതെങ്കിലും ചോദ്യത്തിൽ ടാപ്പ് ചെയ്യുക.';
 
   @override
-  String get tutorialFinishDesc => 'When done, tap here to finish and proceed to confession.';
+  String get tutorialFinishDesc => 'പൂർത്തിയായിക്കഴിഞ്ഞാൽ, കുമ്പസാരത്തിലേക്ക് നീങ്ങാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.';
 
   @override
-  String get tutorialPenanceDesc => 'Track penances given by your confessor here.';
+  String get tutorialCounterDesc => 'കുമ്പസാരത്തിനായി നിങ്ങൾ എത്ര ഇനങ്ങൾ തിരഞ്ഞെടുത്തു എന്ന് ഇത് കാണിക്കുന്നു.';
 
   @override
-  String get tutorialInsightsDesc => 'View your confession journey statistics and streaks.';
+  String get tutorialMenuDesc => 'സ്വന്തം പാപങ്ങൾ കൈകാര്യം ചെയ്യാനും തിരഞ്ഞെടുപ്പുകൾ മായ്ക്കാനും ഇവിടെ ഉപയോഗിക്കുക.';
 
   @override
-  String get tutorialHistoryDesc => 'Access your past confessions and their dates.';
+  String get tutorialPenanceDesc => 'കുമ്പസാരക്കാരൻ നൽകുന്ന പ്രായശ്ചിത്തങ്ങൾ ഇവിടെ രേഖപ്പെടുത്താം.';
+
+  @override
+  String get tutorialInsightsDesc => 'നിങ്ങളുടെ കുമ്പസാര യാത്രയുടെ സ്ഥിതിവിവരക്കണക്കുകളും തുടർച്ചയും കാണുക.';
+
+  @override
+  String get tutorialHistoryDesc => 'നിങ്ങളുടെ മുൻ കുമ്പസാരങ്ങളും തീയതികളും കാണുക.';
 
   @override
   String get replayTutorial => 'ട്യൂട്ടോറിയൽ വീണ്ടും കാണുക';
@@ -279,7 +285,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get replayTutorialDesc => 'ആപ്പ് ട്യൂട്ടോറിയൽ വീണ്ടും കാണുക';
 
   @override
-  String get tutorialReset => 'Tutorial reset! You\'ll see the guides again.';
+  String get tutorialReset => 'ട്യൂട്ടോറിയൽ പുനഃക്രമീകരിച്ചു! നിങ്ങൾക്ക് ഗൈഡുകൾ വീണ്ടും കാണാം.';
 
   @override
   String get about => 'വിവരങ്ങൾ';
@@ -441,141 +447,141 @@ class AppLocalizationsMl extends AppLocalizations {
   String get addYourOwn => 'സ്വന്തമായി ചേർക്കുക...';
 
   @override
-  String get penance => 'Penance';
+  String get penance => 'പ്രായശ്ചിത്തം';
 
   @override
-  String get penanceTracker => 'Penance Tracker';
+  String get penanceTracker => 'പ്രായശ്ചിത്ത ട്രാക്കർ';
 
   @override
-  String get addPenance => 'Add Penance';
+  String get addPenance => 'പ്രായശ്ചിത്തം ചേർക്കുക';
 
   @override
-  String get editPenance => 'Edit Penance';
+  String get editPenance => 'പ്രായശ്ചിത്തം തിരുത്തുക';
 
   @override
-  String get penanceDescription => 'What penance were you given?';
+  String get penanceDescription => 'നിങ്ങൾക്ക് ലഭിച്ച പ്രായശ്ചിത്തം എന്താണ്?';
 
   @override
-  String get penanceHint => 'e.g., Say 3 Hail Marys, Read a Scripture passage...';
+  String get penanceHint => 'ഉദാ: 3 നന്മ നിറഞ്ഞ മറിയമേ ചൊല്ലുക, ബൈബിൾ വായിക്കുക...';
 
   @override
-  String get penanceAdded => 'Penance added';
+  String get penanceAdded => 'പ്രായശ്ചിത്തം ചേർത്തു';
 
   @override
-  String get penanceUpdated => 'Penance updated';
+  String get penanceUpdated => 'പ്രായശ്ചിത്തം പുതുക്കി';
 
   @override
-  String get penanceCompleted => 'Penance completed! God bless you.';
+  String get penanceCompleted => 'പ്രായശ്ചിത്തം പൂർത്തിയായി! ദൈവം അനുഗ്രഹിക്കട്ടെ.';
 
   @override
-  String get markAsComplete => 'Mark as Complete';
+  String get markAsComplete => 'പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക';
 
   @override
-  String get pendingPenances => 'Pending Penances';
+  String get pendingPenances => 'ബാക്കിയുള്ള പ്രായശ്ചിത്തങ്ങൾ';
 
   @override
-  String get noPendingPenances => 'No pending penances';
+  String get noPendingPenances => 'ബാക്കിയുള്ള പ്രായശ്ചിത്തങ്ങളില്ല';
 
   @override
-  String get noPendingPenancesDesc => 'All your penances are completed. God bless!';
+  String get noPendingPenancesDesc => 'നിങ്ങളുടെ എല്ലാ പ്രായശ്ചിത്തങ്ങളും പൂർത്തിയായി. ദൈവം അനുഗ്രഹിക്കട്ടെ!';
 
   @override
   String completedOn(Object date) {
-    return 'Completed on $date';
+    return 'പൂർത്തിയായത് $date-ൽ';
   }
 
   @override
   String assignedOn(Object date) {
-    return 'Assigned on $date';
+    return 'ലഭിച്ചത് $date-ൽ';
   }
 
   @override
-  String get skipPenance => 'Skip';
+  String get skipPenance => 'ഒഴിവാക്കുക';
 
   @override
-  String get savePenance => 'Save Penance';
+  String get savePenance => 'പ്രായശ്ചിത്തം സേവ് ചെയ്യുക';
 
   @override
-  String get insights => 'Insights';
+  String get insights => 'സ്ഥിതിവിവരങ്ങൾ';
 
   @override
-  String get confessionInsights => 'Confession Insights';
+  String get confessionInsights => 'കുമ്പസാര സ്ഥിതിവിവരങ്ങൾ';
 
   @override
-  String get totalConfessions => 'Total Confessions';
+  String get totalConfessions => 'ആകെ കുമ്പസാരങ്ങൾ';
 
   @override
-  String get averageFrequency => 'Average Frequency';
+  String get averageFrequency => 'ശരാശരി ഇടവേള';
 
   @override
   String everyXDays(Object count) {
-    return 'Every $count days';
+    return 'ഓരോ $count ദിവസത്തിലും';
   }
 
   @override
-  String get daysSinceLastConfession => 'Days Since Last';
+  String get daysSinceLastConfession => 'അവസാന കുമ്പസാരത്തിന് ശേഷം';
 
   @override
-  String get currentStreak => 'Current Streak';
+  String get currentStreak => 'നിലവിലെ തുടർച്ച';
 
   @override
   String weeksStreak(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count weeks',
-      one: '1 week',
+      other: '$count ആഴ്ചകൾ',
+      one: '1 ആഴ്ച',
     );
     return '$_temp0';
   }
 
   @override
-  String get monthlyActivity => 'Monthly Activity';
+  String get monthlyActivity => 'പ്രതിമാസ പ്രവർത്തനം';
 
   @override
-  String get confessionsThisYear => 'Confessions This Year';
+  String get confessionsThisYear => 'ഈ വർഷത്തെ കുമ്പസാരങ്ങൾ';
 
   @override
-  String get noInsightsYet => 'No insights yet';
+  String get noInsightsYet => 'സ്ഥിതിവിവരങ്ങൾ ലഭ്യമല്ല';
 
   @override
-  String get noInsightsYetDesc => 'Complete your first confession to see your spiritual journey stats';
+  String get noInsightsYetDesc => 'നിങ്ങളുടെ ആത്മീയ യാത്രയുടെ സ്ഥിതിവിവരങ്ങൾ കാണാൻ ആദ്യ കുമ്പസാരം പൂർത്തിയാക്കുക';
 
   @override
-  String get totalItemsConfessed => 'Total Items Confessed';
+  String get totalItemsConfessed => 'ഏറ്റുപറഞ്ഞ ആകെ പാപങ്ങൾ';
 
   @override
-  String get firstConfession => 'First Confession';
+  String get firstConfession => 'ആദ്യ കുമ്പസാരം';
 
   @override
-  String get spiritualJourney => 'Your Spiritual Journey';
+  String get spiritualJourney => 'നിങ്ങളുടെ ആത്മീയ യാത്ര';
 
   @override
-  String get listView => 'List';
+  String get listView => 'ലിസ്റ്റ്';
 
   @override
-  String get guidedView => 'Guided';
+  String get guidedView => 'ഗൈഡഡ്';
 
   @override
   String commandmentProgress(Object current, Object total) {
-    return '$current of $total';
+    return '$current / $total';
   }
 
   @override
-  String get previousCommandment => 'Previous';
+  String get previousCommandment => 'മുൻപുള്ളത്';
 
   @override
-  String get nextCommandment => 'Next';
+  String get nextCommandment => 'അടുത്തത്';
 
   @override
-  String get finishExamination => 'Finish';
+  String get finishExamination => 'പൂർത്തിയാക്കുക';
 
   @override
-  String get noQuestionsSelected => 'No questions selected in this section';
+  String get noQuestionsSelected => 'ഈ വിഭാഗത്തിൽ ചോദ്യങ്ങളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല';
 
   @override
   String questionsSelectedInSection(Object count) {
-    return '$count selected';
+    return '$count എണ്ണം തിരഞ്ഞെടുത്തു';
   }
 
   @override

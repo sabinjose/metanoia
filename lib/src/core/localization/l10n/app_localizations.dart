@@ -593,6 +593,18 @@ abstract class AppLocalizations {
   /// **'When done, tap here to finish and proceed to confession.'**
   String get tutorialFinishDesc;
 
+  /// No description provided for @tutorialCounterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'This shows how many items you\'ve selected for confession.'**
+  String get tutorialCounterDesc;
+
+  /// No description provided for @tutorialMenuDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Access custom sins and clear your selections from here.'**
+  String get tutorialMenuDesc;
+
   /// No description provided for @tutorialPenanceDesc.
   ///
   /// In en, this message translates to:

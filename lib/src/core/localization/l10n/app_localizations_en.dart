@@ -276,6 +276,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tutorialFinishDesc => 'When done, tap here to finish and proceed to confession.';
 
   @override
+  String get tutorialCounterDesc => 'This shows how many items you\'ve selected for confession.';
+
+  @override
+  String get tutorialMenuDesc => 'Access custom sins and clear your selections from here.';
+
+  @override
   String get tutorialPenanceDesc => 'Track penances given by your confessor here.';
 
   @override
