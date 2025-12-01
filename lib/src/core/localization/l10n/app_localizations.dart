@@ -575,18 +575,6 @@ abstract class AppLocalizations {
   /// **'Read the guide and FAQs to learn more.'**
   String get tutorialGuideDesc;
 
-  /// No description provided for @tutorialSearchDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Search for specific sins or commandments.'**
-  String get tutorialSearchDesc;
-
-  /// No description provided for @tutorialFinishDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap here when you are ready to confess.'**
-  String get tutorialFinishDesc;
-
   /// No description provided for @replayTutorial.
   ///
   /// In en, this message translates to:
@@ -916,12 +904,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add your own...'**
   String get addYourOwn;
-
-  /// No description provided for @tutorialCustomSinDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap here to add your own personal notes for this commandment.'**
-  String get tutorialCustomSinDesc;
 
   /// No description provided for @penance.
   ///

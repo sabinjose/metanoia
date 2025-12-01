@@ -83,8 +83,6 @@
   "tutorialConfessDesc": "Use this during confession to track your sins.",
   "tutorialPrayersDesc": "Find common prayers for before and after confession.",
   "tutorialGuideDesc": "Read the guide and FAQs to learn more.",
-  "tutorialSearchDesc": "Search for specific sins or commandments.",
-  "tutorialFinishDesc": "Tap here when you are ready to confess.",
   "replayTutorial": "Replay Tutorial",
   "replayTutorialDesc": "View the app tutorial again",
   "about": "About",
@@ -140,8 +138,6 @@
   "updateButton": "Update",
   "deleteButton": "Delete",
   "addYourOwn": "Add your own...",
-  "tutorialCustomSinDesc": "Tap here to add your own personal notes for this commandment.",
-
   "penance": "Penance",
   "penanceTracker": "Penance Tracker",
   "addPenance": "Add Penance",

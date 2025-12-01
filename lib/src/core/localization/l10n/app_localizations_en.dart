@@ -267,12 +267,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tutorialGuideDesc => 'Read the guide and FAQs to learn more.';
 
   @override
-  String get tutorialSearchDesc => 'Search for specific sins or commandments.';
-
-  @override
-  String get tutorialFinishDesc => 'Tap here when you are ready to confess.';
-
-  @override
   String get replayTutorial => 'Replay Tutorial';
 
   @override
@@ -436,9 +430,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addYourOwn => 'Add your own...';
-
-  @override
-  String get tutorialCustomSinDesc => 'Tap here to add your own personal notes for this commandment.';
 
   @override
   String get penance => 'Penance';

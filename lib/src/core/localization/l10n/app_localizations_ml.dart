@@ -255,12 +255,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tutorialGuideDesc => 'കൂടുതലറിയാൻ വഴികാട്ടിയും പതിവ് ചോദ്യങ്ങളും വായിക്കുക.';
 
   @override
-  String get tutorialSearchDesc => 'പ്രത്യേക പാപങ്ങളോ കൽപ്പനകളോ തിരയുക.';
-
-  @override
-  String get tutorialFinishDesc => 'കുമ്പസാരിക്കാൻ തയ്യാറാകുമ്പോൾ ഇവിടെ ടാപ്പ് ചെയ്യുക.';
-
-  @override
   String get replayTutorial => 'ട്യൂട്ടോറിയൽ വീണ്ടും കാണുക';
 
   @override
@@ -424,9 +418,6 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get addYourOwn => 'സ്വന്തമായി ചേർക്കുക...';
-
-  @override
-  String get tutorialCustomSinDesc => 'ഈ കൽപ്പനയ്ക്കായി നിങ്ങളുടെ സ്വന്തം കുറിപ്പുകൾ ചേർക്കാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.';
 
   @override
   String get penance => 'Penance';
