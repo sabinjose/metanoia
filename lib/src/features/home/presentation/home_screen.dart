@@ -50,20 +50,37 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if we came from tutorial reset
+    final state = GoRouterState.of(context);
+    if (state.uri.queryParameters['tutorial_reset'] == 'true') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _startTutorial();
+      });
+    }
+  }
+
   Future<void> _checkAndShowTutorial() async {
     final controller = ref.read(tutorialControllerProvider.notifier);
     final shouldShow = await controller.shouldShowHomeTutorial();
 
     if (shouldShow && mounted) {
-      // ignore: deprecated_member_use
-      ShowCaseWidget.of(context).startShowCase([
-        _examineKey,
-        _confessKey,
-        _prayersKey,
-        _guideKey,
-      ]);
+      _startTutorial();
       await controller.markHomeTutorialShown();
     }
+  }
+
+  void _startTutorial() {
+    if (!mounted) return;
+    // ignore: deprecated_member_use
+    ShowCaseWidget.of(context).startShowCase([
+      _examineKey,
+      _confessKey,
+      _prayersKey,
+      _guideKey,
+    ]);
   }
 
   Future<void> _onRefresh() async {

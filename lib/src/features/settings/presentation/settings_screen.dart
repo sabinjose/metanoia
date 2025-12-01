@@ -445,11 +445,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       .read(tutorialControllerProvider.notifier)
                       .resetTutorials();
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.tutorialReset)),
-                    );
-                    // Navigate to home so tutorials trigger on next visit
-                    context.go('/');
+                    // Navigate to home and force rebuild by using replace
+                    context.go('/?tutorial_reset=true');
                   }
                 },
                 icon: const Icon(Icons.replay),
