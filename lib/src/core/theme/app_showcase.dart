@@ -31,6 +31,7 @@ class AppShowcase extends StatelessWidget {
       targetShapeBorder: shapeBorder ?? const CircleBorder(),
       overlayOpacity: isDark ? 0.8 : 0.7,
       overlayColor: Colors.black,
+      enableAutoScroll: true,
       container: _buildTooltip(context, theme, isDark),
       child: child,
     );

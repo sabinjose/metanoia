@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
     // ignore: deprecated_member_use
     return ShowCaseWidget(
       blurValue: 1,
+      enableAutoScroll: true,
       builder: (context) => const _HomeContent(),
       autoPlayDelay: const Duration(seconds: 3),
     );
@@ -55,10 +56,12 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
 
     if (shouldShow && mounted) {
       // ignore: deprecated_member_use
-      ShowCaseWidget.of(
-        context,
-        // ignore: deprecated_member_use
-      ).startShowCase([_examineKey, _confessKey, _prayersKey, _guideKey]);
+      ShowCaseWidget.of(context).startShowCase([
+        _examineKey,
+        _confessKey,
+        _prayersKey,
+        _guideKey,
+      ]);
       await controller.markHomeTutorialShown();
     }
   }
