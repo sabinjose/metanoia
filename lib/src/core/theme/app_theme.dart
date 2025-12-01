@@ -171,6 +171,24 @@ class AppTheme {
           );
         }),
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: _cardLight,
+        surfaceTintColor: Colors.transparent,
+        elevation: 8,
+        shadowColor: _primaryLight.withValues(alpha: 0.15),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: colorScheme.outlineVariant,
+            width: 1,
+          ),
+        ),
+        textStyle: GoogleFonts.lato(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: const Color(0xFF1C1B1F),
+        ),
+      ),
     );
   }
 
@@ -300,6 +318,24 @@ class AppTheme {
           }
           return const Color(0xFF463F4E);
         }),
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: _cardDark,
+        surfaceTintColor: Colors.transparent,
+        elevation: 8,
+        shadowColor: Colors.black.withValues(alpha: 0.4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: colorScheme.outlineVariant,
+            width: 1,
+          ),
+        ),
+        textStyle: GoogleFonts.lato(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: const Color(0xFFE8E3EB),
+        ),
       ),
     );
   }

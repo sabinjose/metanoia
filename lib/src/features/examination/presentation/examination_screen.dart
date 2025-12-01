@@ -132,40 +132,47 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                   context.push('/examine/custom-sins');
                 }
               },
-              itemBuilder:
-                  (context) => [
-                    PopupMenuItem(
-                      value: 'custom_sins',
-                      child: Row(
-                        children: [
-                          const Icon(Icons.note_add),
-                          const SizedBox(width: 8),
-                          Text(l10n.manageCustomSins),
-                        ],
+              itemBuilder: (context) {
+              final theme = Theme.of(context);
+              return [
+                PopupMenuItem(
+                  value: 'custom_sins',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.note_add_outlined,
+                        color: theme.colorScheme.primary,
+                        size: 20,
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 'clear',
-                      enabled: selectedQuestions.isNotEmpty,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.delete_outline,
-                            color: selectedQuestions.isEmpty
-                                ? Theme.of(context).disabledColor
-                                : null,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.clearDraft,
-                            style: selectedQuestions.isEmpty
-                                ? TextStyle(color: Theme.of(context).disabledColor)
-                                : null,
-                          ),
-                        ],
+                      const SizedBox(width: 12),
+                      Text(l10n.manageCustomSins),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'clear',
+                  enabled: selectedQuestions.isNotEmpty,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.delete_outline,
+                        color: selectedQuestions.isEmpty
+                            ? theme.disabledColor
+                            : theme.colorScheme.error,
+                        size: 20,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+                      Text(
+                        l10n.clearDraft,
+                        style: selectedQuestions.isEmpty
+                            ? TextStyle(color: theme.disabledColor)
+                            : TextStyle(color: theme.colorScheme.error),
+                      ),
+                    ],
+                  ),
+                ),
+              ];
+            },
             ),
           ],
         ),
