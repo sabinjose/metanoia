@@ -144,17 +144,27 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                         ],
                       ),
                     ),
-                    if (selectedQuestions.isNotEmpty)
-                      PopupMenuItem(
-                        value: 'clear',
-                        child: Row(
-                          children: [
-                            const Icon(Icons.delete_outline),
-                            const SizedBox(width: 8),
-                            Text(l10n.clearDraft),
-                          ],
-                        ),
+                    PopupMenuItem(
+                      value: 'clear',
+                      enabled: selectedQuestions.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete_outline,
+                            color: selectedQuestions.isEmpty
+                                ? Theme.of(context).disabledColor
+                                : null,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            l10n.clearDraft,
+                            style: selectedQuestions.isEmpty
+                                ? TextStyle(color: Theme.of(context).disabledColor)
+                                : null,
+                          ),
+                        ],
                       ),
+                    ),
                   ],
             ),
           ],
