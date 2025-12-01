@@ -433,30 +433,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 16),
           _SettingsCard(
+            title: l10n.replayTutorial,
+            subtitle: l10n.replayTutorialDesc,
+            icon: Icons.school_outlined,
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  HapticUtils.lightImpact();
+                  await ref
+                      .read(tutorialControllerProvider.notifier)
+                      .resetTutorials();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.tutorialReset)),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.replay),
+                label: Text(l10n.replayTutorial),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SettingsCard(
             title: l10n.about,
             subtitle: l10n.aboutSubtitle,
             icon: Icons.info_outline,
             child: Column(
               children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(l10n.replayTutorial),
-                  subtitle: Text(l10n.replayTutorialDesc),
-                  leading: const Icon(Icons.school_outlined),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () async {
-                    HapticUtils.lightImpact();
-                    await ref
-                        .read(tutorialControllerProvider.notifier)
-                        .resetTutorials();
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.tutorialReset)),
-                      );
-                    }
-                  },
-                ),
-                const Divider(),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.shareApp),
