@@ -448,6 +448,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.tutorialReset)),
                     );
+                    // Navigate to home so tutorials trigger on next visit
+                    context.go('/');
                   }
                 },
                 icon: const Icon(Icons.replay),
