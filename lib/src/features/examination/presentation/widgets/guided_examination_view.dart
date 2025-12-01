@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart'
@@ -14,12 +15,18 @@ class GuidedExaminationView extends ConsumerStatefulWidget {
   final List<CommandmentWithQuestions> data;
   final VoidCallback onFinish;
   final Function(String?) onAddCustomSin;
+  final GlobalKey? swipeShowcaseKey;
+  final GlobalKey? selectShowcaseKey;
+  final GlobalKey? finishShowcaseKey;
 
   const GuidedExaminationView({
     super.key,
     required this.data,
     required this.onFinish,
     required this.onAddCustomSin,
+    this.swipeShowcaseKey,
+    this.selectShowcaseKey,
+    this.finishShowcaseKey,
   });
 
   @override
@@ -103,25 +110,7 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
 
         // Page view with commandments
         Expanded(
-          child: PageView.builder(
-            controller: _pageController,
-            onPageChanged: (page) {
-              setState(() {
-                _currentPage = page;
-              });
-              _saveCurrentPosition();
-              HapticUtils.selectionClick();
-            },
-            itemCount: widget.data.length,
-            itemBuilder: (context, index) {
-              final item = widget.data[index];
-              return _CommandmentPage(
-                item: item,
-                selectedQuestions: selectedQuestions,
-                onAddCustomSin: widget.onAddCustomSin,
-              );
-            },
-          ),
+          child: _buildPageViewWithShowcase(context, l10n, selectedQuestions),
         ),
 
         // Navigation buttons
@@ -241,133 +230,56 @@ class _GuidedExaminationViewState extends ConsumerState<GuidedExaminationView> {
     ).animate().fadeIn();
   }
 
-  Widget _buildNavigationBar(
+  Widget _buildPageViewWithShowcase(
     BuildContext context,
-    ThemeData theme,
     AppLocalizations l10n,
     Map<int, String> selectedQuestions,
   ) {
-    final isFirstPage = _currentPage == 0;
-    final isLastPage = _currentPage == widget.data.length - 1;
-    final hasSelections = selectedQuestions.isNotEmpty;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // Previous button - icon on left (natural for "back")
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: isFirstPage ? null : _previousPage,
-                icon: const Icon(Icons.chevron_left),
-                label: Text(l10n.previousCommandment),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Next / Finish button - icon on right for "forward" direction
-            Expanded(
-              child: isLastPage
-                  ? FilledButton.icon(
-                      onPressed: hasSelections
-                          ? () => _showSummarySheet(context, selectedQuestions)
-                          : null,
-                      icon: const Icon(Icons.check),
-                      label: Text(l10n.finishExamination),
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                    )
-                  : FilledButton(
-                      onPressed: _nextPage,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(l10n.nextCommandment),
-                          const SizedBox(width: 4),
-                          const Icon(Icons.chevron_right),
-                        ],
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
+    final pageView = PageView.builder(
+      controller: _pageController,
+      onPageChanged: (page) {
+        setState(() {
+          _currentPage = page;
+        });
+        _saveCurrentPosition();
+        HapticUtils.selectionClick();
+      },
+      itemCount: widget.data.length,
+      itemBuilder: (context, index) {
+        final item = widget.data[index];
+        return _buildCommandmentPage(
+          context,
+          item,
+          selectedQuestions,
+          index == 0, // isFirstPage - show select showcase on first page
+        );
+      },
     );
+
+    // Wrap with swipe showcase if key is provided
+    if (widget.swipeShowcaseKey != null) {
+      return AppShowcase(
+        showcaseKey: widget.swipeShowcaseKey!,
+        title: l10n.examineTitle,
+        description: l10n.tutorialSwipeDesc,
+        currentStep: 1,
+        totalSteps: 3,
+        shapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: pageView,
+      );
+    }
+
+    return pageView;
   }
 
-  int _getSelectedCountForItem(
+  Widget _buildCommandmentPage(
+    BuildContext context,
     CommandmentWithQuestions item,
     Map<int, String> selectedQuestions,
+    bool isFirstPage,
   ) {
-    int count = 0;
-    // Count selected standard questions
-    for (final q in item.questions) {
-      if (selectedQuestions.containsKey(q.id)) count++;
-    }
-    // Count selected custom sins (negative IDs)
-    for (final s in item.customSins) {
-      if (selectedQuestions.containsKey(-s.id)) count++;
-    }
-    return count;
-  }
-
-  String _getTooltipForItem(CommandmentWithQuestions item, AppLocalizations l10n) {
-    if (item.isGeneral) {
-      return l10n.noCommandment;
-    }
-    return item.commandment?.customTitle ??
-        '${l10n.commandment} ${item.commandment?.commandmentNo}';
-  }
-
-  void _showSummarySheet(BuildContext context, Map<int, String> selectedQuestions) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => ExaminationSummarySheet(
-        data: widget.data,
-        selectedQuestions: selectedQuestions,
-        onConfirm: () {
-          Navigator.pop(context);
-          widget.onFinish();
-        },
-        onCancel: () => Navigator.pop(context),
-      ),
-    );
-  }
-}
-
-/// Individual commandment page with questions
-class _CommandmentPage extends ConsumerWidget {
-  final CommandmentWithQuestions item;
-  final Map<int, String> selectedQuestions;
-  final Function(String?) onAddCustomSin;
-
-  const _CommandmentPage({
-    required this.item,
-    required this.selectedQuestions,
-    required this.onAddCustomSin,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final allItems = <Widget>[];
@@ -376,22 +288,38 @@ class _CommandmentPage extends ConsumerWidget {
     for (int i = 0; i < item.questions.length; i++) {
       final q = item.questions[i];
       final isSelected = selectedQuestions.containsKey(q.id);
-      allItems.add(
-        _QuestionTile(
-          question: q.question,
-          isSelected: isSelected,
-          isCustom: false,
-          onTap: () {
-            HapticUtils.selectionClick();
-            final controller = ref.read(examinationControllerProvider.notifier);
-            if (isSelected) {
-              controller.unselectQuestion(q.id);
-            } else {
-              controller.selectQuestion(q.id, q.question);
-            }
-          },
-        ),
+
+      Widget tile = _QuestionTile(
+        question: q.question,
+        isSelected: isSelected,
+        isCustom: false,
+        onTap: () {
+          HapticUtils.selectionClick();
+          final controller = ref.read(examinationControllerProvider.notifier);
+          if (isSelected) {
+            controller.unselectQuestion(q.id);
+          } else {
+            controller.selectQuestion(q.id, q.question);
+          }
+        },
       );
+
+      // Wrap first question on first page with showcase
+      if (i == 0 && isFirstPage && widget.selectShowcaseKey != null) {
+        tile = AppShowcase(
+          showcaseKey: widget.selectShowcaseKey!,
+          title: l10n.examineTitle,
+          description: l10n.tutorialSelectDesc,
+          currentStep: 2,
+          totalSteps: 3,
+          shapeBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: tile,
+        );
+      }
+
+      allItems.add(tile);
     }
 
     // Custom sins
@@ -420,7 +348,7 @@ class _CommandmentPage extends ConsumerWidget {
     if (_shouldShowAddYourOwn(item)) {
       allItems.add(
         _AddYourOwnTile(
-          onTap: () => onAddCustomSin(
+          onTap: () => widget.onAddCustomSin(
             item.isGeneral ? null : item.commandment?.code,
           ),
         ),
@@ -471,6 +399,144 @@ class _CommandmentPage extends ConsumerWidget {
     final commandmentNo = item.commandment?.commandmentNo;
     if (commandmentNo == null) return false;
     return commandmentNo <= 11;
+  }
+
+  Widget _buildNavigationBar(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n,
+    Map<int, String> selectedQuestions,
+  ) {
+    final isFirstPage = _currentPage == 0;
+    final isLastPage = _currentPage == widget.data.length - 1;
+    final hasSelections = selectedQuestions.isNotEmpty;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            // Previous button - icon on left (natural for "back")
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: isFirstPage ? null : _previousPage,
+                icon: const Icon(Icons.chevron_left),
+                label: Text(l10n.previousCommandment),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Next / Finish button - icon on right for "forward" direction
+            Expanded(
+              child: isLastPage
+                  ? _buildFinishButton(context, l10n, hasSelections, selectedQuestions)
+                  : FilledButton(
+                      onPressed: _nextPage,
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(l10n.nextCommandment),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFinishButton(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool hasSelections,
+    Map<int, String> selectedQuestions,
+  ) {
+    final button = FilledButton.icon(
+      onPressed: hasSelections
+          ? () => _showSummarySheet(context, selectedQuestions)
+          : null,
+      icon: const Icon(Icons.check),
+      label: Text(l10n.finishExamination),
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+      ),
+    );
+
+    // Wrap with finish showcase if key is provided
+    if (widget.finishShowcaseKey != null) {
+      return AppShowcase(
+        showcaseKey: widget.finishShowcaseKey!,
+        title: l10n.finishExamination,
+        description: l10n.tutorialFinishDesc,
+        currentStep: 3,
+        totalSteps: 3,
+        shapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: button,
+      );
+    }
+
+    return button;
+  }
+
+  int _getSelectedCountForItem(
+    CommandmentWithQuestions item,
+    Map<int, String> selectedQuestions,
+  ) {
+    int count = 0;
+    // Count selected standard questions
+    for (final q in item.questions) {
+      if (selectedQuestions.containsKey(q.id)) count++;
+    }
+    // Count selected custom sins (negative IDs)
+    for (final s in item.customSins) {
+      if (selectedQuestions.containsKey(-s.id)) count++;
+    }
+    return count;
+  }
+
+  String _getTooltipForItem(CommandmentWithQuestions item, AppLocalizations l10n) {
+    if (item.isGeneral) {
+      return l10n.noCommandment;
+    }
+    return item.commandment?.customTitle ??
+        '${l10n.commandment} ${item.commandment?.commandmentNo}';
+  }
+
+  void _showSummarySheet(BuildContext context, Map<int, String> selectedQuestions) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ExaminationSummarySheet(
+        data: widget.data,
+        selectedQuestions: selectedQuestions,
+        onConfirm: () {
+          Navigator.pop(context);
+          widget.onFinish();
+        },
+        onCancel: () => Navigator.pop(context),
+      ),
+    );
   }
 }
 

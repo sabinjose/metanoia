@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ExaminationScreen extends ConsumerStatefulWidget {
   const ExaminationScreen({super.key});
@@ -21,6 +23,11 @@ class ExaminationScreen extends ConsumerStatefulWidget {
 
 class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   bool _hasShownRestoreSnackbar = false;
+
+  // Showcase keys
+  final GlobalKey _swipeKey = GlobalKey();
+  final GlobalKey _selectKey = GlobalKey();
+  final GlobalKey _finishKey = GlobalKey();
 
   @override
   void initState() {
@@ -45,7 +52,25 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           ),
         );
       }
+
+      // Check if tutorial should be shown
+      _checkAndShowTutorial();
     });
+  }
+
+  Future<void> _checkAndShowTutorial() async {
+    final tutorialController = ref.read(tutorialControllerProvider.notifier);
+    final shouldShow = await tutorialController.shouldShowExaminationTutorial();
+    if (shouldShow && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ShowCaseWidget.of(context).startShowCase([
+          _swipeKey,
+          _selectKey,
+          _finishKey,
+        ]);
+      });
+      await tutorialController.markExaminationTutorialShown();
+    }
   }
 
   @override
@@ -54,93 +79,99 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     final examinationDataAsync = ref.watch(examinationDataProvider);
     final selectedQuestions = ref.watch(examinationControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.examinationTitle),
-        actions: [
-          if (selectedQuestions.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: AnimatedCountBadge(
-                count: selectedQuestions.length,
-                label: l10n.selected(selectedQuestions.length),
-                backgroundColor:
-                    Theme.of(context).colorScheme.primaryContainer,
-                textColor:
-                    Theme.of(context).colorScheme.onPrimaryContainer,
-                textStyle:
-                    Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ).animate().fadeIn().scale(),
-          PopupMenuButton<String>(
-            onSelected: (value) async {
-              if (value == 'clear') {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        title: Text(l10n.clearDraftTitle),
-                        content: Text(l10n.clearDraftMessage),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: Text(l10n.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: Text(l10n.clear),
-                          ),
-                        ],
+    return ShowCaseWidget(
+      enableAutoScroll: true,
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.examinationTitle),
+          actions: [
+            if (selectedQuestions.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: AnimatedCountBadge(
+                  count: selectedQuestions.length,
+                  label: l10n.selected(selectedQuestions.length),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  textColor:
+                      Theme.of(context).colorScheme.onPrimaryContainer,
+                  textStyle:
+                      Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onPrimaryContainer,
+                        fontWeight: FontWeight.bold,
                       ),
-                );
-                if (confirmed == true && context.mounted) {
-                  await ref.read(examinationControllerProvider.notifier).clearDraft();
+                ),
+              ).animate().fadeIn().scale(),
+            PopupMenuButton<String>(
+              onSelected: (value) async {
+                if (value == 'clear') {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: Text(l10n.clearDraftTitle),
+                          content: Text(l10n.clearDraftMessage),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text(l10n.cancel),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text(l10n.clear),
+                            ),
+                          ],
+                        ),
+                  );
+                  if (confirmed == true && context.mounted) {
+                    await ref.read(examinationControllerProvider.notifier).clearDraft();
+                  }
+                } else if (value == 'custom_sins') {
+                  context.push('/examine/custom-sins');
                 }
-              } else if (value == 'custom_sins') {
-                context.push('/examine/custom-sins');
-              }
-            },
-            itemBuilder:
-                (context) => [
-                  PopupMenuItem(
-                    value: 'custom_sins',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.note_add),
-                        const SizedBox(width: 8),
-                        Text(l10n.manageCustomSins),
-                      ],
-                    ),
-                  ),
-                  if (selectedQuestions.isNotEmpty)
+              },
+              itemBuilder:
+                  (context) => [
                     PopupMenuItem(
-                      value: 'clear',
+                      value: 'custom_sins',
                       child: Row(
                         children: [
-                          const Icon(Icons.delete_outline),
+                          const Icon(Icons.note_add),
                           const SizedBox(width: 8),
-                          Text(l10n.clearDraft),
+                          Text(l10n.manageCustomSins),
                         ],
                       ),
                     ),
-                ],
-          ),
-        ],
-      ),
-      body: examinationDataAsync.when(
-        data: (data) => GuidedExaminationView(
-          data: data,
-          onFinish: () => _finishExamination(context, ref),
-          onAddCustomSin: (commandmentCode) =>
-              _showAddCustomSinDialog(context, commandmentCode),
+                    if (selectedQuestions.isNotEmpty)
+                      PopupMenuItem(
+                        value: 'clear',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.delete_outline),
+                            const SizedBox(width: 8),
+                            Text(l10n.clearDraft),
+                          ],
+                        ),
+                      ),
+                  ],
+            ),
+          ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
+        body: examinationDataAsync.when(
+          data: (data) => GuidedExaminationView(
+            data: data,
+            onFinish: () => _finishExamination(context, ref),
+            onAddCustomSin: (commandmentCode) =>
+                _showAddCustomSinDialog(context, commandmentCode),
+            swipeShowcaseKey: _swipeKey,
+            selectShowcaseKey: _selectKey,
+            finishShowcaseKey: _finishKey,
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
+        ),
       ),
     );
   }
