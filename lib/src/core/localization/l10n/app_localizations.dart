@@ -1390,6 +1390,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to read more'**
   String get tapToExpand;
+
+  /// No description provided for @continueExamination.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Examination'**
+  String get continueExamination;
+
+  /// No description provided for @continueExaminationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an examination in progress'**
+  String get continueExaminationDesc;
+
+  /// No description provided for @examinationProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items selected'**
+  String examinationProgress(Object count);
+
+  /// No description provided for @startNewExamination.
+  ///
+  /// In en, this message translates to:
+  /// **'Start New Examination'**
+  String get startNewExamination;
+
+  /// No description provided for @startNewExaminationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Examine your conscience before confession'**
+  String get startNewExaminationDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

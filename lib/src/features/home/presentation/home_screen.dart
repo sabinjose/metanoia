@@ -13,6 +13,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/features/home/presentation/providers/quote_provider.dart';
+import 'package:confessionapp/src/features/home/presentation/widgets/examination_cta_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -146,7 +147,9 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                       ).animate().fadeIn(),
                       const SizedBox(height: 32),
                       _DailyQuoteCard(theme: theme),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
+                      const ExaminationCtaCard(),
+                      const SizedBox(height: 24),
                       Text(
                         l10n.quickActions,
                         style: theme.textTheme.titleMedium?.copyWith(

@@ -222,5 +222,11 @@
   "noFaqContent": "No FAQs available",
   "noFaqContentDesc": "Frequently asked questions will appear here",
   "faqSubtitle": "Frequently asked questions about confession",
-  "tapToExpand": "Tap to read more"
+  "tapToExpand": "Tap to read more",
+
+  "continueExamination": "Continue Examination",
+  "continueExaminationDesc": "You have an examination in progress",
+  "examinationProgress": "{count} items selected",
+  "startNewExamination": "Start New Examination",
+  "startNewExaminationDesc": "Examine your conscience before confession"
 }

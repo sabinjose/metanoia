@@ -695,4 +695,21 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get tapToExpand => 'കൂടുതൽ വായിക്കാൻ ടാപ്പ് ചെയ്യുക';
+
+  @override
+  String get continueExamination => 'പരിശോധന തുടരുക';
+
+  @override
+  String get continueExaminationDesc => 'നിങ്ങൾക്ക് പുരോഗതിയിലുള്ള ഒരു പരിശോധന ഉണ്ട്';
+
+  @override
+  String examinationProgress(Object count) {
+    return '$count ഇനങ്ങൾ തിരഞ്ഞെടുത്തു';
+  }
+
+  @override
+  String get startNewExamination => 'പുതിയ പരിശോധന ആരംഭിക്കുക';
+
+  @override
+  String get startNewExaminationDesc => 'കുമ്പസാരത്തിന് മുമ്പ് മനസ്സാക്ഷി പരിശോധിക്കുക';
 }

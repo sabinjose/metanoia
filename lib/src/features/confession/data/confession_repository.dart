@@ -23,6 +23,47 @@ Future<Confession?> lastFinishedConfession(Ref ref) async {
       .getSingleOrNull();
 }
 
+/// Represents an active (unfinished) examination draft
+class ActiveExaminationDraft {
+  final Confession confession;
+  final int itemCount;
+
+  ActiveExaminationDraft({
+    required this.confession,
+    required this.itemCount,
+  });
+}
+
+@riverpod
+Future<ActiveExaminationDraft?> activeExaminationDraft(Ref ref) async {
+  final db = ref.watch(appDatabaseProvider);
+
+  // Find unfinished confession (draft)
+  final draft = await (db.select(db.confessions)
+        ..where((tbl) => tbl.isFinished.equals(false))
+        ..orderBy([
+          (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+        ])
+        ..limit(1))
+      .getSingleOrNull();
+
+  if (draft == null) return null;
+
+  // Count items in this draft
+  final itemCount = await (db.selectOnly(db.confessionItems)
+        ..addColumns([db.confessionItems.id.count()])
+        ..where(db.confessionItems.confessionId.equals(draft.id)))
+      .map((row) => row.read(db.confessionItems.id.count()) ?? 0)
+      .getSingle();
+
+  if (itemCount == 0) return null;
+
+  return ActiveExaminationDraft(
+    confession: draft,
+    itemCount: itemCount,
+  );
+}
+
 @riverpod
 Future<List<ConfessionWithItems>> finishedConfessions(Ref ref) async {
   final repo = ref.watch(confessionRepositoryProvider);

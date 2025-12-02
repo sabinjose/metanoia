@@ -707,4 +707,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tapToExpand => 'Tap to read more';
+
+  @override
+  String get continueExamination => 'Continue Examination';
+
+  @override
+  String get continueExaminationDesc => 'You have an examination in progress';
+
+  @override
+  String examinationProgress(Object count) {
+    return '$count items selected';
+  }
+
+  @override
+  String get startNewExamination => 'Start New Examination';
+
+  @override
+  String get startNewExaminationDesc => 'Examine your conscience before confession';
 }

@@ -44,6 +44,26 @@ final lastFinishedConfessionProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef LastFinishedConfessionRef = AutoDisposeFutureProviderRef<Confession?>;
+String _$activeExaminationDraftHash() =>
+    r'59342d35cb4bf661bb28ebeec93cf0f7ec81e695';
+
+/// See also [activeExaminationDraft].
+@ProviderFor(activeExaminationDraft)
+final activeExaminationDraftProvider =
+    AutoDisposeFutureProvider<ActiveExaminationDraft?>.internal(
+  activeExaminationDraft,
+  name: r'activeExaminationDraftProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$activeExaminationDraftHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ActiveExaminationDraftRef
+    = AutoDisposeFutureProviderRef<ActiveExaminationDraft?>;
 String _$finishedConfessionsHash() =>
     r'd77e0dc40023ffae5f73f1a02fa18c3d9d85267d';
 
