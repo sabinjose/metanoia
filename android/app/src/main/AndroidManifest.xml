@@ -2,7 +2,7 @@
     <application
         android:label="Metanoia"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_metanoia">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"

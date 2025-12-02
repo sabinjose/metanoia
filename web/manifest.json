@@ -3,7 +3,7 @@
     "short_name": "confessionapp",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#5A3A7C",
+    "background_color": "#F8F8FA",
     "theme_color": "#5A3A7C",
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",
