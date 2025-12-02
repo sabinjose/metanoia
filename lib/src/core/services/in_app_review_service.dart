@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/constants/app_constants.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,11 +14,6 @@ class InAppReviewService {
   static const String _confessionCountKey = 'confession_count';
   static const String _penanceCountKey = 'penance_count';
   static const String _lastPromptDateKey = 'rate_app_last_prompt_date';
-
-  // Thresholds for triggering review prompts
-  static const int _confessionThreshold = 2; // After 2nd confession
-  static const int _penanceThreshold = 3; // After 3rd penance completion
-  static const int _minDaysBetweenPrompts = 30; // Min 30 days between prompts
 
   final InAppReview _inAppReview = InAppReview.instance;
 
@@ -57,7 +53,7 @@ class InAppReviewService {
     if (lastPrompt == null) return true;
 
     final daysSinceLastPrompt = DateTime.now().difference(lastPrompt).inDays;
-    return daysSinceLastPrompt >= _minDaysBetweenPrompts;
+    return daysSinceLastPrompt >= ReviewConfig.minDaysBetweenPrompts;
   }
 
   /// Track confession completion and check if review should be requested
@@ -72,7 +68,7 @@ class InAppReviewService {
     await prefs.setInt(_confessionCountKey, count);
 
     // Check if we've hit the threshold
-    if (count == _confessionThreshold) {
+    if (count == ReviewConfig.confessionThreshold) {
       return await _inAppReview.isAvailable();
     }
 
@@ -91,7 +87,7 @@ class InAppReviewService {
     await prefs.setInt(_penanceCountKey, count);
 
     // Check if we've hit the threshold
-    if (count == _penanceThreshold) {
+    if (count == ReviewConfig.penanceThreshold) {
       return await _inAppReview.isAvailable();
     }
 
@@ -107,9 +103,9 @@ class InAppReviewService {
 
   /// Open the store listing directly
   /// Use this for the manual "Rate App" button in settings
-  Future<void> openStoreListing({String? appStoreId}) async {
+  Future<void> openStoreListing() async {
     await _inAppReview.openStoreListing(
-      appStoreId: appStoreId ?? '', // Add your App Store ID here when available
+      appStoreId: StoreConfig.appStoreId,
     );
   }
 
