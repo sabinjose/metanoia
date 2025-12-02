@@ -4,6 +4,12 @@
 /// when publishing or configuring the app.
 library;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'app_constants.g.dart';
+
 /// App Store and Play Store configuration
 abstract class StoreConfig {
   /// Apple App Store ID (found in App Store Connect → App Information → Apple ID)
@@ -38,11 +44,9 @@ abstract class AppUrls {
   // TODO: Update with actual website/store URL when available
 }
 
-/// App metadata
-abstract class AppMetadata {
-  /// Current app version (should match pubspec.yaml)
-  static const String version = '1.0.0';
-
-  /// App name
-  static const String appName = 'Metanoia';
+/// Provider for package info (version, build number, etc.)
+/// Reads directly from pubspec.yaml at runtime
+@riverpod
+Future<PackageInfo> packageInfo(Ref ref) async {
+  return await PackageInfo.fromPlatform();
 }

@@ -501,11 +501,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: Text(
-              '${l10n.version} ${AppMetadata.version}',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+            child: ref.watch(packageInfoProvider).when(
+              data: (info) => Text(
+                '${l10n.version} ${info.version} (${info.buildNumber})',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
+              loading: () => Text(
+                l10n.version,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              error: (_, __) => const SizedBox.shrink(),
             ),
           ),
         ],
