@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:confessionapp/src/core/services/in_app_review_service.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
@@ -51,6 +52,8 @@ class PenanceScreen extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(l10n.penanceCompleted)),
                     );
+                    // Check for review after penance completion (happy moment)
+                    _checkAndRequestReview(context);
                   }
                 },
                 onEdit: () => _showEditDialog(context, ref, item),
@@ -69,6 +72,86 @@ class PenanceScreen extends ConsumerWidget {
       title: l10n.noPendingPenances,
       subtitle: l10n.noPendingPenancesDesc,
     ).animate().fadeIn().scale();
+  }
+
+  Future<void> _checkAndRequestReview(BuildContext context) async {
+    final reviewService = InAppReviewService();
+    final shouldPrompt = await reviewService.trackPenanceCompletion();
+
+    if (shouldPrompt && context.mounted) {
+      _showReviewDialog(context, reviewService);
+    }
+  }
+
+  void _showReviewDialog(BuildContext context, InAppReviewService reviewService) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primaryContainer,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.favorite,
+            color: theme.colorScheme.primary,
+            size: 32,
+          ),
+        ),
+        title: Text(
+          l10n.rateDialogTitle,
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          l10n.rateDialogContent,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilledButton.icon(
+                onPressed: () async {
+                  await reviewService.setOptOut(true);
+                  if (context.mounted) Navigator.pop(context);
+                  await reviewService.requestReview();
+                },
+                icon: const Icon(Icons.star),
+                label: Text(l10n.rateDialogYes),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () async {
+                  await reviewService.resetCounters();
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: Text(l10n.rateDialogLater),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await reviewService.setOptOut(true);
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: Text(
+                  l10n.rateDialogNo,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   void _showEditDialog(

@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/services/in_app_review_service.dart';
 import 'package:confessionapp/src/core/services/reminder_service.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
@@ -463,11 +464,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 ListTile(
                   contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.rateApp),
+                  subtitle: Text(l10n.rateAppSubtitle),
+                  leading: const Icon(Icons.star_rate),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    HapticUtils.lightImpact();
+                    final reviewService = InAppReviewService();
+                    await reviewService.openStoreListing();
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
                   title: Text(l10n.shareApp),
                   subtitle: Text(l10n.shareAppSubtitle),
                   leading: const Icon(Icons.share),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
+                    HapticUtils.lightImpact();
                     // TODO: Update link when webpage is ready
                     Share.share(
                       'Check out Metanoia: Catholic Confession App! https://github.com/sabinjose/confessionapp',

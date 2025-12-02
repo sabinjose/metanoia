@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/database/database_provider.dart';
+import 'package:confessionapp/src/core/services/in_app_review_service.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
@@ -15,8 +16,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 part 'confession_screen.g.dart';
@@ -408,58 +407,83 @@ class _ConfessionScreenContentState
   }
 
   Future<void> _checkAndRequestReview(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    final dontAsk = prefs.getBool('rate_app_dont_ask') ?? false;
+    final reviewService = InAppReviewService();
+    final shouldPrompt = await reviewService.trackConfessionCompletion();
 
-    if (dontAsk) return;
-
-    int count = prefs.getInt('confession_count') ?? 0;
-    count++;
-    await prefs.setInt('confession_count', count);
-
-    if (count == 2 && context.mounted) {
-      final l10n = AppLocalizations.of(context)!;
-      final InAppReview inAppReview = InAppReview.instance;
-
-      if (await inAppReview.isAvailable()) {
-        if (!context.mounted) return;
-        showDialog(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: Text(l10n.rateDialogTitle),
-                content: Text(l10n.rateDialogContent),
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      await prefs.setBool('rate_app_dont_ask', true);
-                      if (context.mounted) Navigator.pop(context);
-                    },
-                    child: Text(l10n.rateDialogNo),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      await prefs.setInt(
-                        'confession_count',
-                        0,
-                      ); // Reset to ask again later
-                      if (context.mounted) Navigator.pop(context);
-                    },
-                    child: Text(l10n.rateDialogLater),
-                  ),
-                  FilledButton(
-                    onPressed: () async {
-                      await prefs.setBool('rate_app_dont_ask', true);
-                      if (context.mounted) Navigator.pop(context);
-                      inAppReview.requestReview();
-                    },
-                    child: Text(l10n.rateDialogYes),
-                  ),
-                ],
-              ),
-        );
-      }
+    if (shouldPrompt && context.mounted) {
+      _showReviewDialog(context, reviewService);
     }
+  }
+
+  void _showReviewDialog(BuildContext context, InAppReviewService reviewService) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primaryContainer,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.favorite,
+            color: theme.colorScheme.primary,
+            size: 32,
+          ),
+        ),
+        title: Text(
+          l10n.rateDialogTitle,
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          l10n.rateDialogContent,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilledButton.icon(
+                onPressed: () async {
+                  await reviewService.setOptOut(true);
+                  if (context.mounted) Navigator.pop(context);
+                  await reviewService.requestReview();
+                },
+                icon: const Icon(Icons.star),
+                label: Text(l10n.rateDialogYes),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () async {
+                  await reviewService.resetCounters();
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: Text(l10n.rateDialogLater),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await reviewService.setOptOut(true);
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: Text(
+                  l10n.rateDialogNo,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Future<String?> _showPenanceInputDialog(
