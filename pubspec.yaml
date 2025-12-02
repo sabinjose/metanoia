@@ -78,16 +78,16 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icon/icon.png"
   min_sdk_android: 21
-  # Android Adaptive Icons - logo has light background built-in
-  adaptive_icon_background: "#F8F8FA"
+  # Android Adaptive Icons - using app theme background color
+  adaptive_icon_background: "#F8F6F3"
   adaptive_icon_foreground: "assets/icon/foreground.png"
   # Remove alpha channel for iOS (required)
   remove_alpha_ios: true
   web:
     generate: true
     image_path: "assets/icon/icon.png"
-    background_color: "#F8F8FA"
-    theme_color: "#5A3A7C"
+    background_color: "#F8F6F3"
+    theme_color: "#7558A3"
   windows:
     generate: true
     image_path: "assets/icon/icon.png"
