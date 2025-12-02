@@ -15,6 +15,15 @@ abstract class StoreConfig {
   static const String? playStorePackageName = null;
 }
 
+/// App Update configuration
+abstract class UpdateConfig {
+  /// Minimum app version required - versions below this will be forced to update
+  static const String minAppVersion = '1.0.0';
+
+  /// Days to wait before showing the update prompt again
+  static const int daysUntilAlertAgain = 3;
+}
+
 /// In-App Review configuration
 abstract class ReviewConfig {
   /// Number of confessions before showing review prompt

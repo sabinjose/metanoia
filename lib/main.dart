@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/constants/app_constants.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/router/app_router.dart';
 import 'package:confessionapp/src/core/theme/app_theme.dart';
@@ -5,6 +6,7 @@ import 'package:confessionapp/src/core/theme/theme_provider.dart';
 import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:upgrader/upgrader.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,6 +30,20 @@ class MyApp extends ConsumerWidget {
       locale: languageState.valueOrNull,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        return UpgradeAlert(
+          navigatorKey: router.routerDelegate.navigatorKey,
+          upgrader: Upgrader(
+            storeController: UpgraderStoreController(
+              onAndroid: () => UpgraderPlayStore(),
+              oniOS: () => UpgraderAppStore(),
+            ),
+            minAppVersion: UpdateConfig.minAppVersion,
+            durationUntilAlertAgain: const Duration(days: UpdateConfig.daysUntilAlertAgain),
+          ),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
