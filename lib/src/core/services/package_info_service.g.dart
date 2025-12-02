@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_constants.dart';
+part of 'package_info_service.dart';
 
 // **************************************************************************
 // RiverpodGenerator

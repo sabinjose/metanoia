@@ -1,4 +1,5 @@
 import 'package:confessionapp/src/core/constants/app_constants.dart';
+import 'package:confessionapp/src/core/services/package_info_service.dart';
 import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/services/in_app_review_service.dart';
