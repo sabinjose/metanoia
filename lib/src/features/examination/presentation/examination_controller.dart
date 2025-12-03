@@ -1,5 +1,6 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
+import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -143,6 +144,9 @@ class ExaminationController extends _$ExaminationController {
 
     // Update last saved time
     lastSavedAt = DateTime.now();
+
+    // Invalidate the draft provider so home screen updates
+    ref.invalidate(activeExaminationDraftProvider);
   }
 
   Future<void> saveConfession() async {
@@ -226,5 +230,8 @@ class ExaminationController extends _$ExaminationController {
     // Clear the saved examination page position
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(kLastExaminationPageKey);
+
+    // Invalidate the draft provider so home screen updates
+    ref.invalidate(activeExaminationDraftProvider);
   }
 }
