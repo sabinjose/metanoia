@@ -2,6 +2,7 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
+import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/examination/data/examination_repository.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
@@ -239,8 +240,9 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   Future<void> _finishExamination(BuildContext context, WidgetRef ref) async {
     final controller = ref.read(examinationControllerProvider.notifier);
     await controller.saveConfession();
-    // Invalidate the confession provider so it refreshes
+    // Invalidate providers so home screen refreshes
     ref.invalidate(activeConfessionProvider);
+    ref.invalidate(activeExaminationDraftProvider);
     if (context.mounted) {
       context.go('/confess');
       // Clear the examination state after navigation

@@ -372,6 +372,8 @@ class _ConfessionScreenContentState
 
                                       // Refresh the active confession state
                                       ref.invalidate(activeConfessionProvider);
+                                      ref.invalidate(activeExaminationDraftProvider);
+                                      ref.invalidate(lastFinishedConfessionProvider);
 
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(
