@@ -3,18 +3,29 @@ import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   late AppDatabase db;
   late ProviderContainer container;
+
+  setUpAll(() {
+    // Initialize Flutter binding for SharedPreferences
+    WidgetsFlutterBinding.ensureInitialized();
+    // Set up mock SharedPreferences
+    SharedPreferences.setMockInitialValues({});
+  });
 
   setUp(() {
     db = TestAppDatabase(NativeDatabase.memory());
     container = ProviderContainer(
       overrides: [appDatabaseProvider.overrideWithValue(db)],
     );
+    // Reset mock SharedPreferences before each test
+    SharedPreferences.setMockInitialValues({});
   });
 
   tearDown(() async {
@@ -69,20 +80,26 @@ void main() {
     expect(items, isEmpty);
   });
 
-  test('Save confession creates active confession and clears state', () async {
+  test('Save confession creates active confession and preserves state until clearAfterSave', () async {
     final controller = container.read(examinationControllerProvider.notifier);
 
     await controller.selectQuestion(1, 'Test Question');
     await controller.saveConfession();
 
-    expect(container.read(examinationControllerProvider), isEmpty);
+    // State is preserved after saveConfession (for navigation purposes)
+    expect(container.read(examinationControllerProvider), {1: 'Test Question'});
 
+    // Confession exists in database
     final confessions = await db.select(db.confessions).get();
     expect(confessions.length, 1);
     expect(confessions.first.isFinished, false);
 
     final items = await db.select(db.confessionItems).get();
     expect(items.length, 1);
+
+    // State is cleared after clearAfterSave
+    await controller.clearAfterSave();
+    expect(container.read(examinationControllerProvider), isEmpty);
   });
 
   test('Restores draft on initialization', () async {
@@ -132,6 +149,41 @@ void main() {
 
     final confessions = await db.select(db.confessions).get();
     expect(confessions, isEmpty);
+  });
+
+  test('Select custom sin with negative ID', () async {
+    final controller = container.read(examinationControllerProvider.notifier);
+
+    // Custom sins use negative IDs
+    await controller.selectQuestion(-5, 'Custom Sin Text');
+
+    expect(container.read(examinationControllerProvider), {-5: 'Custom Sin Text'});
+
+    // Verify draft in DB with custom sin flag
+    final drafts =
+        await (db.select(db.confessions)
+          ..where((t) => t.isFinished.equals(false))).get();
+    expect(drafts.length, 1);
+
+    final items =
+        await (db.select(db.confessionItems)
+          ..where((t) => t.confessionId.equals(drafts.first.id))).get();
+    expect(items.length, 1);
+    expect(items.first.isCustom, true);
+    expect(items.first.note, '5'); // Custom sin ID stored in note field
+    expect(items.first.content, 'Custom Sin Text');
+  });
+
+  test('isChecked returns correct state', () async {
+    final controller = container.read(examinationControllerProvider.notifier);
+
+    expect(controller.isChecked(1), false);
+
+    await controller.selectQuestion(1, 'Test Question');
+    expect(controller.isChecked(1), true);
+
+    await controller.unselectQuestion(1);
+    expect(controller.isChecked(1), false);
   });
 }
 
