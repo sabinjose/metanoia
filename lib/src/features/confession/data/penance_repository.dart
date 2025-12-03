@@ -88,25 +88,6 @@ class PenanceRepository {
   Future<void> deletePenance(int penanceId) async {
     await (_db.delete(_db.penances)..where((t) => t.id.equals(penanceId))).go();
   }
-
-  /// Get all penances (for history/analytics)
-  Future<List<PenanceWithConfession>> getAllPenances() async {
-    final query = _db.select(_db.penances).join([
-      innerJoin(
-        _db.confessions,
-        _db.confessions.id.equalsExp(_db.penances.confessionId),
-      ),
-    ])
-      ..orderBy([OrderingTerm.desc(_db.penances.createdAt)]);
-
-    final results = await query.get();
-    return results.map((row) {
-      return PenanceWithConfession(
-        penance: row.readTable(_db.penances),
-        confession: row.readTable(_db.confessions),
-      );
-    }).toList();
-  }
 }
 
 class PenanceWithConfession {

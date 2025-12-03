@@ -718,10 +718,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String examinationProgress(Object count) {
     return '$count items selected';
   }
-
-  @override
-  String get startNewExamination => 'Start New Examination';
-
-  @override
-  String get startNewExaminationDesc => 'Examine your conscience before confession';
 }

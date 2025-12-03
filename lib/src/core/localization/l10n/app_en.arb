@@ -226,7 +226,5 @@
 
   "continueExamination": "Continue Examination",
   "continueExaminationDesc": "You have an examination in progress",
-  "examinationProgress": "{count} items selected",
-  "startNewExamination": "Start New Examination",
-  "startNewExaminationDesc": "Examine your conscience before confession"
+  "examinationProgress": "{count} items selected"
 }

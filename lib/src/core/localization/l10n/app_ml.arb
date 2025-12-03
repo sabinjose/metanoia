@@ -222,7 +222,5 @@
 
   "continueExamination": "പരിശോധന തുടരുക",
   "continueExaminationDesc": "നിങ്ങൾക്ക് പുരോഗതിയിലുള്ള ഒരു പരിശോധന ഉണ്ട്",
-  "examinationProgress": "{count} ഇനങ്ങൾ തിരഞ്ഞെടുത്തു",
-  "startNewExamination": "പുതിയ പരിശോധന ആരംഭിക്കുക",
-  "startNewExaminationDesc": "കുമ്പസാരത്തിന് മുമ്പ് മനസ്സാക്ഷി പരിശോധിക്കുക"
+  "examinationProgress": "{count} ഇനങ്ങൾ തിരഞ്ഞെടുത്തു"
 }

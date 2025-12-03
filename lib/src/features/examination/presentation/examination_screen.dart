@@ -36,6 +36,9 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   @override
   void initState() {
     super.initState();
+    // Register showcase
+    ShowcaseView.register(enableAutoScroll: true);
+
     // Show snackbar after first frame if draft was restored
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = ref.read(examinationControllerProvider.notifier);
@@ -59,7 +62,7 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     });
   }
 
-  Future<void> _checkAndShowTutorial(BuildContext showcaseContext) async {
+  Future<void> _checkAndShowTutorial() async {
     if (_hasCheckedTutorial) return;
     _hasCheckedTutorial = true;
 
@@ -68,7 +71,7 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     if (shouldShow && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          ShowCaseWidget.of(showcaseContext).startShowCase([
+          ShowcaseView.get().startShowCase([
             _swipeKey,
             _selectKey,
             _counterKey,
@@ -87,15 +90,12 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     final examinationDataAsync = ref.watch(examinationDataProvider);
     final selectedQuestions = ref.watch(examinationControllerProvider);
 
-    return ShowCaseWidget(
-      enableAutoScroll: true,
-      builder: (showcaseContext) {
-        // Check tutorial after the ShowCaseWidget is built
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _checkAndShowTutorial(showcaseContext);
-        });
+    // Check tutorial after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowTutorial();
+    });
 
-        return Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(l10n.examinationTitle),
           actions: [
@@ -115,12 +115,12 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                         count: selectedQuestions.length,
                         label: l10n.selected(selectedQuestions.length),
                         backgroundColor:
-                            Theme.of(showcaseContext).colorScheme.primaryContainer,
+                            Theme.of(context).colorScheme.primaryContainer,
                         textColor:
-                            Theme.of(showcaseContext).colorScheme.onPrimaryContainer,
+                            Theme.of(context).colorScheme.onPrimaryContainer,
                         textStyle:
-                            Theme.of(showcaseContext).textTheme.labelLarge?.copyWith(
-                              color: Theme.of(showcaseContext)
+                            Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: Theme.of(context)
                                   .colorScheme
                                   .onPrimaryContainer,
                               fontWeight: FontWeight.bold,
@@ -129,13 +129,13 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
                     : Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Theme.of(showcaseContext).colorScheme.surfaceContainerHighest,
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           '0 ${l10n.selectedLabel}',
-                          style: Theme.of(showcaseContext).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(showcaseContext).colorScheme.onSurfaceVariant,
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -223,9 +223,9 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
         body: examinationDataAsync.when(
           data: (data) => GuidedExaminationView(
             data: data,
-            onFinish: () => _finishExamination(showcaseContext, ref),
+            onFinish: () => _finishExamination(context, ref),
             onAddCustomSin: (commandmentCode) =>
-                _showAddCustomSinDialog(showcaseContext, commandmentCode),
+                _showAddCustomSinDialog(context, commandmentCode),
             swipeShowcaseKey: _swipeKey,
             selectShowcaseKey: _selectKey,
             finishShowcaseKey: _finishKey,
@@ -234,8 +234,6 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
           error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
         ),
       );
-      },
-    );
   }
 
   Future<void> _finishExamination(BuildContext context, WidgetRef ref) async {

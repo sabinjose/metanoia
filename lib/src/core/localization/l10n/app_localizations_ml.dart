@@ -706,10 +706,4 @@ class AppLocalizationsMl extends AppLocalizations {
   String examinationProgress(Object count) {
     return '$count ഇനങ്ങൾ തിരഞ്ഞെടുത്തു';
   }
-
-  @override
-  String get startNewExamination => 'പുതിയ പരിശോധന ആരംഭിക്കുക';
-
-  @override
-  String get startNewExaminationDesc => 'കുമ്പസാരത്തിന് മുമ്പ് മനസ്സാക്ഷി പരിശോധിക്കുക';
 }

@@ -20,17 +20,27 @@ import 'package:showcaseview/showcaseview.dart';
 
 part 'confession_screen.g.dart';
 
-class ConfessionScreen extends StatelessWidget {
+class ConfessionScreen extends StatefulWidget {
   const ConfessionScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ShowCaseWidget(
+  State<ConfessionScreen> createState() => _ConfessionScreenState();
+}
+
+class _ConfessionScreenState extends State<ConfessionScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ShowcaseView.register(
       blurValue: 1,
       enableAutoScroll: true,
-      builder: (context) => const _ConfessionScreenContent(),
       autoPlayDelay: const Duration(seconds: 3),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const _ConfessionScreenContent();
   }
 }
 
@@ -61,8 +71,7 @@ class _ConfessionScreenContentState
     final shouldShow = await controller.shouldShowConfessionTutorial();
 
     if (shouldShow && mounted) {
-      // ignore: deprecated_member_use
-      ShowCaseWidget.of(context).startShowCase([
+      ShowcaseView.get().startShowCase([
         _penanceKey,
         _insightsKey,
         _historyKey,
