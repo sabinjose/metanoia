@@ -710,13 +710,11 @@ class _PendingPenancesCard extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           penances.length == 1
-                              ? penances.first.penance.description
+                              ? '1 ${l10n.penance.toLowerCase()}'
                               : '${penances.length} ${l10n.pendingPenances.toLowerCase()}',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
