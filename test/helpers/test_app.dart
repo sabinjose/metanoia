@@ -52,7 +52,11 @@ class TestApp extends StatelessWidget {
         locale: locale ?? const Locale('en'),
         theme: theme ?? ThemeData.light(useMaterial3: true),
         navigatorObservers: navigatorObservers ?? [],
-        home: child,
+        // Wrap with TickerMode to disable animations in tests
+        home: TickerMode(
+          enabled: false,
+          child: child,
+        ),
       ),
     );
   }
