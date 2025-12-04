@@ -80,6 +80,7 @@ class ExaminationSummarySheet extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: onCancel,
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                 ),
               ],
             ),

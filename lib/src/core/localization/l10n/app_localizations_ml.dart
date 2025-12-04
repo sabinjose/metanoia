@@ -846,4 +846,16 @@ class AppLocalizationsMl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get undo => 'പഴയപടിയാക്കുക';
+
+  @override
+  String get confessionDeleted => 'കുമ്പസാരം ഇല്ലാതാക്കി';
+
+  @override
+  String get noConfessionHistory => 'കുമ്പസാര ചരിത്രമില്ല';
+
+  @override
+  String get noConfessionHistoryDesc => 'പൂർത്തിയാക്കിയ കുമ്പസാരങ്ങൾ ഇവിടെ കാണിക്കും';
 }

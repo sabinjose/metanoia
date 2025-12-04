@@ -1,12 +1,14 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:confessionapp/src/features/confession/data/confession_analytics_repository.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ConfessionHistoryScreen extends ConsumerStatefulWidget {
@@ -19,6 +21,9 @@ class ConfessionHistoryScreen extends ConsumerStatefulWidget {
 
 class _ConfessionHistoryScreenState
     extends ConsumerState<ConfessionHistoryScreen> {
+  // Track pending deletions for undo functionality
+  final Map<int, bool> _pendingDeletions = {};
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -45,38 +50,17 @@ class _ConfessionHistoryScreenState
         data: (confessions) {
 
           if (confessions.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.history,
-                      size: 64,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'No confession history',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Completed confessions will appear here',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+            return EmptyState(
+              icon: Icons.history,
+              title: l10n.noConfessionHistory,
+              subtitle: l10n.noConfessionHistoryDesc,
+              action: FilledButton.icon(
+                onPressed: () {
+                  HapticUtils.lightImpact();
+                  context.go('/examine');
+                },
+                icon: const Icon(Icons.assignment_outlined),
+                label: Text(l10n.startExamination),
               ),
             ).animate().fadeIn().scale();
           }
@@ -101,18 +85,8 @@ class _ConfessionHistoryScreenState
                   ),
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                confirmDismiss: (direction) => _confirmDelete(context),
-                onDismissed: (direction) async {
-                  await ref
-                      .read(confessionRepositoryProvider)
-                      .deleteConfession(confession.confession.id);
-                  // Don't invalidate here - Dismissible handles the visual removal
-                  // The provider will be refreshed when the screen is revisited
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Confession deleted')),
-                    );
-                  }
+                onDismissed: (direction) {
+                  _handleDeleteWithUndo(context, confession, l10n);
                 },
                 child: Card(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -213,28 +187,40 @@ class _ConfessionHistoryScreenState
     );
   }
 
-  Future<bool?> _confirmDelete(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Confession?'),
-            content: const Text('This action cannot be undone.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-                child: const Text('Delete'),
-              ),
-            ],
-          ),
-    );
+  void _handleDeleteWithUndo(
+    BuildContext context,
+    ConfessionWithItems confession,
+    AppLocalizations l10n,
+  ) {
+    final confessionId = confession.confession.id;
+
+    // Mark as pending deletion
+    _pendingDeletions[confessionId] = true;
+
+    // Show snackbar with undo action
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.confessionDeleted),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: l10n.undo,
+          onPressed: () {
+            // Cancel deletion and restore item
+            _pendingDeletions.remove(confessionId);
+            ref.invalidate(finishedConfessionsProvider);
+          },
+        ),
+      ),
+    ).closed.then((reason) async {
+      // If undo wasn't pressed and deletion is still pending, perform actual deletion
+      if (_pendingDeletions.containsKey(confessionId)) {
+        _pendingDeletions.remove(confessionId);
+        await ref
+            .read(confessionRepositoryProvider)
+            .deleteConfession(confessionId);
+      }
+    });
   }
 
   void _showDeleteAllDialog(BuildContext context) {

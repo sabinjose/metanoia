@@ -858,4 +858,16 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String get confessionDeleted => 'Confession deleted';
+
+  @override
+  String get noConfessionHistory => 'No confession history';
+
+  @override
+  String get noConfessionHistoryDesc => 'Completed confessions will appear here';
 }

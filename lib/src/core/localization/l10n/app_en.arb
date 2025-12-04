@@ -265,5 +265,9 @@
   "enterPinToUnlock": "Enter your PIN to unlock",
   "attemptsRemaining": "{count, plural, =1{1 attempt remaining} other{{count} attempts remaining}}",
   "seconds": "{count, plural, =1{1 second} other{{count} seconds}}",
-  "minutes": "{count, plural, =1{1 minute} other{{count} minutes}}"
+  "minutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "undo": "Undo",
+  "confessionDeleted": "Confession deleted",
+  "noConfessionHistory": "No confession history",
+  "noConfessionHistoryDesc": "Completed confessions will appear here"
 }

@@ -90,8 +90,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Don't show skip on intro page (page 0) or last page
-    final showSkip = _currentPage > 0 && _currentPage < _totalPages - 1;
+    // Show skip on all pages except the last page (language selection)
+    final showSkip = _currentPage < _totalPages - 1;
     // Show back button except on first page
     final showBack = _currentPage > 0;
 

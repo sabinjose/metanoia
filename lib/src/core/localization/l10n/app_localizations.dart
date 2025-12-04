@@ -1636,6 +1636,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 minute} other{{count} minutes}}'**
   String minutes(num count);
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @confessionDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Confession deleted'**
+  String get confessionDeleted;
+
+  /// No description provided for @noConfessionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No confession history'**
+  String get noConfessionHistory;
+
+  /// No description provided for @noConfessionHistoryDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed confessions will appear here'**
+  String get noConfessionHistoryDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

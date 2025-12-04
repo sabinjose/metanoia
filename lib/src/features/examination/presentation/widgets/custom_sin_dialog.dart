@@ -105,6 +105,7 @@ class _CustomSinDialogState extends ConsumerState<CustomSinDialog> {
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                     color: theme.colorScheme.onPrimaryContainer,
+                    tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                   ),
                 ],
               ),

@@ -261,5 +261,9 @@
   "enterPinToUnlock": "അൺലോക്ക് ചെയ്യാൻ നിങ്ങളുടെ PIN നൽകുക",
   "attemptsRemaining": "{count, plural, =1{1 ശ്രമം ശേഷിക്കുന്നു} other{{count} ശ്രമങ്ങൾ ശേഷിക്കുന്നു}}",
   "seconds": "{count, plural, =1{1 സെക്കൻഡ്} other{{count} സെക്കൻഡുകൾ}}",
-  "minutes": "{count, plural, =1{1 മിനിറ്റ്} other{{count} മിനിറ്റുകൾ}}"
+  "minutes": "{count, plural, =1{1 മിനിറ്റ്} other{{count} മിനിറ്റുകൾ}}",
+  "undo": "പഴയപടിയാക്കുക",
+  "confessionDeleted": "കുമ്പസാരം ഇല്ലാതാക്കി",
+  "noConfessionHistory": "കുമ്പസാര ചരിത്രമില്ല",
+  "noConfessionHistoryDesc": "പൂർത്തിയാക്കിയ കുമ്പസാരങ്ങൾ ഇവിടെ കാണിക്കും"
 }

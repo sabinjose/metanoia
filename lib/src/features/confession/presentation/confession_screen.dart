@@ -248,145 +248,12 @@ class _ConfessionScreenContentState
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                title: Text(l10n.finishConfessionTitle),
-                                content: Text(l10n.finishConfessionContent),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(l10n.cancel),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      // Show delete confirmation
-                                      final confirm = await showDialog<bool>(
-                                        context: context,
-                                        builder:
-                                            (context) => AlertDialog(
-                                              title: Text(
-                                                l10n.deleteConfession,
-                                              ),
-                                              content: Text(
-                                                l10n.deleteConfessionContent,
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed:
-                                                      () => Navigator.pop(
-                                                        context,
-                                                        false,
-                                                      ),
-                                                  child: Text(l10n.cancel),
-                                                ),
-                                                FilledButton(
-                                                  onPressed:
-                                                      () => Navigator.pop(
-                                                        context,
-                                                        true,
-                                                      ),
-                                                  style: FilledButton.styleFrom(
-                                                    backgroundColor:
-                                                        Theme.of(
-                                                          context,
-                                                        ).colorScheme.error,
-                                                  ),
-                                                  child: Text(
-                                                    l10n.deleteConfession,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                      );
-
-                                      if (confirm == true) {
-                                        await ref
-                                            .read(confessionRepositoryProvider)
-                                            .deleteConfession(
-                                              data.confession.id,
-                                            );
-                                        ref.invalidate(
-                                          activeConfessionProvider,
-                                        );
-                                        if (context.mounted) {
-                                          Navigator.pop(
-                                            context,
-                                          ); // Close finish dialog
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Confession deleted',
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    style: TextButton.styleFrom(
-                                      foregroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
-                                    child: Text(l10n.deleteConfession),
-                                  ),
-                                  FilledButton(
-                                    onPressed: () async {
-                                      Navigator.pop(context); // Close confirmation dialog
-
-                                      // Show penance input dialog
-                                      final penanceText = await _showPenanceInputDialog(
-                                        context,
-                                        l10n,
-                                      );
-
-                                      final keepHistory = await ref.read(
-                                        keepHistorySettingsProvider.future,
-                                      );
-                                      await ref
-                                          .read(confessionRepositoryProvider)
-                                          .markConfessionAsFinished(
-                                            data.confession.id,
-                                            keepHistory: keepHistory,
-                                          );
-
-                                      // Save penance if provided
-                                      if (penanceText != null && penanceText.isNotEmpty) {
-                                        await ref
-                                            .read(penanceRepositoryProvider)
-                                            .addPenance(data.confession.id, penanceText);
-                                        ref.invalidate(pendingPenancesProvider);
-                                      }
-
-                                      // Refresh the active confession state
-                                      ref.invalidate(activeConfessionProvider);
-                                      ref.invalidate(activeExaminationDraftProvider);
-                                      ref.invalidate(lastFinishedConfessionProvider);
-
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              l10n.confessionCompletedMessage,
-                                            ),
-                                          ),
-                                        );
-
-                                        // Check for rating
-                                        _checkAndRequestReview(context);
-                                      }
-                                    },
-                                    child: Text(l10n.finish),
-                                  ),
-                                ],
-                              ),
-                        );
-                      },
+                      onPressed: () => _showFinishConfessionSheet(
+                        context,
+                        ref,
+                        data,
+                        l10n,
+                      ),
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -404,6 +271,93 @@ class _ConfessionScreenContentState
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
+      ),
+    );
+  }
+
+  void _showFinishConfessionSheet(
+    BuildContext context,
+    WidgetRef ref,
+    ConfessionWithItems data,
+    AppLocalizations l10n,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => _FinishConfessionSheet(
+        l10n: l10n,
+        onComplete: (penanceText) async {
+          Navigator.pop(sheetContext);
+
+          final keepHistory = await ref.read(
+            keepHistorySettingsProvider.future,
+          );
+          await ref
+              .read(confessionRepositoryProvider)
+              .markConfessionAsFinished(
+                data.confession.id,
+                keepHistory: keepHistory,
+              );
+
+          // Save penance if provided
+          if (penanceText != null && penanceText.isNotEmpty) {
+            await ref
+                .read(penanceRepositoryProvider)
+                .addPenance(data.confession.id, penanceText);
+            ref.invalidate(pendingPenancesProvider);
+          }
+
+          // Refresh state
+          ref.invalidate(activeConfessionProvider);
+          ref.invalidate(activeExaminationDraftProvider);
+          ref.invalidate(lastFinishedConfessionProvider);
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.confessionCompletedMessage)),
+            );
+            _checkAndRequestReview(context);
+          }
+        },
+        onDelete: () async {
+          // Show delete confirmation
+          final confirm = await showDialog<bool>(
+            context: sheetContext,
+            builder: (dialogContext) => AlertDialog(
+              title: Text(l10n.deleteConfession),
+              content: Text(l10n.deleteConfessionContent),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: Text(l10n.cancel),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.pop(dialogContext, true),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(dialogContext).colorScheme.error,
+                  ),
+                  child: Text(l10n.deleteConfession),
+                ),
+              ],
+            ),
+          );
+
+          if (confirm == true) {
+            await ref
+                .read(confessionRepositoryProvider)
+                .deleteConfession(data.confession.id);
+            ref.invalidate(activeConfessionProvider);
+            if (sheetContext.mounted) {
+              Navigator.pop(sheetContext);
+            }
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.confessionDeleted)),
+              );
+            }
+          }
+        },
       ),
     );
   }
@@ -487,101 +441,216 @@ class _ConfessionScreenContentState
       ),
     );
   }
-
-  Future<String?> _showPenanceInputDialog(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) async {
-    return showDialog<String?>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => _PenanceInputDialog(l10n: l10n),
-    );
-  }
 }
 
-class _PenanceInputDialog extends StatefulWidget {
+/// Bottom sheet for completing a confession with optional penance input
+class _FinishConfessionSheet extends StatefulWidget {
   final AppLocalizations l10n;
+  final Future<void> Function(String? penanceText) onComplete;
+  final Future<void> Function() onDelete;
 
-  const _PenanceInputDialog({required this.l10n});
+  const _FinishConfessionSheet({
+    required this.l10n,
+    required this.onComplete,
+    required this.onDelete,
+  });
 
   @override
-  State<_PenanceInputDialog> createState() => _PenanceInputDialogState();
+  State<_FinishConfessionSheet> createState() => _FinishConfessionSheetState();
 }
 
-class _PenanceInputDialogState extends State<_PenanceInputDialog> {
-  final _controller = TextEditingController();
-  bool _hasText = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_onTextChanged);
-  }
-
-  void _onTextChanged() {
-    final hasText = _controller.text.trim().isNotEmpty;
-    if (hasText != _hasText) {
-      setState(() => _hasText = hasText);
-    }
-  }
+class _FinishConfessionSheetState extends State<_FinishConfessionSheet> {
+  final _penanceController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
-    _controller.removeListener(_onTextChanged);
-    _controller.dispose();
+    _penanceController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = widget.l10n;
-    return AlertDialog(
-      title: Row(
-        children: [
-          Icon(
-            Icons.checklist,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(width: 8),
-          Text(l10n.addPenance),
-        ],
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.penanceDescription,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+
+              // Header
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: theme.colorScheme.primary,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.finishConfessionTitle,
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n.finishConfessionContent,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1),
+
+              // Penance input section
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.checklist,
+                          color: theme.colorScheme.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.addPenance,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '(${l10n.skipPenance.toLowerCase()})',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _penanceController,
+                      decoration: InputDecoration(
+                        hintText: l10n.penanceHint,
+                        border: const OutlineInputBorder(),
+                      ),
+                      maxLines: 2,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ],
+                ),
+              ),
+
+              // Action buttons
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FilledButton.icon(
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              setState(() => _isLoading = true);
+                              await widget.onComplete(
+                                _penanceController.text.trim().isEmpty
+                                    ? null
+                                    : _penanceController.text.trim(),
+                              );
+                            },
+                      icon: _isLoading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: theme.colorScheme.onPrimary,
+                              ),
+                            )
+                          : const Icon(Icons.check),
+                      label: Text(l10n.finish),
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: _isLoading
+                                ? null
+                                : () => Navigator.pop(context),
+                            child: Text(l10n.cancel),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        TextButton(
+                          onPressed: _isLoading ? null : widget.onDelete,
+                          style: TextButton.styleFrom(
+                            foregroundColor: theme.colorScheme.error,
+                          ),
+                          child: Text(l10n.deleteConfession),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Bottom safe area padding
+              SizedBox(height: MediaQuery.of(context).padding.bottom),
+            ],
           ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              hintText: l10n.penanceHint,
-              border: const OutlineInputBorder(),
-            ),
-            maxLines: 3,
-            textCapitalization: TextCapitalization.sentences,
-            autofocus: true,
-          ),
-        ],
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, null),
-          child: Text(l10n.skipPenance),
-        ),
-        FilledButton(
-          onPressed: _hasText
-              ? () => Navigator.pop(context, _controller.text.trim())
-              : null,
-          child: Text(l10n.savePenance),
-        ),
-      ],
     );
   }
 }
