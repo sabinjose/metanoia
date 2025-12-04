@@ -1,4 +1,4 @@
-package io.holystack.metanoia
+package dev.holystack.metanoia
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
