@@ -153,29 +153,3 @@ flutter:
           weight: 600
         - asset: assets/fonts/EBGaramond-Italic.ttf
           style: italic
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Inter-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Inter-SemiBold.ttf
-          weight: 600
-    - family: Lora
-      fonts:
-        - asset: assets/fonts/Lora-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Lora-Italic.ttf
-          style: italic
-    - family: Merriweather
-      fonts:
-        - asset: assets/fonts/Merriweather-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Merriweather-Italic.ttf
-          style: italic
-    - family: NotoSerif
-      fonts:
-        - asset: assets/fonts/NotoSerif-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/NotoSerif-Italic.ttf
-          style: italic

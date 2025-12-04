@@ -284,7 +284,7 @@ class _DailyQuoteCard extends ConsumerWidget {
             Text(
               quote.quote,
               style: TextStyle(
-                fontFamily: AppTheme.fontFamilyMerriweather,
+                fontFamily: AppTheme.fontFamilyEBGaramond,
                 color: theme.colorScheme.onPrimary,
                 fontSize: 16,
                 fontStyle: FontStyle.italic,
