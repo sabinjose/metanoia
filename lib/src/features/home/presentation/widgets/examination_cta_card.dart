@@ -1,6 +1,7 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
+import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,13 +9,46 @@ import 'package:go_router/go_router.dart';
 
 /// A CTA card that shows "Continue Examination" when there's an active draft.
 /// Returns empty space when no draft exists.
-class ExaminationCtaCard extends ConsumerWidget {
+class ExaminationCtaCard extends ConsumerStatefulWidget {
   const ExaminationCtaCard({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ExaminationCtaCard> createState() => _ExaminationCtaCardState();
+}
+
+class _ExaminationCtaCardState extends ConsumerState<ExaminationCtaCard>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Refresh when app resumes
+    if (state == AppLifecycleState.resumed) {
+      ref.invalidate(activeExaminationDraftProvider);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+
+    // Listen to examination controller changes to trigger refresh
+    ref.listen(examinationControllerProvider, (_, __) {
+      // When examination controller state changes, refresh the draft provider
+      ref.invalidate(activeExaminationDraftProvider);
+    });
+
     final draftAsync = ref.watch(activeExaminationDraftProvider);
 
     return draftAsync.when(
