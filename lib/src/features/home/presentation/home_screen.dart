@@ -1,8 +1,5 @@
-import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
-import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart'
-    show ReminderFrequency, reminderSettingsProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
@@ -14,6 +11,7 @@ import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/features/home/presentation/providers/quote_provider.dart';
 import 'package:confessionapp/src/features/home/presentation/widgets/action_items_card.dart';
+import 'package:confessionapp/src/features/home/presentation/widgets/stats_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -149,17 +147,8 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                       _DailyQuoteCard(theme: theme),
                       const SizedBox(height: 24),
                       const ActionItemsCard(),
-                      const SizedBox(height: 24),
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(child: _LastConfessionCard(theme: theme)),
-                            const SizedBox(width: 16),
-                            Expanded(child: _NextReminderCard(theme: theme)),
-                          ],
-                        ),
-                      ),
+                      const SizedBox(height: 16),
+                      const StatsCard(),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -441,199 +430,5 @@ class _HomeCardState extends State<_HomeCard>
         ),
       ),
     ).animate().fadeIn(delay: widget.delay).slideY(begin: 0.2, end: 0);
-  }
-}
-
-class _LastConfessionCard extends ConsumerWidget {
-  const _LastConfessionCard({required this.theme});
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final lastConfessionAsync = ref.watch(lastFinishedConfessionProvider);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.history, color: theme.colorScheme.primary, size: 24),
-            const SizedBox(height: 12),
-            Text(
-              l10n.lastConfession,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 4),
-            lastConfessionAsync.when(
-              data: (confession) {
-                if (confession == null) {
-                  return Text(
-                    l10n.noneYet,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                }
-                final daysAgo =
-                    DateTime.now().difference(confession.date).inDays;
-                String timeText;
-                if (daysAgo == 0) {
-                  timeText = l10n.today;
-                } else if (daysAgo == 1) {
-                  timeText = l10n.yesterday;
-                } else {
-                  timeText = l10n.daysAgo(daysAgo);
-                }
-                return Text(
-                  timeText,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-              loading:
-                  () => const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-              error:
-                  (_, __) => Text(l10n.error, style: theme.textTheme.bodySmall),
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(delay: 100.ms);
-  }
-}
-
-class _NextReminderCard extends ConsumerWidget {
-  const _NextReminderCard({required this.theme});
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final reminderSettings = ref.watch(reminderSettingsProvider);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          HapticUtils.lightImpact();
-          context.push(
-            Uri(
-              path: '/settings',
-              queryParameters: {'scrollTo': 'reminders'},
-            ).toString(),
-          );
-        },
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: theme.colorScheme.outlineVariant),
-          ),
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.notifications_outlined,
-                  color: theme.colorScheme.secondary,
-                  size: 24,
-                  // ignore: deprecated_member_use
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  l10n.nextReminder,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                reminderSettings.when(
-                  data: (config) {
-                    if (config.frequency == ReminderFrequency.none) {
-                      return Text(
-                        l10n.off,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.outline,
-                        ),
-                      );
-                    }
-
-                    String text = '';
-                    switch (config.frequency) {
-                      case ReminderFrequency.weekly:
-                        text = l10n.weekly;
-                        break;
-                      case ReminderFrequency.biweekly:
-                        text = l10n.biweekly;
-                        break;
-                      case ReminderFrequency.monthly:
-                        text = l10n.monthly;
-                        break;
-                      case ReminderFrequency.quarterly:
-                        text = l10n.quarterly;
-                        break;
-                      case ReminderFrequency.none:
-                        text = l10n.off;
-                        break;
-                    }
-
-                    // Add day info
-                    final days = [
-                      l10n.mon,
-                      l10n.tue,
-                      l10n.wed,
-                      l10n.thu,
-                      l10n.fri,
-                      l10n.sat,
-                      l10n.sun,
-                    ];
-                    text += ' (${days[config.weekday - 1]})';
-
-                    return Text(
-                      text,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  },
-                  loading:
-                      () => const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                  error:
-                      (_, __) =>
-                          Text(l10n.error, style: theme.textTheme.bodySmall),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ).animate().fadeIn(delay: 150.ms);
   }
 }
