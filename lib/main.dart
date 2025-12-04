@@ -58,22 +58,21 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     final languageState = ref.watch(languageControllerProvider);
     final authState = ref.watch(authControllerProvider);
 
-    return MaterialApp.router(
-      title: 'Metanoia',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
-      routerConfig: router,
-      locale: languageState.valueOrNull,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      builder: (context, child) {
-        // Apply font size scaling
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(fontSizeScale.scale),
-          ),
-          child: UpgradeAlert(
+    return MediaQuery(
+      data: MediaQueryData.fromView(View.of(context)).copyWith(
+        textScaler: TextScaler.linear(fontSizeScale.scale),
+      ),
+      child: MaterialApp.router(
+        title: 'Metanoia',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: themeMode,
+        routerConfig: router,
+        locale: languageState.valueOrNull,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) {
+          return UpgradeAlert(
             navigatorKey: router.routerDelegate.navigatorKey,
             upgrader: Upgrader(
               storeController: UpgraderStoreController(
@@ -94,9 +93,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
                   ),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
