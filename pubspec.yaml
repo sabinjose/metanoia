@@ -44,6 +44,10 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   flutter_secure_storage: ^9.0.0
+
+  # Authentication
+  local_auth: ^2.2.0
+  crypto: ^3.0.3
   
   # Navigation
   go_router: ^14.0.2

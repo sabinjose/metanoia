@@ -706,4 +706,144 @@ class AppLocalizationsMl extends AppLocalizations {
   String examinationProgress(Object count) {
     return '$count ഇനങ്ങൾ തിരഞ്ഞെടുത്തു';
   }
+
+  @override
+  String get security => 'സുരക്ഷ';
+
+  @override
+  String get securitySubtitle => 'നിങ്ങളുടെ വ്യക്തിഗത ഡാറ്റ സംരക്ഷിക്കുക';
+
+  @override
+  String get pinAndBiometric => 'PIN & ബയോമെട്രിക്';
+
+  @override
+  String get pinAndBiometricSubtitle => 'ആപ്പ് ലോക്ക് ക്രമീകരണങ്ങൾ ക്രമീകരിക്കുക';
+
+  @override
+  String get enterPin => 'PIN നൽകുക';
+
+  @override
+  String get createPin => 'PIN സൃഷ്ടിക്കുക';
+
+  @override
+  String get confirmPin => 'PIN സ്ഥിരീകരിക്കുക';
+
+  @override
+  String get incorrectPin => 'തെറ്റായ PIN';
+
+  @override
+  String get pinMismatch => 'PIN കൾ പൊരുത്തപ്പെടുന്നില്ല';
+
+  @override
+  String get biometricUnlock => 'ബയോമെട്രിക് അൺലോക്ക്';
+
+  @override
+  String get autoLockTimeout => 'ഓട്ടോ-ലോക്ക് ടൈംഔട്ട്';
+
+  @override
+  String get tooManyAttempts => 'വളരെയധികം പരാജയപ്പെട്ട ശ്രമങ്ങൾ';
+
+  @override
+  String tryAgainIn(Object time) {
+    return '$time-ൽ വീണ്ടും ശ്രമിക്കുക';
+  }
+
+  @override
+  String get useBiometricUnlock => 'ബയോമെട്രിക് അൺലോക്ക് ഉപയോഗിക്കുക';
+
+  @override
+  String get unlockWithFingerprintOrFace => 'ഫിംഗർപ്രിന്റ് അല്ലെങ്കിൽ മുഖം ഉപയോഗിച്ച് അൺലോക്ക് ചെയ്യുക';
+
+  @override
+  String get lockAfter => 'ശേഷം ലോക്ക് ചെയ്യുക';
+
+  @override
+  String get timeInBackgroundBeforeLocking => 'ലോക്ക് ചെയ്യുന്നതിന് മുമ്പുള്ള പശ്ചാത്തല സമയം';
+
+  @override
+  String get changePin => 'PIN മാറ്റുക';
+
+  @override
+  String get updateYourSecurityPin => 'നിങ്ങളുടെ സുരക്ഷാ PIN അപ്‌ഡേറ്റ് ചെയ്യുക';
+
+  @override
+  String get enterCurrentPin => 'നിലവിലെ PIN നൽകുക';
+
+  @override
+  String get enterNewPin => 'പുതിയ PIN നൽകുക';
+
+  @override
+  String get confirmNewPin => 'പുതിയ PIN സ്ഥിരീകരിക്കുക';
+
+  @override
+  String get pinChangedSuccessfully => 'PIN വിജയകരമായി മാറ്റി';
+
+  @override
+  String get currentPinIncorrect => 'നിലവിലെ PIN തെറ്റാണ്';
+
+  @override
+  String get enableBiometricUnlock => 'ബയോമെട്രിക് അൺലോക്ക് പ്രവർത്തനക്ഷമമാക്കണോ?';
+
+  @override
+  String get biometricDescription => 'ആപ്പ് വേഗത്തിലും സുരക്ഷിതമായും അൺലോക്ക് ചെയ്യാൻ ഫിംഗർപ്രിന്റോ മുഖമോ ഉപയോഗിക്കുക.';
+
+  @override
+  String get notNow => 'ഇപ്പോഴല്ല';
+
+  @override
+  String get enable => 'പ്രവർത്തനക്ഷമമാക്കുക';
+
+  @override
+  String get setUpPin => 'PIN സജ്ജീകരിക്കുക';
+
+  @override
+  String get createSixDigitPin => '6 അക്ക PIN സൃഷ്ടിക്കുക';
+
+  @override
+  String get pinProtectData => 'നിങ്ങളുടെ ഡാറ്റ സംരക്ഷിക്കാൻ ഈ PIN ഉപയോഗിക്കും';
+
+  @override
+  String get confirmYourPin => 'നിങ്ങളുടെ PIN സ്ഥിരീകരിക്കുക';
+
+  @override
+  String get enterSamePinAgain => 'സ്ഥിരീകരിക്കാൻ അതേ PIN വീണ്ടും നൽകുക';
+
+  @override
+  String get metanoia => 'മെറ്റാനോയ';
+
+  @override
+  String get enterPinToUnlock => 'അൺലോക്ക് ചെയ്യാൻ നിങ്ങളുടെ PIN നൽകുക';
+
+  @override
+  String attemptsRemaining(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ശ്രമങ്ങൾ ശേഷിക്കുന്നു',
+      one: '1 ശ്രമം ശേഷിക്കുന്നു',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seconds(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count സെക്കൻഡുകൾ',
+      one: '1 സെക്കൻഡ്',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String minutes(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count മിനിറ്റുകൾ',
+      one: '1 മിനിറ്റ്',
+    );
+    return '$_temp0';
+  }
 }

@@ -4,6 +4,9 @@ import 'package:confessionapp/src/core/router/app_router.dart';
 import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
 import 'package:confessionapp/src/core/localization/language_provider.dart';
+import 'package:confessionapp/src/features/authentication/domain/models/auth_settings.dart';
+import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
+import 'package:confessionapp/src/features/authentication/presentation/screens/lock_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:upgrader/upgrader.dart';
@@ -12,14 +15,46 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Convert Flutter's AppLifecycleState to our auth AppLifecycleState
+    final authLifecycleState = switch (state) {
+      AppLifecycleState.resumed => AuthAppLifecycleState.resumed,
+      AppLifecycleState.inactive => AuthAppLifecycleState.inactive,
+      AppLifecycleState.paused => AuthAppLifecycleState.paused,
+      AppLifecycleState.detached => AuthAppLifecycleState.detached,
+      AppLifecycleState.hidden => AuthAppLifecycleState.hidden,
+    };
+
+    ref.read(authControllerProvider.notifier).onAppLifecycleChange(authLifecycleState);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
     final languageState = ref.watch(languageControllerProvider);
+    final authState = ref.watch(authControllerProvider);
 
     return MaterialApp.router(
       title: 'Metanoia',
@@ -41,7 +76,17 @@ class MyApp extends ConsumerWidget {
             minAppVersion: UpdateConfig.minAppVersion,
             durationUntilAlertAgain: const Duration(days: UpdateConfig.daysUntilAlertAgain),
           ),
-          child: child ?? const SizedBox.shrink(),
+          child: Stack(
+            children: [
+              child ?? const SizedBox.shrink(),
+              // Lock screen overlay
+              if (authState.valueOrNull?.status == AuthStatus.locked ||
+                  authState.valueOrNull?.status == AuthStatus.lockedOut)
+                const Positioned.fill(
+                  child: LockScreen(),
+                ),
+            ],
+          ),
         );
       },
     );

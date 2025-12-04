@@ -1408,6 +1408,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} items selected'**
   String examinationProgress(Object count);
+
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @securitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect your personal data'**
+  String get securitySubtitle;
+
+  /// No description provided for @pinAndBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN & Biometric'**
+  String get pinAndBiometric;
+
+  /// No description provided for @pinAndBiometricSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure app lock settings'**
+  String get pinAndBiometricSubtitle;
+
+  /// No description provided for @enterPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter PIN'**
+  String get enterPin;
+
+  /// No description provided for @createPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Create PIN'**
+  String get createPin;
+
+  /// No description provided for @confirmPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm PIN'**
+  String get confirmPin;
+
+  /// No description provided for @incorrectPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN'**
+  String get incorrectPin;
+
+  /// No description provided for @pinMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'PINs don\'t match'**
+  String get pinMismatch;
+
+  /// No description provided for @biometricUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Unlock'**
+  String get biometricUnlock;
+
+  /// No description provided for @autoLockTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Lock Timeout'**
+  String get autoLockTimeout;
+
+  /// No description provided for @tooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts'**
+  String get tooManyAttempts;
+
+  /// No description provided for @tryAgainIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again in {time}'**
+  String tryAgainIn(Object time);
+
+  /// No description provided for @useBiometricUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Biometric Unlock'**
+  String get useBiometricUnlock;
+
+  /// No description provided for @unlockWithFingerprintOrFace.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock with fingerprint or face'**
+  String get unlockWithFingerprintOrFace;
+
+  /// No description provided for @lockAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock After'**
+  String get lockAfter;
+
+  /// No description provided for @timeInBackgroundBeforeLocking.
+  ///
+  /// In en, this message translates to:
+  /// **'Time in background before locking'**
+  String get timeInBackgroundBeforeLocking;
+
+  /// No description provided for @changePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Change PIN'**
+  String get changePin;
+
+  /// No description provided for @updateYourSecurityPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your security PIN'**
+  String get updateYourSecurityPin;
+
+  /// No description provided for @enterCurrentPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Current PIN'**
+  String get enterCurrentPin;
+
+  /// No description provided for @enterNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter New PIN'**
+  String get enterNewPin;
+
+  /// No description provided for @confirmNewPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New PIN'**
+  String get confirmNewPin;
+
+  /// No description provided for @pinChangedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN changed successfully'**
+  String get pinChangedSuccessfully;
+
+  /// No description provided for @currentPinIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Current PIN is incorrect'**
+  String get currentPinIncorrect;
+
+  /// No description provided for @enableBiometricUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Biometric Unlock?'**
+  String get enableBiometricUnlock;
+
+  /// No description provided for @biometricDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your fingerprint or face to unlock the app quickly and securely.'**
+  String get biometricDescription;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get notNow;
+
+  /// No description provided for @enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get enable;
+
+  /// No description provided for @setUpPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Up PIN'**
+  String get setUpPin;
+
+  /// No description provided for @createSixDigitPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a 6-digit PIN'**
+  String get createSixDigitPin;
+
+  /// No description provided for @pinProtectData.
+  ///
+  /// In en, this message translates to:
+  /// **'This PIN will be used to protect your data'**
+  String get pinProtectData;
+
+  /// No description provided for @confirmYourPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your PIN'**
+  String get confirmYourPin;
+
+  /// No description provided for @enterSamePinAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the same PIN again to confirm'**
+  String get enterSamePinAgain;
+
+  /// No description provided for @metanoia.
+  ///
+  /// In en, this message translates to:
+  /// **'Metanoia'**
+  String get metanoia;
+
+  /// No description provided for @enterPinToUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your PIN to unlock'**
+  String get enterPinToUnlock;
+
+  /// No description provided for @attemptsRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 attempt remaining} other{{count} attempts remaining}}'**
+  String attemptsRemaining(num count);
+
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 second} other{{count} seconds}}'**
+  String seconds(num count);
+
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 minute} other{{count} minutes}}'**
+  String minutes(num count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

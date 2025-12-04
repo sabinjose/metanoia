@@ -718,4 +718,144 @@ class AppLocalizationsEn extends AppLocalizations {
   String examinationProgress(Object count) {
     return '$count items selected';
   }
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get securitySubtitle => 'Protect your personal data';
+
+  @override
+  String get pinAndBiometric => 'PIN & Biometric';
+
+  @override
+  String get pinAndBiometricSubtitle => 'Configure app lock settings';
+
+  @override
+  String get enterPin => 'Enter PIN';
+
+  @override
+  String get createPin => 'Create PIN';
+
+  @override
+  String get confirmPin => 'Confirm PIN';
+
+  @override
+  String get incorrectPin => 'Incorrect PIN';
+
+  @override
+  String get pinMismatch => 'PINs don\'t match';
+
+  @override
+  String get biometricUnlock => 'Biometric Unlock';
+
+  @override
+  String get autoLockTimeout => 'Auto-Lock Timeout';
+
+  @override
+  String get tooManyAttempts => 'Too many failed attempts';
+
+  @override
+  String tryAgainIn(Object time) {
+    return 'Try again in $time';
+  }
+
+  @override
+  String get useBiometricUnlock => 'Use Biometric Unlock';
+
+  @override
+  String get unlockWithFingerprintOrFace => 'Unlock with fingerprint or face';
+
+  @override
+  String get lockAfter => 'Lock After';
+
+  @override
+  String get timeInBackgroundBeforeLocking => 'Time in background before locking';
+
+  @override
+  String get changePin => 'Change PIN';
+
+  @override
+  String get updateYourSecurityPin => 'Update your security PIN';
+
+  @override
+  String get enterCurrentPin => 'Enter Current PIN';
+
+  @override
+  String get enterNewPin => 'Enter New PIN';
+
+  @override
+  String get confirmNewPin => 'Confirm New PIN';
+
+  @override
+  String get pinChangedSuccessfully => 'PIN changed successfully';
+
+  @override
+  String get currentPinIncorrect => 'Current PIN is incorrect';
+
+  @override
+  String get enableBiometricUnlock => 'Enable Biometric Unlock?';
+
+  @override
+  String get biometricDescription => 'Use your fingerprint or face to unlock the app quickly and securely.';
+
+  @override
+  String get notNow => 'Not Now';
+
+  @override
+  String get enable => 'Enable';
+
+  @override
+  String get setUpPin => 'Set Up PIN';
+
+  @override
+  String get createSixDigitPin => 'Create a 6-digit PIN';
+
+  @override
+  String get pinProtectData => 'This PIN will be used to protect your data';
+
+  @override
+  String get confirmYourPin => 'Confirm your PIN';
+
+  @override
+  String get enterSamePinAgain => 'Enter the same PIN again to confirm';
+
+  @override
+  String get metanoia => 'Metanoia';
+
+  @override
+  String get enterPinToUnlock => 'Enter your PIN to unlock';
+
+  @override
+  String attemptsRemaining(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attempts remaining',
+      one: '1 attempt remaining',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seconds(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seconds',
+      one: '1 second',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String minutes(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
 }

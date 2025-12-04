@@ -436,6 +436,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 16),
           _SettingsCard(
+            title: l10n.security,
+            subtitle: l10n.securitySubtitle,
+            icon: Icons.security_rounded,
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.pinAndBiometric),
+              subtitle: Text(l10n.pinAndBiometricSubtitle),
+              leading: const Icon(Icons.lock_outline_rounded),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                HapticUtils.lightImpact();
+                context.push('/settings/security');
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SettingsCard(
             title: l10n.replayTutorial,
             subtitle: l10n.replayTutorialDesc,
             icon: Icons.school_outlined,

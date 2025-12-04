@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:confessionapp/src/features/authentication/domain/models/auth_settings.dart';
+import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
+import 'package:confessionapp/src/features/authentication/presentation/screens/pin_setup_screen.dart';
+import 'package:confessionapp/src/features/authentication/presentation/screens/security_settings_screen.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_history_screen.dart';
 import 'package:confessionapp/src/features/confession/presentation/insights_screen.dart';
@@ -37,6 +41,7 @@ GoRouter goRouter(Ref ref) {
               .read(onboardingControllerProvider.notifier)
               .hasCompletedOnboarding();
       final isOnOnboardingPage = state.matchedLocation == '/onboarding';
+      final isOnPinSetupPage = state.matchedLocation == '/pin-setup';
 
       // If not completed and not on onboarding, redirect to onboarding
       if (!onboardingCompleted && !isOnOnboardingPage) {
@@ -46,6 +51,14 @@ GoRouter goRouter(Ref ref) {
       // If completed and on onboarding, redirect to home
       if (onboardingCompleted && isOnOnboardingPage) {
         return '/';
+      }
+
+      // Check PIN setup after onboarding
+      if (onboardingCompleted && !isOnPinSetupPage) {
+        final authState = ref.read(authControllerProvider).valueOrNull;
+        if (authState?.status == AuthStatus.uninitialized) {
+          return '/pin-setup';
+        }
       }
 
       return null;
@@ -149,12 +162,22 @@ GoRouter goRouter(Ref ref) {
             parentNavigatorKey: rootNavigatorKey,
             builder: (context, state) => const AboutScreen(),
           ),
+          GoRoute(
+            path: 'security',
+            parentNavigatorKey: rootNavigatorKey,
+            builder: (context, state) => const SecuritySettingsScreen(),
+          ),
         ],
       ),
       GoRoute(
         path: '/onboarding',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/pin-setup',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const PinSetupScreen(),
       ),
     ],
   );
