@@ -269,5 +269,12 @@
   "undo": "Undo",
   "confessionDeleted": "Confession deleted",
   "noConfessionHistory": "No confession history",
-  "noConfessionHistoryDesc": "Completed confessions will appear here"
+  "noConfessionHistoryDesc": "Completed confessions will appear here",
+
+  "fontSize": "Font Size",
+  "fontSizeSubtitle": "Adjust text size for better readability",
+  "fontSizeSmall": "Small",
+  "fontSizeMedium": "Medium",
+  "fontSizeLarge": "Large",
+  "fontSizeExtraLarge": "Extra Large"
 }

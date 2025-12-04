@@ -265,5 +265,12 @@
   "undo": "പഴയപടിയാക്കുക",
   "confessionDeleted": "കുമ്പസാരം ഇല്ലാതാക്കി",
   "noConfessionHistory": "കുമ്പസാര ചരിത്രമില്ല",
-  "noConfessionHistoryDesc": "പൂർത്തിയാക്കിയ കുമ്പസാരങ്ങൾ ഇവിടെ കാണിക്കും"
+  "noConfessionHistoryDesc": "പൂർത്തിയാക്കിയ കുമ്പസാരങ്ങൾ ഇവിടെ കാണിക്കും",
+
+  "fontSize": "അക്ഷര വലിപ്പം",
+  "fontSizeSubtitle": "മികച്ച വായനാനുഭവത്തിനായി അക്ഷര വലിപ്പം ക്രമീകരിക്കുക",
+  "fontSizeSmall": "ചെറുത്",
+  "fontSizeMedium": "ഇടത്തരം",
+  "fontSizeLarge": "വലുത്",
+  "fontSizeExtraLarge": "വളരെ വലുത്"
 }

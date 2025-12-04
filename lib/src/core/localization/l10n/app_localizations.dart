@@ -1660,6 +1660,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed confessions will appear here'**
   String get noConfessionHistoryDesc;
+
+  /// No description provided for @fontSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Font Size'**
+  String get fontSize;
+
+  /// No description provided for @fontSizeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust text size for better readability'**
+  String get fontSizeSubtitle;
+
+  /// No description provided for @fontSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get fontSizeSmall;
+
+  /// No description provided for @fontSizeMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get fontSizeMedium;
+
+  /// No description provided for @fontSizeLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get fontSizeLarge;
+
+  /// No description provided for @fontSizeExtraLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra Large'**
+  String get fontSizeExtraLarge;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

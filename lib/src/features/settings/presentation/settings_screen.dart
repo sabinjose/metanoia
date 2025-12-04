@@ -5,6 +5,7 @@ import 'package:confessionapp/src/core/localization/content_language_provider.da
 import 'package:confessionapp/src/core/services/in_app_review_service.dart';
 import 'package:confessionapp/src/core/services/reminder_service.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
+import 'package:confessionapp/src/core/theme/font_size_provider.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
@@ -142,6 +143,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final themeMode = ref.watch(themeModeControllerProvider);
+    final fontSizeScale = ref.watch(fontSizeControllerProvider);
     final reminderConfig = ref.watch(reminderSettingsProvider);
     final languageState = ref.watch(languageControllerProvider);
     final keepHistory = ref.watch(keepHistorySettingsProvider);
@@ -185,6 +187,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     .read(themeModeControllerProvider.notifier)
                     .setTheme(newSelection.first);
               },
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SettingsCard(
+            title: l10n.fontSize,
+            subtitle: l10n.fontSizeSubtitle,
+            icon: Icons.text_fields,
+            child: _FontSizeSelector(
+              currentScale: fontSizeScale,
+              onChanged: (scale) {
+                HapticUtils.selectionClick();
+                ref.read(fontSizeControllerProvider.notifier).setFontSize(scale);
+              },
+              l10n: l10n,
             ),
           ),
           const SizedBox(height: 16),
@@ -828,6 +844,104 @@ class _FrequencyChip extends StatelessWidget {
                 ? Colors.transparent
                 : Theme.of(context).colorScheme.outlineVariant,
       ),
+    );
+  }
+}
+
+class _FontSizeSelector extends StatelessWidget {
+  const _FontSizeSelector({
+    required this.currentScale,
+    required this.onChanged,
+    required this.l10n,
+  });
+
+  final FontSizeScale currentScale;
+  final ValueChanged<FontSizeScale> onChanged;
+  final AppLocalizations l10n;
+
+  String _getLabel(FontSizeScale scale) {
+    switch (scale) {
+      case FontSizeScale.small:
+        return l10n.fontSizeSmall;
+      case FontSizeScale.medium:
+        return l10n.fontSizeMedium;
+      case FontSizeScale.large:
+        return l10n.fontSizeLarge;
+      case FontSizeScale.extraLarge:
+        return l10n.fontSizeExtraLarge;
+    }
+  }
+
+  double _getFontSize(FontSizeScale scale) {
+    switch (scale) {
+      case FontSizeScale.small:
+        return 13;
+      case FontSizeScale.medium:
+        return 15;
+      case FontSizeScale.large:
+        return 17;
+      case FontSizeScale.extraLarge:
+        return 19;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Preview text
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant,
+              width: 1,
+            ),
+          ),
+          child: Text(
+            'Aa - Preview Text',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontSize: _getFontSize(currentScale),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Font size options
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: FontSizeScale.values.map((scale) {
+            final isSelected = currentScale == scale;
+            return ChoiceChip(
+              label: Text(_getLabel(scale)),
+              selected: isSelected,
+              onSelected: (_) => onChanged(scale),
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                fontSize: _getFontSize(scale) - 2,
+                color: isSelected
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSurfaceVariant,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              selectedColor: theme.colorScheme.primaryContainer,
+              backgroundColor: theme.colorScheme.surfaceContainerLow,
+              side: BorderSide(
+                color: isSelected
+                    ? Colors.transparent
+                    : theme.colorScheme.outlineVariant,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

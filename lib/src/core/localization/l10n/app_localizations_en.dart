@@ -870,4 +870,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noConfessionHistoryDesc => 'Completed confessions will appear here';
+
+  @override
+  String get fontSize => 'Font Size';
+
+  @override
+  String get fontSizeSubtitle => 'Adjust text size for better readability';
+
+  @override
+  String get fontSizeSmall => 'Small';
+
+  @override
+  String get fontSizeMedium => 'Medium';
+
+  @override
+  String get fontSizeLarge => 'Large';
+
+  @override
+  String get fontSizeExtraLarge => 'Extra Large';
 }

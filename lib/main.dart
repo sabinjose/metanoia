@@ -3,6 +3,7 @@ import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart'
 import 'package:confessionapp/src/core/router/app_router.dart';
 import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/theme/theme_provider.dart';
+import 'package:confessionapp/src/core/theme/font_size_provider.dart';
 import 'package:confessionapp/src/core/localization/language_provider.dart';
 import 'package:confessionapp/src/features/authentication/domain/models/auth_settings.dart';
 import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
@@ -53,6 +54,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
+    final fontSizeScale = ref.watch(fontSizeControllerProvider);
     final languageState = ref.watch(languageControllerProvider);
     final authState = ref.watch(authControllerProvider);
 
@@ -66,26 +68,32 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
-        return UpgradeAlert(
-          navigatorKey: router.routerDelegate.navigatorKey,
-          upgrader: Upgrader(
-            storeController: UpgraderStoreController(
-              onAndroid: () => UpgraderPlayStore(),
-              oniOS: () => UpgraderAppStore(),
-            ),
-            minAppVersion: UpdateConfig.minAppVersion,
-            durationUntilAlertAgain: const Duration(days: UpdateConfig.daysUntilAlertAgain),
+        // Apply font size scaling
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(fontSizeScale.scale),
           ),
-          child: Stack(
-            children: [
-              child ?? const SizedBox.shrink(),
-              // Lock screen overlay
-              if (authState.valueOrNull?.status == AuthStatus.locked ||
-                  authState.valueOrNull?.status == AuthStatus.lockedOut)
-                const Positioned.fill(
-                  child: LockScreen(),
-                ),
-            ],
+          child: UpgradeAlert(
+            navigatorKey: router.routerDelegate.navigatorKey,
+            upgrader: Upgrader(
+              storeController: UpgraderStoreController(
+                onAndroid: () => UpgraderPlayStore(),
+                oniOS: () => UpgraderAppStore(),
+              ),
+              minAppVersion: UpdateConfig.minAppVersion,
+              durationUntilAlertAgain: const Duration(days: UpdateConfig.daysUntilAlertAgain),
+            ),
+            child: Stack(
+              children: [
+                child ?? const SizedBox.shrink(),
+                // Lock screen overlay
+                if (authState.valueOrNull?.status == AuthStatus.locked ||
+                    authState.valueOrNull?.status == AuthStatus.lockedOut)
+                  const Positioned.fill(
+                    child: LockScreen(),
+                  ),
+              ],
+            ),
           ),
         );
       },

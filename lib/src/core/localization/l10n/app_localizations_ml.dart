@@ -858,4 +858,22 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get noConfessionHistoryDesc => 'പൂർത്തിയാക്കിയ കുമ്പസാരങ്ങൾ ഇവിടെ കാണിക്കും';
+
+  @override
+  String get fontSize => 'അക്ഷര വലിപ്പം';
+
+  @override
+  String get fontSizeSubtitle => 'മികച്ച വായനാനുഭവത്തിനായി അക്ഷര വലിപ്പം ക്രമീകരിക്കുക';
+
+  @override
+  String get fontSizeSmall => 'ചെറുത്';
+
+  @override
+  String get fontSizeMedium => 'ഇടത്തരം';
+
+  @override
+  String get fontSizeLarge => 'വലുത്';
+
+  @override
+  String get fontSizeExtraLarge => 'വളരെ വലുത്';
 }
