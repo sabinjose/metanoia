@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/features/authentication/domain/models/auth_settings.dart';
 import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/lockout_timer_widget.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/pin_dots_display.dart';
@@ -18,17 +19,17 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   String _enteredPin = '';
   bool _hasError = false;
   bool _isVerifying = false;
+  bool _hasAttemptedBiometric = false;
 
   @override
   void initState() {
     super.initState();
-    // Attempt biometric auth on first load
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _attemptBiometric();
-    });
   }
 
   Future<void> _attemptBiometric() async {
+    if (_hasAttemptedBiometric) return;
+    _hasAttemptedBiometric = true;
+
     final authState = ref.read(authControllerProvider).valueOrNull;
     if (authState == null ||
         !authState.biometricAvailable ||
@@ -91,6 +92,32 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final authState = ref.watch(authControllerProvider);
+
+    // Listen for auth state changes to trigger biometric on first load
+    ref.listen(authControllerProvider, (previous, next) {
+      final state = next.valueOrNull;
+      if (state != null &&
+          state.status == AuthStatus.locked &&
+          state.biometricAvailable &&
+          state.biometricEnabled &&
+          !_hasAttemptedBiometric) {
+        // Delay slightly to ensure UI is ready
+        Future.microtask(() => _attemptBiometric());
+      }
+    });
+
+    // Also attempt on first build if data is already available
+    if (!_hasAttemptedBiometric) {
+      final state = authState.valueOrNull;
+      if (state != null &&
+          state.status == AuthStatus.locked &&
+          state.biometricAvailable &&
+          state.biometricEnabled) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _attemptBiometric();
+        });
+      }
+    }
 
     return authState.when(
       data: (state) => _buildContent(context, theme, state),
