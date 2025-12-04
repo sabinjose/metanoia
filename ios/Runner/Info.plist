@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Metanoia uses Face ID to securely unlock your confession data.</string>
 </dict>
 </plist>
