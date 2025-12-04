@@ -1,5 +1,4 @@
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
-import 'package:confessionapp/src/features/confession/data/penance_repository.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/settings/presentation/settings_screen.dart'
@@ -14,7 +13,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
 import 'package:confessionapp/src/features/home/presentation/providers/quote_provider.dart';
-import 'package:confessionapp/src/features/home/presentation/widgets/examination_cta_card.dart';
+import 'package:confessionapp/src/features/home/presentation/widgets/action_items_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -149,15 +148,8 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                       const SizedBox(height: 32),
                       _DailyQuoteCard(theme: theme),
                       const SizedBox(height: 24),
-                      const ExaminationCtaCard(),
+                      const ActionItemsCard(),
                       const SizedBox(height: 24),
-                      Text(
-                        l10n.quickActions,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ).animate().fadeIn(delay: 200.ms),
-                      const SizedBox(height: 16),
                       IntrinsicHeight(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -168,8 +160,6 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      const _PendingPenancesCard(),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -645,92 +635,5 @@ class _NextReminderCard extends ConsumerWidget {
         ),
       ),
     ).animate().fadeIn(delay: 150.ms);
-  }
-}
-
-class _PendingPenancesCard extends ConsumerWidget {
-  const _PendingPenancesCard();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final pendingPenancesAsync = ref.watch(pendingPenancesProvider);
-
-    return pendingPenancesAsync.when(
-      data: (penances) {
-        // Don't show card if no pending penances
-        if (penances.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              HapticUtils.lightImpact();
-              context.push('/confess/penance');
-            },
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: theme.colorScheme.tertiary.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.tertiary.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.task_alt,
-                      color: theme.colorScheme.tertiary,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.pendingPenances,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          penances.length == 1
-                              ? '1 ${l10n.penance.toLowerCase()}'
-                              : '${penances.length} ${l10n.pendingPenances.toLowerCase()}',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0);
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-    );
   }
 }
