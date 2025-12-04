@@ -872,19 +872,6 @@ class _FontSizeSelector extends StatelessWidget {
     }
   }
 
-  double _getFontSize(FontSizeScale scale) {
-    switch (scale) {
-      case FontSizeScale.small:
-        return 13;
-      case FontSizeScale.medium:
-        return 15;
-      case FontSizeScale.large:
-        return 17;
-      case FontSizeScale.extraLarge:
-        return 19;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -892,27 +879,6 @@ class _FontSizeSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Preview text
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: theme.colorScheme.outlineVariant,
-              width: 1,
-            ),
-          ),
-          child: Text(
-            'Aa - Preview Text',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              fontSize: _getFontSize(currentScale),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        const SizedBox(height: 16),
         // Font size options
         Wrap(
           spacing: 8,
@@ -925,7 +891,6 @@ class _FontSizeSelector extends StatelessWidget {
               onSelected: (_) => onChanged(scale),
               showCheckmark: false,
               labelStyle: TextStyle(
-                fontSize: _getFontSize(scale) - 2,
                 color: isSelected
                     ? theme.colorScheme.onPrimaryContainer
                     : theme.colorScheme.onSurfaceVariant,
