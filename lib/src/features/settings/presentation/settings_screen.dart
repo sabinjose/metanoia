@@ -892,11 +892,11 @@ class _FontSizeSelector extends StatelessWidget {
               showCheckmark: false,
               labelStyle: TextStyle(
                 color: isSelected
-                    ? theme.colorScheme.onPrimaryContainer
+                    ? theme.colorScheme.onSecondaryContainer
                     : theme.colorScheme.onSurfaceVariant,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-              selectedColor: theme.colorScheme.primaryContainer,
+              selectedColor: theme.colorScheme.secondaryContainer,
               backgroundColor: theme.colorScheme.surfaceContainerLow,
               side: BorderSide(
                 color: isSelected
