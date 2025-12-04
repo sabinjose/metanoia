@@ -16,14 +16,28 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-class ExaminationScreen extends ConsumerStatefulWidget {
+class ExaminationScreen extends StatelessWidget {
   const ExaminationScreen({super.key});
 
   @override
-  ConsumerState<ExaminationScreen> createState() => _ExaminationScreenState();
+  Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
+    return ShowCaseWidget(
+      blurValue: 1,
+      enableAutoScroll: true,
+      builder: (context) => const _ExaminationContent(),
+    );
+  }
 }
 
-class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
+class _ExaminationContent extends ConsumerStatefulWidget {
+  const _ExaminationContent();
+
+  @override
+  ConsumerState<_ExaminationContent> createState() => _ExaminationContentState();
+}
+
+class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
   bool _hasShownRestoreSnackbar = false;
   bool _hasCheckedTutorial = false;
 
@@ -37,8 +51,6 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
   @override
   void initState() {
     super.initState();
-    // Register showcase
-    ShowcaseView.register(enableAutoScroll: true);
 
     // Show snackbar after first frame if draft was restored
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,7 +84,8 @@ class _ExaminationScreenState extends ConsumerState<ExaminationScreen> {
     if (shouldShow && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          ShowcaseView.get().startShowCase([
+          // ignore: deprecated_member_use
+          ShowCaseWidget.of(context).startShowCase([
             _swipeKey,
             _selectKey,
             _counterKey,
