@@ -1,6 +1,6 @@
+import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
 class MetanoiaIntroPage extends StatefulWidget {
@@ -112,7 +112,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                           children: [
                             Text(
                               l10n.appTitle,
-                              style: GoogleFonts.ebGaramond(
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontFamilyEBGaramond,
                                 fontSize: 62,
                                 fontWeight: FontWeight.w600,
                                 color: theme.colorScheme.primary,
@@ -142,7 +143,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                   ),
                                   child: Text(
                                     l10n.greekLabel,
-                                    style: GoogleFonts.inter(
+                                    style: TextStyle(
+                                      fontFamily: AppTheme.fontFamilyInter,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: theme.colorScheme.primary,
@@ -153,7 +155,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                 const SizedBox(width: 8),
                                 Text(
                                   'μετάνοια',
-                                  style: GoogleFonts.lora(
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontFamilyLora,
                                     fontSize: 16,
                                     fontStyle: FontStyle.italic,
                                     color: theme.colorScheme.onSurface
@@ -174,7 +177,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                         opacity: _fadeAnimation2,
                         child: Text(
                           '/ˌmɛtəˈnɔɪə/',
-                          style: GoogleFonts.notoSerif(
+                          style: TextStyle(
+                            fontFamily: AppTheme.fontFamilyNotoSerif,
                             fontSize: 18,
                             fontStyle: FontStyle.italic,
                             color: theme.colorScheme.onSurface.withValues(
@@ -206,7 +210,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                               ),
                               child: Text(
                                 l10n.nounLabel,
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
+                                  fontFamily: AppTheme.fontFamilyInter,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   color: theme.colorScheme.secondary,
@@ -217,7 +222,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                             const SizedBox(height: 28),
                             Text(
                               l10n.metanoiaDefinition,
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontFamilyInter,
                                 fontSize: 20,
                                 height: 1.7,
                                 color: theme.colorScheme.onSurface,
@@ -239,7 +245,8 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                             children: [
                               Text(
                                 l10n.turnBackToGrace,
-                                style: GoogleFonts.ebGaramond(
+                                style: TextStyle(
+                                  fontFamily: AppTheme.fontFamilyEBGaramond,
                                   fontSize: 20,
                                   color: theme.colorScheme.onSurfaceVariant
                                       .withValues(alpha: 0.8),

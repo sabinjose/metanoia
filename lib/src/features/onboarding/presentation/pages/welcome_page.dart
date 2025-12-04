@@ -1,6 +1,6 @@
+import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -187,7 +187,8 @@ class _WelcomePageState extends State<WelcomePage>
                 // Title - Premium Serif
                 Text(
                   l10n.appTitle,
-                  style: GoogleFonts.ebGaramond(
+                  style: TextStyle(
+                    fontFamily: AppTheme.fontFamilyEBGaramond,
                     fontSize: 60,
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.primary,
@@ -202,7 +203,8 @@ class _WelcomePageState extends State<WelcomePage>
                 // Tagline - Serif, Premium
                 Text(
                   l10n.turnBackToGrace,
-                  style: GoogleFonts.ebGaramond(
+                  style: TextStyle(
+                    fontFamily: AppTheme.fontFamilyEBGaramond,
                     fontSize: 20,
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     fontWeight: FontWeight.w500,

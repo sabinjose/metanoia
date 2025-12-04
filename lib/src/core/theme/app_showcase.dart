@@ -1,5 +1,5 @@
+import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class AppShowcase extends StatelessWidget {
@@ -108,7 +108,8 @@ class AppShowcase extends StatelessWidget {
                     // Title
                     Text(
                       title,
-                      style: GoogleFonts.ebGaramond(
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontFamilyEBGaramond,
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
@@ -121,7 +122,8 @@ class AppShowcase extends StatelessWidget {
                       // Step indicator
                       Text(
                         'Step $currentStep of $totalSteps',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
+                          fontFamily: AppTheme.fontFamilyLato,
                           fontSize: 12,
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.w600,
@@ -139,7 +141,8 @@ class AppShowcase extends StatelessWidget {
           // Description
           Text(
             description,
-            style: GoogleFonts.lato(
+            style: TextStyle(
+              fontFamily: AppTheme.fontFamilyLato,
               fontSize: 15,
               color: theme.colorScheme.onSurfaceVariant,
               height: 1.6,
@@ -275,7 +278,8 @@ class AppShowcase extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: GoogleFonts.lato(
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamilyLato,
                   fontSize: 15,
                   color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w700,
@@ -334,7 +338,8 @@ class AppShowcase extends StatelessWidget {
               ],
               Text(
                 label,
-                style: GoogleFonts.lato(
+                style: TextStyle(
+                  fontFamily: AppTheme.fontFamilyLato,
                   fontSize: 14,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w600,

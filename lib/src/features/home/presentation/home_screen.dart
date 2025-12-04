@@ -1,11 +1,11 @@
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
+import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
@@ -283,7 +283,8 @@ class _DailyQuoteCard extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               quote.quote,
-              style: GoogleFonts.merriweather(
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyMerriweather,
                 color: theme.colorScheme.onPrimary,
                 fontSize: 16,
                 fontStyle: FontStyle.italic,

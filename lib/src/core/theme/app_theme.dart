@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Premium Spiritual Color Palette
@@ -33,42 +32,65 @@ class AppTheme {
   static const _cardDark = Color(0xFF272134); // Purple-tinted cards (lighter)
   static const _backgroundDark = Color(0xFF121019); // Deep purple-black
 
+  // Font family constants for local fonts
+  static const String fontFamilyLato = 'Lato';
+  static const String fontFamilyEBGaramond = 'EBGaramond';
+  static const String fontFamilyInter = 'Inter';
+  static const String fontFamilyLora = 'Lora';
+  static const String fontFamilyMerriweather = 'Merriweather';
+  static const String fontFamilyNotoSerif = 'NotoSerif';
+
   static TextTheme _buildTextTheme(TextTheme base) {
-    return GoogleFonts.latoTextTheme(base).copyWith(
-      displayLarge: GoogleFonts.lato(
-        textStyle: base.displayLarge,
+    return base.copyWith(
+      displayLarge: base.displayLarge?.copyWith(
+        fontFamily: fontFamilyLato,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.5,
       ),
-      displayMedium: GoogleFonts.lato(
-        textStyle: base.displayMedium,
+      displayMedium: base.displayMedium?.copyWith(
+        fontFamily: fontFamilyLato,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.5,
       ),
-      displaySmall: GoogleFonts.lato(
-        textStyle: base.displaySmall,
+      displaySmall: base.displaySmall?.copyWith(
+        fontFamily: fontFamilyLato,
         fontWeight: FontWeight.bold,
         letterSpacing: -0.25,
       ),
-      titleLarge: GoogleFonts.lato(
-        textStyle: base.titleLarge,
+      titleLarge: base.titleLarge?.copyWith(
+        fontFamily: fontFamilyLato,
         fontWeight: FontWeight.bold,
         letterSpacing: 0,
       ),
-      titleMedium: GoogleFonts.lato(
-        textStyle: base.titleMedium,
+      titleMedium: base.titleMedium?.copyWith(
+        fontFamily: fontFamilyLato,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.15,
       ),
-      bodyLarge: GoogleFonts.lato(
-        textStyle: base.bodyLarge,
+      titleSmall: base.titleSmall?.copyWith(
+        fontFamily: fontFamilyLato,
+      ),
+      bodyLarge: base.bodyLarge?.copyWith(
+        fontFamily: fontFamilyLato,
         letterSpacing: 0.5,
         height: 1.5,
       ),
-      bodyMedium: GoogleFonts.lato(
-        textStyle: base.bodyMedium,
+      bodyMedium: base.bodyMedium?.copyWith(
+        fontFamily: fontFamilyLato,
         letterSpacing: 0.25,
         height: 1.6,
+      ),
+      bodySmall: base.bodySmall?.copyWith(
+        fontFamily: fontFamilyLato,
+      ),
+      labelLarge: base.labelLarge?.copyWith(
+        fontFamily: fontFamilyLato,
+      ),
+      labelMedium: base.labelMedium?.copyWith(
+        fontFamily: fontFamilyLato,
+      ),
+      labelSmall: base.labelSmall?.copyWith(
+        fontFamily: fontFamilyLato,
       ),
     );
   }
@@ -111,13 +133,14 @@ class AppTheme {
           TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
         },
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: _primaryLight,
-        titleTextStyle: GoogleFonts.lato(
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamilyLato,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: _primaryLight,
@@ -143,7 +166,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+            fontFamily: fontFamilyLato,
             fontSize: 16,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -158,16 +182,18 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.lato(
+            return const TextStyle(
+              fontFamily: fontFamilyLato,
               fontSize: 12,
               fontWeight: FontWeight.bold,
               color: _primaryLight,
             );
           }
-          return GoogleFonts.lato(
+          return const TextStyle(
+            fontFamily: fontFamilyLato,
             fontSize: 12,
             fontWeight: FontWeight.normal,
-            color: const Color(0xFF1C1B1F),
+            color: Color(0xFF1C1B1F),
           );
         }),
       ),
@@ -183,10 +209,11 @@ class AppTheme {
             width: 1,
           ),
         ),
-        textStyle: GoogleFonts.lato(
+        textStyle: const TextStyle(
+          fontFamily: fontFamilyLato,
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF1C1B1F),
+          color: Color(0xFF1C1B1F),
         ),
       ),
     );
@@ -226,13 +253,14 @@ class AppTheme {
           TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
         },
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: _primaryDark,
-        titleTextStyle: GoogleFonts.lato(
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamilyLato,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: _primaryDark,
@@ -258,7 +286,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.lato(
+          textStyle: const TextStyle(
+            fontFamily: fontFamilyLato,
             fontSize: 16,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -273,16 +302,18 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.lato(
+            return const TextStyle(
+              fontFamily: fontFamilyLato,
               fontSize: 12,
               fontWeight: FontWeight.bold,
               color: _primaryDark,
             );
           }
-          return GoogleFonts.lato(
+          return const TextStyle(
+            fontFamily: fontFamilyLato,
             fontSize: 12,
             fontWeight: FontWeight.normal,
-            color: const Color(0xFFE6E1E5),
+            color: Color(0xFFE6E1E5),
           );
         }),
       ),
@@ -331,10 +362,11 @@ class AppTheme {
             width: 1,
           ),
         ),
-        textStyle: GoogleFonts.lato(
+        textStyle: const TextStyle(
+          fontFamily: fontFamilyLato,
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFFE8E3EB),
+          color: Color(0xFFE8E3EB),
         ),
       ),
     );
