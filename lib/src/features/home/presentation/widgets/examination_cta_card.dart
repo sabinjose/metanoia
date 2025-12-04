@@ -1,7 +1,7 @@
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
+import 'package:confessionapp/src/core/router/navigation_provider.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
-import 'package:confessionapp/src/features/examination/presentation/examination_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,10 +43,12 @@ class _ExaminationCtaCardState extends ConsumerState<ExaminationCtaCard>
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Listen to examination controller changes to trigger refresh
-    ref.listen(examinationControllerProvider, (_, __) {
-      // When examination controller state changes, refresh the draft provider
-      ref.invalidate(activeExaminationDraftProvider);
+    // Listen to tab changes - when home tab (index 0) is selected, refresh the draft
+    ref.listen(currentTabIndexProvider, (previous, current) {
+      if (current == 0 && previous != 0) {
+        // User navigated to home tab, refresh the draft provider
+        ref.invalidate(activeExaminationDraftProvider);
+      }
     });
 
     final draftAsync = ref.watch(activeExaminationDraftProvider);
