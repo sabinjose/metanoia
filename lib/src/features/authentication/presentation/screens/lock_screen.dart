@@ -56,7 +56,9 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   }
 
   Future<void> _attemptBiometric() async {
-    if (_hasAttemptedBiometric || !mounted) return;
+    if (!mounted) return;
+
+    // Mark as attempted for auto-trigger (so it doesn't auto-trigger again)
     _hasAttemptedBiometric = true;
 
     final success =
@@ -179,8 +181,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                 PinInputWidget(
                   onDigitPressed: _onDigitPressed,
                   onBackspacePressed: _onBackspacePressed,
-                  onBiometricPressed:
-                      biometricAvailable && biometricEnabled ? _attemptBiometric : null,
+                  onBiometricPressed: _attemptBiometric,
                   showBiometric: biometricAvailable && biometricEnabled,
                   enabled: !_isVerifying,
                 ),
