@@ -144,7 +144,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                   child: Text(
                                     l10n.greekLabel,
                                     style: TextStyle(
-                                      fontFamily: AppTheme.fontFamilyInter,
+                                      fontFamily: AppTheme.fontFamilyLato,
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,
                                       color: theme.colorScheme.primary,
@@ -156,7 +156,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                                 Text(
                                   'μετάνοια',
                                   style: TextStyle(
-                                    fontFamily: AppTheme.fontFamilyLora,
+                                    fontFamily: AppTheme.fontFamilyEBGaramond,
                                     fontSize: 16,
                                     fontStyle: FontStyle.italic,
                                     color: theme.colorScheme.onSurface
@@ -178,7 +178,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                         child: Text(
                           '/ˌmɛtəˈnɔɪə/',
                           style: TextStyle(
-                            fontFamily: AppTheme.fontFamilyNotoSerif,
+                            fontFamily: AppTheme.fontFamilyEBGaramond,
                             fontSize: 18,
                             fontStyle: FontStyle.italic,
                             color: theme.colorScheme.onSurface.withValues(
@@ -211,7 +211,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                               child: Text(
                                 l10n.nounLabel,
                                 style: TextStyle(
-                                  fontFamily: AppTheme.fontFamilyInter,
+                                  fontFamily: AppTheme.fontFamilyLato,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   color: theme.colorScheme.secondary,
@@ -223,7 +223,7 @@ class _MetanoiaIntroPageState extends State<MetanoiaIntroPage>
                             Text(
                               l10n.metanoiaDefinition,
                               style: TextStyle(
-                                fontFamily: AppTheme.fontFamilyInter,
+                                fontFamily: AppTheme.fontFamilyLato,
                                 fontSize: 20,
                                 height: 1.7,
                                 color: theme.colorScheme.onSurface,

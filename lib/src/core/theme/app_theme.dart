@@ -35,10 +35,6 @@ class AppTheme {
   // Font family constants for local fonts
   static const String fontFamilyLato = 'Lato';
   static const String fontFamilyEBGaramond = 'EBGaramond';
-  static const String fontFamilyInter = 'Inter';
-  static const String fontFamilyLora = 'Lora';
-  static const String fontFamilyMerriweather = 'Merriweather';
-  static const String fontFamilyNotoSerif = 'NotoSerif';
 
   static TextTheme _buildTextTheme(TextTheme base) {
     return base.copyWith(
