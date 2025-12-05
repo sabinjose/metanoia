@@ -88,14 +88,39 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
                 // Lock screen overlay
                 if (authState.valueOrNull?.status == AuthStatus.locked ||
                     authState.valueOrNull?.status == AuthStatus.lockedOut)
-                  const Positioned.fill(
-                    child: LockScreen(),
+                  Positioned.fill(
+                    child: _LockScreenOverlay(parentContext: context),
                   ),
               ],
             ),
           );
         },
       ),
+    );
+  }
+}
+
+/// Lock screen overlay widget that properly inherits theme and localizations
+class _LockScreenOverlay extends StatelessWidget {
+  const _LockScreenOverlay({required this.parentContext});
+
+  final BuildContext parentContext;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(parentContext);
+    final locale = Localizations.localeOf(parentContext);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: const LockScreen(),
     );
   }
 }

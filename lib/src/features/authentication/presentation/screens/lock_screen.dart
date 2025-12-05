@@ -1,9 +1,12 @@
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/features/authentication/domain/models/auth_settings.dart';
 import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/lockout_timer_widget.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/pin_dots_display.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/pin_input_widget.dart';
+import 'package:confessionapp/src/features/authentication/presentation/widgets/reset_pin_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -112,6 +115,80 @@ class _LockScreenState extends ConsumerState<LockScreen> {
     ref.read(authControllerProvider.notifier).checkLockoutExpired();
   }
 
+  Future<void> _onForgotPinPressed() async {
+    debugPrint('_onForgotPinPressed called');
+    if (!mounted) {
+      debugPrint('Not mounted, returning');
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context)!;
+    final authState = ref.read(authControllerProvider).valueOrNull;
+    debugPrint('authState: $authState');
+
+    // Try biometric verification first if available and enabled
+    bool biometricVerified = false;
+    final canUseBiometric =
+        (authState?.biometricAvailable ?? false) &&
+        (authState?.biometricEnabled ?? false);
+
+    debugPrint('canUseBiometric: $canUseBiometric');
+
+    if (canUseBiometric) {
+      try {
+        biometricVerified = await ref
+            .read(authControllerProvider.notifier)
+            .authenticateWithBiometricForReset(l10n.resetPinBiometricPrompt);
+      } catch (e) {
+        debugPrint('Biometric error: $e');
+        // Biometric failed, continue with timer
+        biometricVerified = false;
+      }
+    }
+
+    debugPrint('biometricVerified: $biometricVerified');
+
+    if (!mounted) {
+      debugPrint('Not mounted after biometric, returning');
+      return;
+    }
+
+    debugPrint('Showing reset dialog');
+    // Show the reset dialog (with timer if biometric not verified)
+    final confirmed = await showResetPinDialog(
+      context,
+      biometricVerified: biometricVerified,
+    );
+
+    debugPrint('Dialog result: $confirmed');
+    if (!confirmed || !mounted) return;
+
+    final success =
+        await ref.read(authControllerProvider.notifier).resetPinAndDeleteAllData();
+
+    if (!mounted) return;
+
+    if (success) {
+      // Show success message and restart app
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.resetPinSuccess),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+      );
+      // Restart the app by exiting (app will reopen fresh)
+      await Future.delayed(const Duration(seconds: 2));
+      SystemNavigator.pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.resetPinError),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -184,6 +261,17 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                   onBiometricPressed: _attemptBiometric,
                   showBiometric: biometricAvailable && biometricEnabled,
                   enabled: !_isVerifying,
+                ),
+                const SizedBox(height: 24),
+                // Forgot PIN button
+                TextButton(
+                  onPressed: _onForgotPinPressed,
+                  child: Text(
+                    AppLocalizations.of(context)!.forgotPin,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
                 ),
               ],
               const Spacer(flex: 2),

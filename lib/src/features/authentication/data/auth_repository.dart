@@ -208,4 +208,21 @@ class AuthRepository {
     await prefs.remove(_failedAttemptsKey);
     await prefs.remove(_lockoutEndKey);
   }
+
+  /// Reset PIN and delete all user data (confessions, custom sins, penances)
+  /// This is a destructive operation that cannot be undone
+  /// Returns true if successful
+  Future<bool> resetPinAndDeleteAllData() async {
+    try {
+      // Delete all authentication data
+      await deleteAllAuthData();
+
+      // Delete database encryption key (this makes the database unrecoverable)
+      await _secureStorage.delete(key: 'db_key');
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

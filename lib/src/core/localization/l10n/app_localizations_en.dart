@@ -888,4 +888,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fontSizeExtraLarge => 'Extra Large';
+
+  @override
+  String get forgotPin => 'Forgot PIN?';
+
+  @override
+  String get resetPinTitle => 'Reset PIN';
+
+  @override
+  String get resetPinWarning => 'Warning: This will permanently delete all your data';
+
+  @override
+  String get resetPinDescription => 'If you reset your PIN, all your confessions, custom sins, penances, and other personal data will be permanently deleted. This action cannot be undone.';
+
+  @override
+  String get resetPinConfirmation => 'Type DELETE to confirm';
+
+  @override
+  String get resetPinButton => 'Reset PIN & Delete Data';
+
+  @override
+  String get resetPinSuccess => 'PIN reset successfully. Please set up a new PIN.';
+
+  @override
+  String get resetPinError => 'Failed to reset PIN. Please try again.';
+
+  @override
+  String get deleteConfirmationText => 'DELETE';
+
+  @override
+  String resetPinWaitTimer(int seconds) {
+    return 'Please wait $seconds seconds';
+  }
+
+  @override
+  String get resetPinBiometricPrompt => 'Verify your identity to reset PIN';
 }

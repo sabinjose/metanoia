@@ -276,5 +276,24 @@
   "fontSizeSmall": "Small",
   "fontSizeMedium": "Medium",
   "fontSizeLarge": "Large",
-  "fontSizeExtraLarge": "Extra Large"
+  "fontSizeExtraLarge": "Extra Large",
+
+  "forgotPin": "Forgot PIN?",
+  "resetPinTitle": "Reset PIN",
+  "resetPinWarning": "Warning: This will permanently delete all your data",
+  "resetPinDescription": "If you reset your PIN, all your confessions, custom sins, penances, and other personal data will be permanently deleted. This action cannot be undone.",
+  "resetPinConfirmation": "Type DELETE to confirm",
+  "resetPinButton": "Reset PIN & Delete Data",
+  "resetPinSuccess": "PIN reset successfully. Please set up a new PIN.",
+  "resetPinError": "Failed to reset PIN. Please try again.",
+  "deleteConfirmationText": "DELETE",
+  "resetPinWaitTimer": "Please wait {seconds} seconds",
+  "@resetPinWaitTimer": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resetPinBiometricPrompt": "Verify your identity to reset PIN"
 }

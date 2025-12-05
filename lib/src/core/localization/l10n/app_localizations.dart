@@ -1696,6 +1696,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Extra Large'**
   String get fontSizeExtraLarge;
+
+  /// No description provided for @forgotPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot PIN?'**
+  String get forgotPin;
+
+  /// No description provided for @resetPinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset PIN'**
+  String get resetPinTitle;
+
+  /// No description provided for @resetPinWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: This will permanently delete all your data'**
+  String get resetPinWarning;
+
+  /// No description provided for @resetPinDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'If you reset your PIN, all your confessions, custom sins, penances, and other personal data will be permanently deleted. This action cannot be undone.'**
+  String get resetPinDescription;
+
+  /// No description provided for @resetPinConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Type DELETE to confirm'**
+  String get resetPinConfirmation;
+
+  /// No description provided for @resetPinButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset PIN & Delete Data'**
+  String get resetPinButton;
+
+  /// No description provided for @resetPinSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN reset successfully. Please set up a new PIN.'**
+  String get resetPinSuccess;
+
+  /// No description provided for @resetPinError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to reset PIN. Please try again.'**
+  String get resetPinError;
+
+  /// No description provided for @deleteConfirmationText.
+  ///
+  /// In en, this message translates to:
+  /// **'DELETE'**
+  String get deleteConfirmationText;
+
+  /// No description provided for @resetPinWaitTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait {seconds} seconds'**
+  String resetPinWaitTimer(int seconds);
+
+  /// No description provided for @resetPinBiometricPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your identity to reset PIN'**
+  String get resetPinBiometricPrompt;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

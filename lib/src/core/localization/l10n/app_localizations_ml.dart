@@ -876,4 +876,39 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get fontSizeExtraLarge => 'വളരെ വലുത്';
+
+  @override
+  String get forgotPin => 'PIN മറന്നോ?';
+
+  @override
+  String get resetPinTitle => 'PIN പുനഃസജ്ജീകരിക്കുക';
+
+  @override
+  String get resetPinWarning => 'മുന്നറിയിപ്പ്: ഇത് നിങ്ങളുടെ എല്ലാ ഡാറ്റയും ശാശ്വതമായി ഇല്ലാതാക്കും';
+
+  @override
+  String get resetPinDescription => 'നിങ്ങൾ PIN പുനഃസജ്ജീകരിച്ചാൽ, നിങ്ങളുടെ എല്ലാ കുമ്പസാരങ്ങളും, ഇഷ്ടാനുസൃത പാപങ്ങളും, പ്രായശ്ചിത്തങ്ങളും, മറ്റ് വ്യക്തിഗത ഡാറ്റയും ശാശ്വതമായി ഇല്ലാതാക്കപ്പെടും. ഈ പ്രവർത്തനം പഴയപടിയാക്കാൻ കഴിയില്ല.';
+
+  @override
+  String get resetPinConfirmation => 'സ്ഥിരീകരിക്കാൻ DELETE എന്ന് ടൈപ്പ് ചെയ്യുക';
+
+  @override
+  String get resetPinButton => 'PIN പുനഃസജ്ജീകരിക്കുക & ഡാറ്റ ഇല്ലാതാക്കുക';
+
+  @override
+  String get resetPinSuccess => 'PIN വിജയകരമായി പുനഃസജ്ജീകരിച്ചു. ദയവായി പുതിയ PIN സജ്ജീകരിക്കുക.';
+
+  @override
+  String get resetPinError => 'PIN പുനഃസജ്ജീകരിക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get deleteConfirmationText => 'DELETE';
+
+  @override
+  String resetPinWaitTimer(int seconds) {
+    return 'ദയവായി $seconds സെക്കൻഡ് കാത്തിരിക്കുക';
+  }
+
+  @override
+  String get resetPinBiometricPrompt => 'PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക';
 }

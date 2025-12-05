@@ -278,6 +278,51 @@ class AuthController extends _$AuthController {
     final repo = ref.read(authRepositoryProvider);
     return repo.changePin(currentPin, newPin);
   }
+
+  /// Reset PIN and delete all user data
+  /// This is a destructive operation that cannot be undone
+  Future<bool> resetPinAndDeleteAllData() async {
+    final repo = ref.read(authRepositoryProvider);
+    final success = await repo.resetPinAndDeleteAllData();
+
+    if (success) {
+      // Reset state to uninitialized (will trigger PIN setup flow)
+      state = const AsyncValue.data(
+        AuthState(status: AuthStatus.uninitialized),
+      );
+    }
+
+    return success;
+  }
+
+  /// Authenticate using biometrics for PIN reset verification
+  /// This doesn't change app state, just verifies identity
+  Future<bool> authenticateWithBiometricForReset(String reason) async {
+    final currentState = state.valueOrNull;
+    if (currentState == null || !currentState.biometricAvailable) {
+      return false;
+    }
+
+    try {
+      // Check if biometrics are actually enrolled
+      final availableBiometrics = await _localAuth.getAvailableBiometrics();
+      if (availableBiometrics.isEmpty) {
+        return false;
+      }
+
+      return await _localAuth.authenticate(
+        localizedReason: reason,
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false, // Allow device credentials as fallback
+        ),
+      );
+    } on PlatformException {
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 /// Enum for app lifecycle state (renamed to avoid conflict with Flutter's)
