@@ -212,6 +212,20 @@ class AppTheme {
           color: Color(0xFF1C1B1F),
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: _accentPurple,
+        contentTextStyle: const TextStyle(
+          fontFamily: fontFamilyLato,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        behavior: SnackBarBehavior.floating,
+        elevation: 4,
+      ),
     );
   }
 
@@ -364,6 +378,20 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: Color(0xFFE8E3EB),
         ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: _accentPurpleDark,
+        contentTextStyle: const TextStyle(
+          fontFamily: fontFamilyLato,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        behavior: SnackBarBehavior.floating,
+        elevation: 4,
       ),
     );
   }

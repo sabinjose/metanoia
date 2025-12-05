@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/features/authentication/presentation/providers/auth_provider.dart';
 import 'package:confessionapp/src/features/authentication/presentation/widgets/pin_dots_display.dart';
@@ -18,24 +19,25 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Security'),
+        title: Text(l10n.security),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: authState.when(
-        data: (state) => _buildContent(context, theme, state),
+        data: (state) => _buildContent(context, theme, state, l10n),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => const Center(child: Text('Error loading settings')),
+        error: (_, __) => Center(child: Text(l10n.error)),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, ThemeData theme, dynamic state) {
+  Widget _buildContent(BuildContext context, ThemeData theme, dynamic state, AppLocalizations l10n) {
     final biometricAvailable = state?.biometricAvailable ?? false;
     final biometricEnabled = state?.biometricEnabled ?? false;
     final backgroundTimeout = state?.backgroundTimeout ?? const Duration(seconds: 15);
@@ -45,22 +47,22 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
       children: [
         // Biometric section
         if (biometricAvailable) ...[
-          _buildSectionHeader(theme, 'Biometric Authentication'),
+          _buildSectionHeader(theme, l10n.biometricUnlock),
           const SizedBox(height: 8),
-          _buildBiometricCard(theme, biometricEnabled),
+          _buildBiometricCard(theme, biometricEnabled, l10n),
           const SizedBox(height: 24),
         ],
 
         // Auto-lock section
-        _buildSectionHeader(theme, 'Auto-Lock'),
+        _buildSectionHeader(theme, l10n.autoLockTimeout),
         const SizedBox(height: 8),
         _buildTimeoutCard(theme, backgroundTimeout),
         const SizedBox(height: 24),
 
         // PIN management section
-        _buildSectionHeader(theme, 'PIN Management'),
+        _buildSectionHeader(theme, l10n.changePin),
         const SizedBox(height: 8),
-        _buildChangePinCard(theme),
+        _buildChangePinCard(theme, l10n),
       ],
     );
   }
@@ -78,7 +80,7 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
     );
   }
 
-  Widget _buildBiometricCard(ThemeData theme, bool enabled) {
+  Widget _buildBiometricCard(ThemeData theme, bool enabled, AppLocalizations l10n) {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -86,8 +88,8 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
         border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: SwitchListTile(
-        title: const Text('Use Biometric Unlock'),
-        subtitle: const Text('Unlock with fingerprint or face'),
+        title: Text(l10n.useBiometricUnlock),
+        subtitle: Text(l10n.unlockWithFingerprintOrFace),
         secondary: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -136,8 +138,8 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
                 color: theme.colorScheme.secondary,
               ),
             ),
-            title: const Text('Lock After'),
-            subtitle: const Text('Time in background before locking'),
+            title: Text(AppLocalizations.of(context)!.lockAfter),
+            subtitle: Text(AppLocalizations.of(context)!.timeInBackgroundBeforeLocking),
           ),
           const Divider(height: 1),
           ...timeoutOptions.map((option) {
@@ -164,7 +166,7 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
     );
   }
 
-  Widget _buildChangePinCard(ThemeData theme) {
+  Widget _buildChangePinCard(ThemeData theme, AppLocalizations l10n) {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -183,8 +185,8 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
             color: theme.colorScheme.tertiary,
           ),
         ),
-        title: const Text('Change PIN'),
-        subtitle: const Text('Update your security PIN'),
+        title: Text(l10n.changePin),
+        subtitle: Text(l10n.updateYourSecurityPin),
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: () => _showChangePinDialog(context, theme),
       ),
@@ -293,7 +295,7 @@ class _ChangePinSheetState extends ConsumerState<_ChangePinSheet> {
     if (_newPin != _confirmPin) {
       setState(() {
         _hasError = true;
-        _errorMessage = 'PINs don\'t match';
+        _errorMessage = AppLocalizations.of(context)!.pinMismatch;
         _confirmPin = '';
       });
       return;
@@ -309,13 +311,14 @@ class _ChangePinSheetState extends ConsumerState<_ChangePinSheet> {
 
     if (success) {
       Navigator.of(context).pop();
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('PIN changed successfully')),
+        SnackBar(content: Text(l10n.pinChangedSuccessfully)),
       );
     } else {
       setState(() {
         _hasError = true;
-        _errorMessage = 'Current PIN is incorrect';
+        _errorMessage = AppLocalizations.of(context)!.currentPinIncorrect;
         _currentPin = '';
         _newPin = '';
         _confirmPin = '';
@@ -338,14 +341,14 @@ class _ChangePinSheetState extends ConsumerState<_ChangePinSheet> {
     }
   }
 
-  String get _stepTitle {
+  String _getStepTitle(AppLocalizations l10n) {
     switch (_step) {
       case 0:
-        return 'Enter Current PIN';
+        return l10n.enterCurrentPin;
       case 1:
-        return 'Enter New PIN';
+        return l10n.enterNewPin;
       case 2:
-        return 'Confirm New PIN';
+        return l10n.confirmNewPin;
       default:
         return '';
     }
@@ -354,6 +357,7 @@ class _ChangePinSheetState extends ConsumerState<_ChangePinSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -381,7 +385,7 @@ class _ChangePinSheetState extends ConsumerState<_ChangePinSheet> {
               const SizedBox(height: 24),
               // Title
               Text(
-                _stepTitle,
+                _getStepTitle(l10n),
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
