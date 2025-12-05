@@ -115,7 +115,6 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
       (const Duration(seconds: 15), '15 seconds'),
       (const Duration(seconds: 30), '30 seconds'),
       (const Duration(minutes: 1), '1 minute'),
-      (const Duration(minutes: 5), '5 minutes'),
     ];
 
     return Container(
