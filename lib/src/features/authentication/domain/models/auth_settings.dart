@@ -21,8 +21,11 @@ class AuthSettings {
 
 /// Authentication status
 enum AuthStatus {
-  /// First launch, no PIN set
+  /// First launch, no PIN set - PIN setup deferred until first sensitive action
   uninitialized,
+
+  /// PIN setup has been deferred - user can browse, but sensitive areas require PIN setup
+  pinSetupDeferred,
 
   /// App is locked, needs authentication
   locked,

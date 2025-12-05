@@ -17,7 +17,8 @@ class AuthController extends _$AuthController {
     final isPinSet = await repo.isPinSet();
 
     if (!isPinSet) {
-      return const AuthState(status: AuthStatus.uninitialized);
+      // PIN not set - use deferred state so user can browse home first
+      return const AuthState(status: AuthStatus.pinSetupDeferred);
     }
 
     // Check if in lockout
@@ -194,7 +195,8 @@ class AuthController extends _$AuthController {
   void lock() {
     final currentState = state.valueOrNull;
     if (currentState == null ||
-        currentState.status == AuthStatus.uninitialized) {
+        currentState.status == AuthStatus.uninitialized ||
+        currentState.status == AuthStatus.pinSetupDeferred) {
       return;
     }
 
@@ -217,7 +219,8 @@ class AuthController extends _$AuthController {
   void onAppLifecycleChange(AuthAppLifecycleState lifecycleState) {
     final currentState = state.valueOrNull;
     if (currentState == null ||
-        currentState.status == AuthStatus.uninitialized) {
+        currentState.status == AuthStatus.uninitialized ||
+        currentState.status == AuthStatus.pinSetupDeferred) {
       return;
     }
 
@@ -277,6 +280,12 @@ class AuthController extends _$AuthController {
   Future<bool> changePin(String currentPin, String newPin) async {
     final repo = ref.read(authRepositoryProvider);
     return repo.changePin(currentPin, newPin);
+  }
+
+  /// Check if PIN setup is required (deferred state)
+  bool get isPinSetupRequired {
+    final currentState = state.valueOrNull;
+    return currentState?.status == AuthStatus.pinSetupDeferred;
   }
 
   /// Reset PIN and delete all user data

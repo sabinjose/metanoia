@@ -144,6 +144,10 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
+          onPressed: () => context.pop(),
+        ),
         title: Text(
           'Set Up PIN',
           style: TextStyle(color: theme.colorScheme.onSurface),

@@ -53,11 +53,29 @@ GoRouter goRouter(Ref ref) {
         return '/';
       }
 
-      // Check PIN setup after onboarding
+      // Sensitive routes that require PIN setup
+      const sensitiveRoutes = [
+        '/examine',
+        '/confess',
+        '/settings',
+      ];
+
+      // Check if navigating to a sensitive route without PIN set
       if (onboardingCompleted && !isOnPinSetupPage) {
         final authState = ref.read(authControllerProvider).valueOrNull;
-        if (authState?.status == AuthStatus.uninitialized) {
-          return '/pin-setup';
+        final isPinDeferred =
+            authState?.status == AuthStatus.pinSetupDeferred ||
+            authState?.status == AuthStatus.uninitialized;
+
+        if (isPinDeferred) {
+          // Check if trying to access sensitive routes
+          final isSensitiveRoute = sensitiveRoutes.any(
+            (route) => state.matchedLocation.startsWith(route),
+          );
+
+          if (isSensitiveRoute) {
+            return '/pin-setup';
+          }
         }
       }
 

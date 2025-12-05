@@ -85,7 +85,8 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
             child: Stack(
               children: [
                 child ?? const SizedBox.shrink(),
-                // Lock screen overlay
+                // Lock screen overlay - only show for locked/lockedOut states
+                // Don't show for pinSetupDeferred (user can browse home first)
                 if (authState.valueOrNull?.status == AuthStatus.locked ||
                     authState.valueOrNull?.status == AuthStatus.lockedOut)
                   Positioned.fill(
