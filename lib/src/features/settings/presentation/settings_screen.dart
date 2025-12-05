@@ -275,19 +275,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             icon: Icons.history,
             child: keepHistory.when(
               data:
-                  (value) => SwitchListTile(
-                    value: value,
-                    onChanged: (newValue) {
-                      HapticUtils.selectionClick();
-                      ref
-                          .read(keepHistorySettingsProvider.notifier)
-                          .toggle(newValue);
-                    },
-                    title: Text(
-                      value ? l10n.onTheDay : l10n.off,
-                      style: Theme.of(context).textTheme.titleSmall,
+                  (value) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Switch(
+                      value: value,
+                      onChanged: (newValue) {
+                        HapticUtils.selectionClick();
+                        ref
+                            .read(keepHistorySettingsProvider.notifier)
+                            .toggle(newValue);
+                      },
                     ),
-                    contentPadding: EdgeInsets.zero,
                   ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => Text(l10n.error),
