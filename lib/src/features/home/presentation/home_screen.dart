@@ -252,6 +252,15 @@ class _DailyQuoteCard extends ConsumerWidget {
 
   final ThemeData theme;
 
+  /// Returns dynamic font size based on quote length for better readability
+  double _getQuoteFontSize(int length) {
+    if (length <= 100) return 18;
+    if (length <= 200) return 16;
+    if (length <= 300) return 14;
+    if (length <= 500) return 13;
+    return 12;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contentLanguageAsync = ref.watch(contentLanguageControllerProvider);
@@ -286,7 +295,7 @@ class _DailyQuoteCard extends ConsumerWidget {
               style: TextStyle(
                 fontFamily: AppTheme.fontFamilyEBGaramond,
                 color: theme.colorScheme.onPrimary,
-                fontSize: 16,
+                fontSize: _getQuoteFontSize(quote.quote.length),
                 fontStyle: FontStyle.italic,
                 height: 1.5,
               ),
