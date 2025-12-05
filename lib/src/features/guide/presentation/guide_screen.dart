@@ -18,6 +18,7 @@ class GuideScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final guideItemsAsync = ref.watch(guideItemsProvider);
+    final contentLanguageAsync = ref.watch(contentLanguageControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +32,12 @@ class GuideScreen extends ConsumerWidget {
       ),
       body: guideItemsAsync.when(
         data: (guideItems) {
+          // Get content language localization for FAQ
+          final contentLocale = contentLanguageAsync.valueOrNull;
+          final contentL10n = contentLocale != null
+              ? lookupAppLocalizations(contentLocale)
+              : l10n;
+
           if (guideItems.isEmpty) {
             return EmptyState(
               icon: Icons.menu_book,
@@ -42,8 +49,8 @@ class GuideScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
-              // FAQ Card with consistent styling
-              _buildFaqCard(context, l10n, theme),
+              // FAQ Card with content language
+              _buildFaqCard(context, contentL10n, theme),
               const SizedBox(height: 16),
               // Guide items as expandable cards
               ...guideItems.asMap().entries.map(

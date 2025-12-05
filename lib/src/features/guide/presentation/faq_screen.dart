@@ -15,11 +15,18 @@ class FaqScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final faqsAsync = ref.watch(faqsProvider);
+    final contentLanguageAsync = ref.watch(contentLanguageControllerProvider);
+
+    // Use content language for FAQ title
+    final contentLocale = contentLanguageAsync.valueOrNull;
+    final contentL10n = contentLocale != null
+        ? lookupAppLocalizations(contentLocale)
+        : l10n;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          l10n.faqTitle,
+          contentL10n.faqTitle,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
