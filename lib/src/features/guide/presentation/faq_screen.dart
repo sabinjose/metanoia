@@ -282,7 +282,7 @@ class FaqScreen extends ConsumerWidget {
       elevation: 0,
       color: theme.colorScheme.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         side: BorderSide(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
           width: 1,
@@ -300,7 +300,7 @@ class FaqScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     _getIconData(faq.icon),
@@ -328,7 +328,7 @@ class FaqScreen extends ConsumerWidget {
           ],
         ),
       ),
-    ).animate().fadeIn(delay: (80 * index).ms).slideY(begin: 0.05, end: 0);
+    ).animate().fadeIn(delay: (80 * (index < 6 ? index : 6)).ms).slideY(begin: 0.05, end: 0);
   }
 
   Widget _buildFormattedContent(String content, ThemeData theme) {
@@ -486,7 +486,7 @@ class FaqScreen extends ConsumerWidget {
                 fontFamily: AppTheme.fontFamilyLato,
                 fontSize: 16,
                 height: 1.7,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
+                color: theme.colorScheme.onSurface,
               ),
             ),
           );

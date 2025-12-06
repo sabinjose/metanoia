@@ -1,17 +1,67 @@
 [
     {
+        "title": "The Lord's Prayer",
+        "content": "Our Father, Who art in heaven, Hallowed be Thy Name. Thy Kingdom come. Thy Will be done, on earth as it is in Heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen.",
+        "displayOrder": 1
+    },
+    {
+        "title": "Hail Mary",
+        "content": "Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.",
+        "displayOrder": 2
+    },
+    {
+        "title": "Glory Be",
+        "content": "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
+        "displayOrder": 3
+    },
+    {
+        "title": "Apostles' Creed",
+        "content": "I believe in God, the Father Almighty, Creator of Heaven and earth; and in Jesus Christ, His only Son, Our Lord, Who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into Hell; the third day He rose again from the dead; He ascended into Heaven, and sitteth at the right hand of God, the Father almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
+        "displayOrder": 4
+    },
+    {
+        "title": "The Confiteor",
+        "content": "I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned, in my thoughts and in my words, in what I have done and in what I have failed to do, through my fault, through my fault, through my most grievous fault; therefore I ask blessed Mary ever-Virgin, all the Angels and Saints, and you, my brothers and sisters, to pray for me to the Lord our God. Amen.",
+        "displayOrder": 5
+    },
+    {
         "title": "Act of Contrition",
         "content": "O My God, I am sorry for my sins with all my heart. In choosing to do wrong and failing to do good, I have sinned against you, whom I should love above all things. I firmly intend, with the help of your grace, to do penance, to sin no more and to avoid whatever leads me to sin. Our Savior, Jesus Christ, suffered and died for us. In His Name, O Lord, have mercy.",
-        "displayOrder": 1
+        "displayOrder": 6
     },
     {
         "title": "Prayer Before Confession",
         "content": "Come, Holy Spirit, into my soul. Enlighten my mind that I may know the sins I ought to confess, and grant me your grace to be truly sorry for my sins.",
-        "displayOrder": 2
+        "displayOrder": 7
     },
     {
         "title": "Prayer After Confession",
         "content": "My Jesus, your blood flows to cleanse my soul and your mercy restores my life. Keep me close to you and help me to avoid sin. Amen.",
-        "displayOrder": 3
+        "displayOrder": 8
+    },
+    {
+        "title": "Prayer to Guardian Angel",
+        "content": "Angel of God, my guardian dear, to whom God's love commits me here, ever this day be at my side, to light and guard, to rule and guide. Amen.",
+        "displayOrder": 9
+    },
+    {
+        "title": "Hail Holy Queen",
+        "content": "Hail, Holy Queen, Mother of Mercy, our life, our sweetness and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary. Pray for us, O holy Mother of God. That we may be made worthy of the promises of Christ. Amen.",
+        "displayOrder": 10
+    },
+    {
+        "title": "The Memorare",
+        "content": "Remember, O most gracious Virgin Mary, that never was it known that anyone who fled to thy protection, implored thy help, or sought thy intercession was left unaided. Inspired by this confidence, I fly unto thee, O Virgin of virgins, my Mother; to thee do I come, before thee I stand, sinful and sorrowful. O Mother of the Word Incarnate, despise not my petitions, but in thy mercy hear and answer me. Amen.",
+        "displayOrder": 11
+    },
+    {
+        "title": "Prayer Before Communion",
+        "content": "O Lord Jesus Christ, Son of the living God, who, by the will of the Father and the cooperation of the Holy Spirit, have by Your death given life to the world: deliver me by this, Your most sacred Body and Blood, from all my iniquities and from every evil: and make me always cleave to Your commandments, and never suffer me to be separated from You. Who with the same God the Father and the Holy Spirit, live and reign, God, world without end. Amen.",
+        "displayOrder": 12
+    },
+    {
+        "title": "Prayer After Communion",
+        "content": "Soul of Christ, sanctify me. Body of Christ, save me. Blood of Christ, inebriate me. Water from the side of Christ, wash me. Passion of Christ, strengthen me. O good Jesus, hear me. Within Thy wounds hide me. Suffer me not to be separated from Thee. From the malicious enemy defend me. In the hour of my death call me. And bid me come to Thee, That with Thy saints I may praise Thee Forever and ever. Amen.",
+        "displayOrder": 13
     }
 ]

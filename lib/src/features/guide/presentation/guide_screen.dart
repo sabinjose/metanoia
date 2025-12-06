@@ -69,7 +69,7 @@ class GuideScreen extends ConsumerWidget {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
@@ -78,6 +78,7 @@ class GuideScreen extends ConsumerWidget {
                   Icons.favorite,
                   size: 24,
                   color: theme.colorScheme.primary,
+                  semanticLabel: 'Encouragement',
                 ),
               ),
               const SizedBox(width: 16),
@@ -104,13 +105,14 @@ class GuideScreen extends ConsumerWidget {
               ),
               Icon(
                 Icons.chevron_right,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.onSurfaceVariant,
+                semanticLabel: 'Navigate',
               ),
             ],
           ),
         ),
       ),
-    ).animate().fadeIn().slideY(begin: 0.1, end: 0);
+    ).animate().fadeIn().slideY(begin: 0.05, end: 0);
   }
 
   Widget _buildConfessionGuideCard(BuildContext context, AppLocalizations l10n, ThemeData theme) {
@@ -135,7 +137,7 @@ class GuideScreen extends ConsumerWidget {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
@@ -144,6 +146,7 @@ class GuideScreen extends ConsumerWidget {
                   Icons.church_outlined,
                   size: 24,
                   color: theme.colorScheme.primary,
+                  semanticLabel: 'Confession guide',
                 ),
               ),
               const SizedBox(width: 16),
@@ -170,12 +173,13 @@ class GuideScreen extends ConsumerWidget {
               Icon(
                 Icons.chevron_right,
                 color: theme.colorScheme.onSurfaceVariant,
+                semanticLabel: 'Navigate',
               ),
             ],
           ),
         ),
       ),
-    ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0);
+    ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.05, end: 0);
   }
 
   Widget _buildFaqCard(BuildContext context, AppLocalizations l10n, ThemeData theme) {
@@ -200,7 +204,7 @@ class GuideScreen extends ConsumerWidget {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
@@ -209,6 +213,7 @@ class GuideScreen extends ConsumerWidget {
                   Icons.question_answer,
                   size: 24,
                   color: theme.colorScheme.primary,
+                  semanticLabel: 'Frequently asked questions',
                 ),
               ),
               const SizedBox(width: 16),
@@ -235,11 +240,12 @@ class GuideScreen extends ConsumerWidget {
               Icon(
                 Icons.chevron_right,
                 color: theme.colorScheme.onSurfaceVariant,
+                semanticLabel: 'Navigate',
               ),
             ],
           ),
         ),
       ),
-    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0);
+    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.05, end: 0);
   }
 }
