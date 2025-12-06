@@ -146,102 +146,70 @@ class InvitationScreen extends ConsumerWidget {
     bool isDark,
     AppLocalizations l10n,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: isDark
-              ? [
-                  theme.colorScheme.primaryContainer,
-                  theme.scaffoldBackgroundColor,
-                  theme.scaffoldBackgroundColor,
-                ]
-              : [
-                  theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                  theme.scaffoldBackgroundColor,
-                  theme.colorScheme.secondaryContainer.withValues(alpha: 0.15),
-                ],
-        ),
-      ),
-      child: CustomScrollView(
+    return CustomScrollView(
         slivers: [
           // App Bar
           SliverAppBar(
-            expandedHeight: 200,
             floating: false,
             pinned: true,
-            backgroundColor: Colors.transparent,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(
-                content.title,
-                style: TextStyle(
-                  fontFamily: AppTheme.fontFamilyEBGaramond,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: isDark
-                        ? [
-                            theme.colorScheme.primaryContainer,
-                            theme.colorScheme.primaryContainer
-                                .withValues(alpha: 0),
-                          ]
-                        : [
-                            theme.colorScheme.primaryContainer
-                                .withValues(alpha: 0.5),
-                            theme.colorScheme.primaryContainer
-                                .withValues(alpha: 0),
-                          ],
-                  ),
-                ),
-                child: SafeArea(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color:
-                                theme.colorScheme.primary.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.favorite,
-                            size: 48,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          content.subtitle,
-                          style: TextStyle(
-                            fontFamily: AppTheme.fontFamilyEBGaramond,
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            elevation: 0,
+            scrolledUnderElevation: 1,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            surfaceTintColor: theme.colorScheme.primary,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.arrow_back,
+                color: theme.colorScheme.onSurface,
+              ),
               onPressed: () {
                 HapticUtils.lightImpact();
                 context.pop();
               },
+            ),
+          ),
+
+          // Header section with icon, subtitle, and title
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      size: 48,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    content.subtitle,
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontFamilyEBGaramond,
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    content.title,
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontFamilyEBGaramond,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
 
@@ -274,7 +242,6 @@ class InvitationScreen extends ConsumerWidget {
           // Bottom padding
           const SliverPadding(padding: EdgeInsets.only(bottom: 40)),
         ],
-      ),
     );
   }
 
