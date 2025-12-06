@@ -153,57 +153,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _SettingsCard(
-            title: l10n.theme,
-            subtitle: l10n.chooseTheme,
-            icon:
-                themeMode == ThemeMode.light
-                    ? Icons.light_mode
-                    : themeMode == ThemeMode.dark
-                    ? Icons.dark_mode
-                    : Icons.brightness_auto,
-            child: SegmentedButton<ThemeMode>(
-              segments: [
-                ButtonSegment(
-                  value: ThemeMode.system,
-                  label: Text(l10n.system),
-                  icon: const Icon(Icons.brightness_auto),
-                ),
-                ButtonSegment(
-                  value: ThemeMode.light,
-                  label: Text(l10n.light),
-                  icon: const Icon(Icons.light_mode),
-                ),
-                ButtonSegment(
-                  value: ThemeMode.dark,
-                  label: Text(l10n.dark),
-                  icon: const Icon(Icons.dark_mode),
-                ),
-              ],
-              selected: {themeMode},
-              onSelectionChanged: (Set<ThemeMode> newSelection) {
-                HapticUtils.selectionClick();
-                ref
-                    .read(themeModeControllerProvider.notifier)
-                    .setTheme(newSelection.first);
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          _SettingsCard(
-            title: l10n.fontSize,
-            subtitle: l10n.fontSizeSubtitle,
-            icon: Icons.text_fields,
-            child: _FontSizeSelector(
-              currentScale: fontSizeScale,
-              onChanged: (scale) {
-                HapticUtils.selectionClick();
-                ref.read(fontSizeControllerProvider.notifier).setFontSize(scale);
-              },
-              l10n: l10n,
-            ),
-          ),
-          const SizedBox(height: 16),
+          // Language settings
           _SettingsCard(
             title: l10n.appLanguage,
             subtitle: l10n.appLanguageSubtitle,
@@ -269,29 +219,59 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
           ),
           const SizedBox(height: 16),
+          // Appearance settings
           _SettingsCard(
-            title: l10n.keepHistory,
-            subtitle: l10n.keepHistorySubtitle,
-            icon: Icons.history,
-            child: keepHistory.when(
-              data:
-                  (value) => Align(
-                    alignment: Alignment.centerLeft,
-                    child: Switch(
-                      value: value,
-                      onChanged: (newValue) {
-                        HapticUtils.selectionClick();
-                        ref
-                            .read(keepHistorySettingsProvider.notifier)
-                            .toggle(newValue);
-                      },
-                    ),
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (_, __) => Text(l10n.error),
+            title: l10n.theme,
+            subtitle: l10n.chooseTheme,
+            icon:
+                themeMode == ThemeMode.light
+                    ? Icons.light_mode
+                    : themeMode == ThemeMode.dark
+                    ? Icons.dark_mode
+                    : Icons.brightness_auto,
+            child: SegmentedButton<ThemeMode>(
+              segments: [
+                ButtonSegment(
+                  value: ThemeMode.system,
+                  label: Text(l10n.system),
+                  icon: const Icon(Icons.brightness_auto),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.light,
+                  label: Text(l10n.light),
+                  icon: const Icon(Icons.light_mode),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.dark,
+                  label: Text(l10n.dark),
+                  icon: const Icon(Icons.dark_mode),
+                ),
+              ],
+              selected: {themeMode},
+              onSelectionChanged: (Set<ThemeMode> newSelection) {
+                HapticUtils.selectionClick();
+                ref
+                    .read(themeModeControllerProvider.notifier)
+                    .setTheme(newSelection.first);
+              },
             ),
           ),
           const SizedBox(height: 16),
+          _SettingsCard(
+            title: l10n.fontSize,
+            subtitle: l10n.fontSizeSubtitle,
+            icon: Icons.text_fields,
+            child: _FontSizeSelector(
+              currentScale: fontSizeScale,
+              onChanged: (scale) {
+                HapticUtils.selectionClick();
+                ref.read(fontSizeControllerProvider.notifier).setFontSize(scale);
+              },
+              l10n: l10n,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Reminders
           _SettingsCard(
             key: _remindersKey,
             title: l10n.reminders,
@@ -404,6 +384,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 16),
+          // Privacy & Security
+          _SettingsCard(
+            title: l10n.keepHistory,
+            subtitle: l10n.keepHistorySubtitle,
+            icon: Icons.history,
+            child: keepHistory.when(
+              data:
+                  (value) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Switch(
+                      value: value,
+                      onChanged: (newValue) {
+                        HapticUtils.selectionClick();
+                        ref
+                            .read(keepHistorySettingsProvider.notifier)
+                            .toggle(newValue);
+                      },
+                    ),
+                  ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, __) => Text(l10n.error),
+            ),
+          ),
+          const SizedBox(height: 16),
           _SettingsCard(
             title: l10n.security,
             subtitle: l10n.securitySubtitle,
@@ -421,6 +425,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 16),
+          // Help & About
           _SettingsCard(
             title: l10n.replayTutorial,
             subtitle: l10n.replayTutorialDesc,
