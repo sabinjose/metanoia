@@ -35,7 +35,7 @@ class GuideScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           // Invitation card for those returning or anxious
-          _buildInvitationCard(context, l10n, theme),
+          _buildInvitationCard(context, contentL10n, theme),
           const SizedBox(height: 16),
           // How to Make a Good Confession card
           _buildConfessionGuideCard(context, contentL10n, theme),
