@@ -226,6 +226,51 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         elevation: 4,
       ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: _surfaceLight,
+        hourMinuteColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primaryContainer;
+          }
+          return colorScheme.surfaceContainerHighest;
+        }),
+        hourMinuteTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryLight;
+          }
+          return colorScheme.onSurface;
+        }),
+        dialHandColor: _primaryLight,
+        dialBackgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.3),
+        dialTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return colorScheme.onSurface;
+        }),
+        entryModeIconColor: _primaryLight,
+        dayPeriodColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primaryContainer;
+          }
+          return colorScheme.surfaceContainerHighest;
+        }),
+        dayPeriodTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryLight;
+          }
+          return colorScheme.onSurfaceVariant;
+        }),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        hourMinuteShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        dayPeriodShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
     );
   }
 
@@ -392,6 +437,51 @@ class AppTheme {
         ),
         behavior: SnackBarBehavior.floating,
         elevation: 4,
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: _surfaceDark,
+        hourMinuteColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primaryContainer;
+          }
+          return colorScheme.surfaceContainerHighest;
+        }),
+        hourMinuteTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryDark;
+          }
+          return colorScheme.onSurface;
+        }),
+        dialHandColor: _primaryDark,
+        dialBackgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.3),
+        dialTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return colorScheme.onSurface;
+        }),
+        entryModeIconColor: _primaryDark,
+        dayPeriodColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return colorScheme.primaryContainer;
+          }
+          return colorScheme.surfaceContainerHighest;
+        }),
+        dayPeriodTextColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return _primaryDark;
+          }
+          return colorScheme.onSurfaceVariant;
+        }),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        hourMinuteShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        dayPeriodShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     );
   }
