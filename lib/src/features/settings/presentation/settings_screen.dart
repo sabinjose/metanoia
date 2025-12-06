@@ -344,70 +344,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          _FrequencyChip(
-                            label: l10n.weekly,
-                            isSelected:
-                                config.frequency == ReminderFrequency.weekly,
-                            onSelected: (selected) {
-                              if (selected) {
-                                ref
-                                    .read(reminderSettingsProvider.notifier)
-                                    .updateConfig(
-                                      config.copyWith(
-                                        frequency: ReminderFrequency.weekly,
-                                      ),
-                                    );
-                              }
-                            },
-                          ),
-                          _FrequencyChip(
-                            label: l10n.biweekly,
-                            isSelected:
-                                config.frequency == ReminderFrequency.biweekly,
-                            onSelected: (selected) {
-                              if (selected) {
-                                ref
-                                    .read(reminderSettingsProvider.notifier)
-                                    .updateConfig(
-                                      config.copyWith(
-                                        frequency: ReminderFrequency.biweekly,
-                                      ),
-                                    );
-                              }
-                            },
-                          ),
-                          _FrequencyChip(
-                            label: l10n.monthly,
-                            isSelected:
-                                config.frequency == ReminderFrequency.monthly,
-                            onSelected: (selected) {
-                              if (selected) {
-                                ref
-                                    .read(reminderSettingsProvider.notifier)
-                                    .updateConfig(
-                                      config.copyWith(
-                                        frequency: ReminderFrequency.monthly,
-                                      ),
-                                    );
-                              }
-                            },
-                          ),
-                          _FrequencyChip(
-                            label: l10n.quarterly,
-                            isSelected:
-                                config.frequency == ReminderFrequency.quarterly,
-                            onSelected: (selected) {
-                              if (selected) {
-                                ref
-                                    .read(reminderSettingsProvider.notifier)
-                                    .updateConfig(
-                                      config.copyWith(
-                                        frequency: ReminderFrequency.quarterly,
-                                      ),
-                                    );
-                              }
-                            },
-                          ),
+                          for (final frequency in [
+                            (ReminderFrequency.weekly, l10n.weekly),
+                            (ReminderFrequency.biweekly, l10n.biweekly),
+                            (ReminderFrequency.monthly, l10n.monthly),
+                            (ReminderFrequency.quarterly, l10n.quarterly),
+                          ])
+                            _FrequencyChip(
+                              label: frequency.$2,
+                              isSelected: config.frequency == frequency.$1,
+                              onSelected: (selected) {
+                                if (selected) {
+                                  ref
+                                      .read(reminderSettingsProvider.notifier)
+                                      .updateConfig(
+                                        config.copyWith(frequency: frequency.$1),
+                                      );
+                                }
+                              },
+                            ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -424,7 +379,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           Expanded(
                             child: _ConfigTile(
                               label: l10n.time,
-                              value: _formatTime(config.hour, config.minute),
+                              value: _formatTime(context, config.hour, config.minute),
                               onTap:
                                   () => _showTimePicker(context, ref, config),
                             ),
@@ -568,11 +523,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return days[weekday - 1];
   }
 
-  String _formatTime(int hour, int minute) {
-    final period = hour >= 12 ? 'PM' : 'AM';
-    final h = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+  String _formatTime(BuildContext context, int hour, int minute) {
+    final use24Hour = MediaQuery.of(context).alwaysUse24HourFormat;
     final m = minute.toString().padLeft(2, '0');
-    return '$h:$m $period';
+
+    if (use24Hour) {
+      final h = hour.toString().padLeft(2, '0');
+      return '$h:$m';
+    } else {
+      final period = hour >= 12 ? 'PM' : 'AM';
+      final h = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+      return '$h:$m $period';
+    }
   }
 
   Future<void> _showDayPicker(
@@ -581,39 +543,52 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     ReminderConfig config,
   ) async {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
     await showDialog(
       context: context,
-      builder:
-          (context) => SimpleDialog(
-            title: Text(l10n.selectDay),
-            children:
-                [1, 2, 3, 4, 5, 6, 7].map((day) {
-                  return SimpleDialogOption(
-                    onPressed: () {
-                      ref
-                          .read(reminderSettingsProvider.notifier)
-                          .updateConfig(config.copyWith(weekday: day));
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        _getDayName(context, day),
-                        style: TextStyle(
-                          fontWeight:
-                              config.weekday == day
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                          color:
-                              config.weekday == day
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          l10n.selectDay,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [1, 2, 3, 4, 5, 6, 7].map((day) {
+            final isSelected = config.weekday == day;
+            return ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              tileColor: isSelected
+                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
+                  : null,
+              title: Text(
+                _getDayName(context, day),
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? theme.colorScheme.primary : null,
+                ),
+              ),
+              trailing: isSelected
+                  ? Icon(Icons.check, color: theme.colorScheme.primary)
+                  : null,
+              onTap: () {
+                ref
+                    .read(reminderSettingsProvider.notifier)
+                    .updateConfig(config.copyWith(weekday: day));
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 
@@ -639,41 +614,53 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     ReminderConfig config,
   ) async {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final advanceOptions = [0, 1, 2, 3, 4, 7];
 
     await showDialog(
       context: context,
-      builder:
-          (context) => SimpleDialog(
-            title: Text(l10n.remindMe),
-            children:
-                advanceOptions.map((days) {
-                  return SimpleDialogOption(
-                    onPressed: () {
-                      ref
-                          .read(reminderSettingsProvider.notifier)
-                          .updateConfig(config.copyWith(advanceDays: days));
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        days == 0 ? l10n.onTheDay : l10n.daysBefore(days),
-                        style: TextStyle(
-                          fontWeight:
-                              config.advanceDays == days
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                          color:
-                              config.advanceDays == days
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          l10n.remindMe,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: advanceOptions.map((days) {
+            final isSelected = config.advanceDays == days;
+            return ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              tileColor: isSelected
+                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
+                  : null,
+              title: Text(
+                days == 0 ? l10n.onTheDay : l10n.daysBefore(days),
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? theme.colorScheme.primary : null,
+                ),
+              ),
+              trailing: isSelected
+                  ? Icon(Icons.check, color: theme.colorScheme.primary)
+                  : null,
+              onTap: () {
+                ref
+                    .read(reminderSettingsProvider.notifier)
+                    .updateConfig(config.copyWith(advanceDays: days));
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 }

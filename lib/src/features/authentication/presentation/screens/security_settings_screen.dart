@@ -91,7 +91,7 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
         title: Text(l10n.useBiometricUnlock),
         subtitle: Text(l10n.unlockWithFingerprintOrFace),
         secondary: Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
             shape: BoxShape.circle,
@@ -127,7 +127,7 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
         children: [
           ListTile(
             leading: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
@@ -174,7 +174,7 @@ class _SecuritySettingsScreenState extends ConsumerState<SecuritySettingsScreen>
       ),
       child: ListTile(
         leading: Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.5),
             shape: BoxShape.circle,
