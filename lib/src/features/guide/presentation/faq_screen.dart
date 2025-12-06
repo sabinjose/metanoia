@@ -167,14 +167,16 @@ class FaqScreen extends ConsumerWidget {
       ),
       child: CustomScrollView(
         slivers: [
-          // App Bar
+          // App Bar - matches gradient top color for seamless look
           SliverAppBar(
             floating: false,
             pinned: true,
             elevation: 0,
-            scrolledUnderElevation: 0,
-            backgroundColor: Colors.transparent,
-            forceMaterialTransparency: true,
+            scrolledUnderElevation: 1,
+            backgroundColor: isDark
+                ? theme.colorScheme.primaryContainer
+                : theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            surfaceTintColor: theme.colorScheme.primary,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
