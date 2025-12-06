@@ -188,6 +188,8 @@ class _PrayersScreenState extends ConsumerState<PrayersScreen> {
         return Icons.water_drop_outlined;
       case 'shield_outlined':
         return Icons.shield_outlined;
+      case 'local_cafe_outlined':
+        return Icons.local_cafe_outlined;
       default:
         return Icons.auto_stories_outlined;
     }

@@ -157,7 +157,7 @@
         {
             "id": "communion",
             "title": "Prayers for Holy Communion",
-            "icon": "brightness_7_outlined",
+            "icon": "local_cafe_outlined",
             "prayers": [
                 {
                     "id": "before_communion",
