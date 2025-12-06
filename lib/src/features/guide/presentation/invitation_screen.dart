@@ -12,13 +12,11 @@ import 'package:go_router/go_router.dart';
 
 /// Model for invitation content
 class InvitationContent {
-  final String title;
   final String subtitle;
   final List<InvitationSection> sections;
   final InvitationCallToAction callToAction;
 
   InvitationContent({
-    required this.title,
     required this.subtitle,
     required this.sections,
     required this.callToAction,
@@ -26,7 +24,6 @@ class InvitationContent {
 
   factory InvitationContent.fromJson(Map<String, dynamic> json) {
     return InvitationContent(
-      title: json['title'] as String,
       subtitle: json['subtitle'] as String,
       sections: (json['sections'] as List)
           .map((s) => InvitationSection.fromJson(s as Map<String, dynamic>))
@@ -192,19 +189,9 @@ class InvitationScreen extends ConsumerWidget {
                     content.subtitle,
                     style: TextStyle(
                       fontFamily: AppTheme.fontFamilyEBGaramond,
-                      fontSize: 16,
+                      fontSize: 18,
                       fontStyle: FontStyle.italic,
                       color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    content.title,
-                    style: TextStyle(
-                      fontFamily: AppTheme.fontFamilyEBGaramond,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 24),
