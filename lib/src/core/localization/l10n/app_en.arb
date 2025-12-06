@@ -62,6 +62,7 @@
   "selectDay": "Select Day",
   "selected": "{count} selected",
   "selectedLabel": "selected",
+  "counter": "Counter",
   "searchPlaceholder": "Search commandments or questions...",
   "noResults": "No results found",
   "viewHistory": "View History",

@@ -204,6 +204,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectedLabel => 'selected';
 
   @override
+  String get counter => 'Counter';
+
+  @override
   String get searchPlaceholder => 'Search commandments or questions...';
 
   @override

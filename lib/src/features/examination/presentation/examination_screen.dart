@@ -317,7 +317,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
           actions: [
             AppShowcase(
               showcaseKey: _counterKey,
-              title: l10n.selected(0).split(' ').first,
+              title: l10n.counter,
               description: l10n.tutorialCounterDesc,
               currentStep: 3,
               totalSteps: 5,

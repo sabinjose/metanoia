@@ -449,6 +449,12 @@ abstract class AppLocalizations {
   /// **'selected'**
   String get selectedLabel;
 
+  /// No description provided for @counter.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter'**
+  String get counter;
+
   /// No description provided for @searchPlaceholder.
   ///
   /// In en, this message translates to:

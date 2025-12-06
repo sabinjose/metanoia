@@ -192,6 +192,9 @@ class AppLocalizationsMl extends AppLocalizations {
   String get selectedLabel => 'തിരഞ്ഞെടുത്തു';
 
   @override
+  String get counter => 'എണ്ണം';
+
+  @override
   String get searchPlaceholder => 'കൽപ്പനകളോ ചോദ്യങ്ങളോ തിരയുക...';
 
   @override

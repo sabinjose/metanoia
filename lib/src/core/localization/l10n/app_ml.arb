@@ -62,6 +62,7 @@
   "selectDay": "ദിവസം തിരഞ്ഞെടുക്കുക",
   "selected": "{count} തിരഞ്ഞെടുത്തു",
   "selectedLabel": "തിരഞ്ഞെടുത്തു",
+  "counter": "എണ്ണം",
   "searchPlaceholder": "കൽപ്പനകളോ ചോദ്യങ്ങളോ തിരയുക...",
   "noResults": "ഫലങ്ങളൊന്നും കണ്ടെത്തിയില്ല",
   "viewHistory": "ചരിത്രം കാണുക",
