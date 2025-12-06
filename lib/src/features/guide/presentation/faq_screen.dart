@@ -147,35 +147,15 @@ class FaqScreen extends ConsumerWidget {
       groupedFaqs[faq.heading]!.add(faq);
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: isDark
-              ? [
-                  theme.colorScheme.primaryContainer,
-                  theme.scaffoldBackgroundColor,
-                  theme.scaffoldBackgroundColor,
-                ]
-              : [
-                  theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                  theme.scaffoldBackgroundColor,
-                  theme.colorScheme.secondaryContainer.withValues(alpha: 0.15),
-                ],
-        ),
-      ),
-      child: CustomScrollView(
+    return CustomScrollView(
         slivers: [
-          // App Bar - matches gradient top color for seamless look
+          // App Bar
           SliverAppBar(
             floating: false,
             pinned: true,
             elevation: 0,
             scrolledUnderElevation: 1,
-            backgroundColor: isDark
-                ? theme.colorScheme.primaryContainer
-                : theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            backgroundColor: theme.scaffoldBackgroundColor,
             surfaceTintColor: theme.colorScheme.primary,
             leading: IconButton(
               icon: Icon(
@@ -289,7 +269,6 @@ class FaqScreen extends ConsumerWidget {
           // Bottom padding
           const SliverPadding(padding: EdgeInsets.only(bottom: 40)),
         ],
-      ),
     );
   }
 
