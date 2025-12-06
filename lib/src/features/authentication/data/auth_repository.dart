@@ -56,14 +56,14 @@ class AuthRepository {
     await resetFailedAttempts();
   }
 
-  /// Verify PIN against stored hash
+  /// Verify PIN against stored hash using constant-time comparison
   Future<bool> verifyPin(String pin) async {
     final storedHash = await _secureStorage.read(key: _pinHashKey);
     final salt = await _secureStorage.read(key: _pinSaltKey);
     if (storedHash == null || salt == null) return false;
 
     final inputHash = _hashPin(pin, salt);
-    return storedHash == inputHash;
+    return _constantTimeCompare(storedHash, inputHash);
   }
 
   /// Change PIN (requires current PIN verification)
@@ -82,11 +82,29 @@ class AuthRepository {
     return base64Encode(bytes);
   }
 
-  /// Hash PIN with salt using SHA-256
+  /// Hash PIN with salt using multiple rounds of SHA-256 (key stretching)
+  /// This makes brute-force attacks significantly slower
   String _hashPin(String pin, String salt) {
-    final bytes = utf8.encode(pin + salt);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
+    List<int> bytes = utf8.encode(pin + salt);
+
+    // Apply 100,000 rounds of hashing for key stretching
+    // This makes brute-force attacks ~100,000x slower
+    for (var i = 0; i < 100000; i++) {
+      bytes = sha256.convert(bytes).bytes;
+    }
+
+    return base64Encode(bytes);
+  }
+
+  /// Constant-time comparison to prevent timing attacks
+  bool _constantTimeCompare(String a, String b) {
+    if (a.length != b.length) return false;
+
+    var result = 0;
+    for (var i = 0; i < a.length; i++) {
+      result |= a.codeUnitAt(i) ^ b.codeUnitAt(i);
+    }
+    return result == 0;
   }
 
   /// Get authentication settings

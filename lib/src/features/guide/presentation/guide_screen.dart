@@ -218,9 +218,9 @@ class _GuideItemCard extends StatelessWidget {
     final paragraphs = content.split('\n\n');
 
     if (paragraphs.length == 1) {
-      // Single paragraph - just format line breaks
+      // Single paragraph
       return Text(
-        content.replaceAll('\n', '\n'),
+        content,
         style: theme.textTheme.bodyMedium?.copyWith(height: 1.7),
       );
     }

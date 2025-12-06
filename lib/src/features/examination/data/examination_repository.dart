@@ -2,8 +2,8 @@ import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/features/examination/data/user_custom_sins_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'examination_repository.g.dart';
 

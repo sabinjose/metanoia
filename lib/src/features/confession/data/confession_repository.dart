@@ -1,8 +1,8 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/database/database_provider.dart';
 import 'package:drift/drift.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'confession_repository.g.dart';
 

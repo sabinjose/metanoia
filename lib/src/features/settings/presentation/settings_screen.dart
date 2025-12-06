@@ -130,11 +130,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = GoRouterState.of(context);
       if (state.uri.queryParameters['scrollTo'] == 'reminders') {
-        Scrollable.ensureVisible(
-          _remindersKey.currentContext!,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+        final reminderContext = _remindersKey.currentContext;
+        if (reminderContext != null) {
+          Scrollable.ensureVisible(
+            reminderContext,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
       }
     });
   }
