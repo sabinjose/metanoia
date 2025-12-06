@@ -960,7 +960,26 @@ class _RegularPrayerCardState extends State<_RegularPrayerCard> {
       }
 
       // Check for special formatting
-      if (line.contains('[RUBRIC]')) {
+      if (line.contains('[INSTRUCTION]')) {
+        final instructionText = line
+            .replaceAll('[INSTRUCTION]', '')
+            .replaceAll('[/INSTRUCTION]', '')
+            .trim();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 4),
+            child: Text(
+              instructionText,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyLato,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        );
+      } else if (line.contains('[RUBRIC]')) {
         final rubricText = line
             .replaceAll('[RUBRIC]', '')
             .replaceAll('[/RUBRIC]', '')
@@ -974,7 +993,7 @@ class _RegularPrayerCardState extends State<_RegularPrayerCard> {
                 fontFamily: AppTheme.fontFamilyLato,
                 fontSize: 14,
                 fontStyle: FontStyle.italic,
-                color: theme.colorScheme.error.withValues(alpha: 0.8),
+                color: theme.colorScheme.primary,
               ),
             ),
           ),
@@ -1260,7 +1279,26 @@ class _ExpandablePrayerCardState extends State<_ExpandablePrayerCard> {
       }
 
       // Check for special formatting
-      if (line.contains('[RUBRIC]')) {
+      if (line.contains('[INSTRUCTION]')) {
+        final instructionText = line
+            .replaceAll('[INSTRUCTION]', '')
+            .replaceAll('[/INSTRUCTION]', '')
+            .trim();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 4),
+            child: Text(
+              instructionText,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyLato,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: widget.theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        );
+      } else if (line.contains('[RUBRIC]')) {
         final rubricText = line
             .replaceAll('[RUBRIC]', '')
             .replaceAll('[/RUBRIC]', '')
@@ -1274,7 +1312,7 @@ class _ExpandablePrayerCardState extends State<_ExpandablePrayerCard> {
                 fontFamily: AppTheme.fontFamilyLato,
                 fontSize: 14,
                 fontStyle: FontStyle.italic,
-                color: widget.theme.colorScheme.error.withValues(alpha: 0.8),
+                color: widget.theme.colorScheme.primary,
               ),
             ),
           ),

@@ -97,32 +97,44 @@
                 {
                     "id": "holy_rosary",
                     "title": "The Holy Rosary",
+                    "subtitle": "A Complete Guide for Beginners",
                     "icon": "all_inclusive",
                     "isExpandable": true,
                     "sections": [
                         {
-                            "title": "How to Pray the Rosary",
-                            "content": "1. Make the Sign of the Cross\n2. Recite the Apostles' Creed\n3. Recite the Our Father\n4. Recite three Hail Marys\n5. Recite the Glory Be\n6. Announce the Mystery for each decade\n7. Recite the Our Father\n8. Recite ten Hail Marys while meditating\n9. Recite the Glory Be\n10. Optionally add the Fatima Prayer\n11. Repeat steps 6-10 for each decade\n12. Conclude with the Hail Holy Queen"
+                            "title": "Opening Prayers",
+                            "subtitle": "On the Crucifix and First Beads",
+                            "content": "[INSTRUCTION]Make the Sign of the Cross:[/INSTRUCTION]\n\nIn the name of the Father, and of the Son, and of the Holy Spirit. Amen.\n\n[INSTRUCTION]Holding the Crucifix, pray the Apostles' Creed:[/INSTRUCTION]\n\n[PRAYER]I believe in God, the Father Almighty, Creator of Heaven and earth; and in Jesus Christ, His only Son, Our Lord, Who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into Hell; the third day He rose again from the dead; He ascended into Heaven, and sitteth at the right hand of God, the Father almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Spirit, the holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.[/PRAYER]\n\n[INSTRUCTION]On the first large bead, pray the Our Father:[/INSTRUCTION]\n\n[PRAYER]Our Father, Who art in heaven, hallowed be Thy Name. Thy Kingdom come. Thy Will be done, on earth as it is in Heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen.[/PRAYER]\n\n[INSTRUCTION]On each of the three small beads, pray the Hail Mary (for Faith, Hope, and Charity):[/INSTRUCTION]\n\n[PRAYER]Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.[/PRAYER]\n\n[INSTRUCTION]Pray the Glory Be:[/INSTRUCTION]\n\n[PRAYER]Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.[/PRAYER]"
+                        },
+                        {
+                            "title": "How to Pray Each Decade",
+                            "subtitle": "Repeat for each of the 5 Mysteries",
+                            "content": "[INSTRUCTION]1. Announce the Mystery and reflect on it[/INSTRUCTION]\n\n[INSTRUCTION]2. On the large bead, pray the Our Father:[/INSTRUCTION]\n\n[PRAYER]Our Father, Who art in heaven, hallowed be Thy Name. Thy Kingdom come. Thy Will be done, on earth as it is in Heaven. Give us this day our daily bread. And forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil. Amen.[/PRAYER]\n\n[INSTRUCTION]3. On each of the 10 small beads, pray the Hail Mary:[/INSTRUCTION]\n\n[PRAYER]Hail Mary, full of grace, the Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.[/PRAYER]\n\n[INSTRUCTION]4. After the 10 Hail Marys, pray the Glory Be:[/INSTRUCTION]\n\n[PRAYER]Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.[/PRAYER]\n\n[INSTRUCTION]5. Optionally, pray the Fatima Prayer:[/INSTRUCTION]\n\n[PRAYER]O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those in most need of Thy mercy. Amen.[/PRAYER]"
                         },
                         {
                             "title": "The Joyful Mysteries",
                             "subtitle": "Mondays and Saturdays",
-                            "content": "1. The Annunciation\n2. The Visitation\n3. The Nativity\n4. The Presentation in the Temple\n5. The Finding of Jesus in the Temple"
+                            "content": "1. The Annunciation — The Angel Gabriel announces to Mary that she will conceive the Son of God.\n\n2. The Visitation — Mary visits her cousin Elizabeth, who is pregnant with John the Baptist.\n\n3. The Nativity — Jesus is born in Bethlehem.\n\n4. The Presentation — Mary and Joseph present Jesus in the Temple.\n\n5. The Finding of Jesus in the Temple — After three days, Mary and Joseph find Jesus teaching in the Temple."
                         },
                         {
                             "title": "The Luminous Mysteries",
                             "subtitle": "Thursdays",
-                            "content": "1. The Baptism in the Jordan\n2. The Wedding at Cana\n3. The Proclamation of the Kingdom\n4. The Transfiguration\n5. The Institution of the Eucharist"
+                            "content": "1. The Baptism in the Jordan — Jesus is baptized by John and the Holy Spirit descends upon Him.\n\n2. The Wedding at Cana — Jesus performs His first miracle, turning water into wine.\n\n3. The Proclamation of the Kingdom — Jesus calls us to conversion and announces the Kingdom of God.\n\n4. The Transfiguration — Jesus is transfigured on Mount Tabor, revealing His divine glory.\n\n5. The Institution of the Eucharist — Jesus gives us His Body and Blood at the Last Supper."
                         },
                         {
                             "title": "The Sorrowful Mysteries",
                             "subtitle": "Tuesdays and Fridays",
-                            "content": "1. The Agony in the Garden\n2. The Scourging at the Pillar\n3. The Crowning with Thorns\n4. The Carrying of the Cross\n5. The Crucifixion"
+                            "content": "1. The Agony in the Garden — Jesus prays in Gethsemane and accepts the Father's will.\n\n2. The Scourging at the Pillar — Jesus is brutally scourged by Roman soldiers.\n\n3. The Crowning with Thorns — Jesus is mocked and crowned with thorns.\n\n4. The Carrying of the Cross — Jesus carries His Cross to Calvary.\n\n5. The Crucifixion — Jesus dies on the Cross for our salvation."
                         },
                         {
                             "title": "The Glorious Mysteries",
                             "subtitle": "Wednesdays and Sundays",
-                            "content": "1. The Resurrection\n2. The Ascension\n3. The Descent of the Holy Spirit\n4. The Assumption of Mary\n5. The Coronation of Mary"
+                            "content": "1. The Resurrection — Jesus rises from the dead on the third day.\n\n2. The Ascension — Jesus ascends into Heaven forty days after the Resurrection.\n\n3. The Descent of the Holy Spirit — The Holy Spirit descends upon Mary and the Apostles at Pentecost.\n\n4. The Assumption of Mary — Mary is taken body and soul into Heaven.\n\n5. The Coronation of Mary — Mary is crowned Queen of Heaven and Earth."
+                        },
+                        {
+                            "title": "Closing Prayers",
+                            "subtitle": "After the Five Decades",
+                            "content": "[INSTRUCTION]Pray the Hail Holy Queen:[/INSTRUCTION]\n\n[PRAYER]Hail, Holy Queen, Mother of Mercy, our life, our sweetness and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary.[/PRAYER]\n\n[VERSICLE]V. Pray for us, O holy Mother of God.[/VERSICLE]\n[RESPONSE]R. That we may be made worthy of the promises of Christ.[/RESPONSE]\n\n[INSTRUCTION]Closing Prayer:[/INSTRUCTION]\n\n[PRAYER]O God, whose only-begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal life, grant, we beseech Thee, that by meditating upon these mysteries of the Most Holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ Our Lord. Amen.[/PRAYER]\n\n[INSTRUCTION]Make the Sign of the Cross[/INSTRUCTION]"
                         }
                     ]
                 },
