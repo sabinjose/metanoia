@@ -172,9 +172,9 @@ class FaqScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             elevation: 0,
-            scrolledUnderElevation: 1,
-            backgroundColor: theme.scaffoldBackgroundColor,
-            surfaceTintColor: theme.colorScheme.primary,
+            scrolledUnderElevation: 0,
+            backgroundColor: Colors.transparent,
+            forceMaterialTransparency: true,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
