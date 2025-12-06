@@ -12,7 +12,7 @@
   "examinationTitle": "Examination",
   "commandment": "Commandment",
   "guideTitle": "Guide",
-  "faqTitle": "FAQ",
+  "faqTitle": "Understanding Confession",
   "language": "Language",
   "chooseLanguage": "Choose your preferred language",
   "theme": "Theme",
@@ -221,7 +221,7 @@
   "noGuideContentDesc": "Guide content will appear here",
   "noFaqContent": "No FAQs available",
   "noFaqContentDesc": "Frequently asked questions will appear here",
-  "faqSubtitle": "Frequently asked questions about confession",
+  "faqSubtitle": "A guide to the Sacrament of Reconciliation",
   "tapToExpand": "Tap to read more",
 
   "continueExamination": "Continue Examination",

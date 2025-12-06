@@ -36,7 +36,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guideTitle => 'Guide';
 
   @override
-  String get faqTitle => 'FAQ';
+  String get faqTitle => 'Understanding Confession';
 
   @override
   String get language => 'Language';
@@ -703,7 +703,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noFaqContentDesc => 'Frequently asked questions will appear here';
 
   @override
-  String get faqSubtitle => 'Frequently asked questions about confession';
+  String get faqSubtitle => 'A guide to the Sacrament of Reconciliation';
 
   @override
   String get tapToExpand => 'Tap to read more';

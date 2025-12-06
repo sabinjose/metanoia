@@ -36,7 +36,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get guideTitle => 'വഴികാട്ടി';
 
   @override
-  String get faqTitle => 'പതിവ് ചോദ്യങ്ങൾ';
+  String get faqTitle => 'കുമ്പസാരം മനസ്സിലാക്കുക';
 
   @override
   String get language => 'ഭാഷ';
@@ -691,7 +691,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get noFaqContentDesc => 'പതിവ് ചോദ്യങ്ങൾ ഇവിടെ ദൃശ്യമാകും';
 
   @override
-  String get faqSubtitle => 'കുമ്പസാരത്തെക്കുറിച്ചുള്ള പതിവ് ചോദ്യങ്ങൾ';
+  String get faqSubtitle => 'അനുരഞ്ജന കൂദാശയെക്കുറിച്ചുള്ള വഴികാട്ടി';
 
   @override
   String get tapToExpand => 'കൂടുതൽ വായിക്കാൻ ടാപ്പ് ചെയ്യുക';
