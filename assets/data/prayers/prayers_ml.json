@@ -35,7 +35,7 @@
         {
             "id": "communion",
             "title": "ദിവ്യകാരുണ്യ സ്വീകരണത്തിനുള്ള പ്രാർത്ഥനകൾ",
-            "icon": "local_cafe_outlined",
+            "icon": "wb_sunny_outlined",
             "prayers": [
                 {
                     "id": "before_communion",
