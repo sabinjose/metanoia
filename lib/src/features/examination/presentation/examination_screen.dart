@@ -19,8 +19,23 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-class ExaminationScreen extends StatelessWidget {
+class ExaminationScreen extends StatefulWidget {
   const ExaminationScreen({super.key});
+
+  @override
+  State<ExaminationScreen> createState() => _ExaminationScreenState();
+}
+
+class _ExaminationScreenState extends State<ExaminationScreen> {
+  final GlobalKey<_ExaminationContentState> _contentKey = GlobalKey();
+  static const int _totalShowcaseSteps = 5;
+
+  void _onShowcaseStepComplete(int index) {
+    // Only show dialog after the last showcase step (0-indexed, so last is 4)
+    if (index == _totalShowcaseSteps - 1) {
+      _contentKey.currentState?.showInvitationDialogIfNeeded();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +43,18 @@ class ExaminationScreen extends StatelessWidget {
     return ShowCaseWidget(
       blurValue: 1,
       enableAutoScroll: true,
-      builder: (context) => const _ExaminationContent(),
+      onComplete: (index, key) {
+        if (index != null) {
+          _onShowcaseStepComplete(index);
+        }
+      },
+      builder: (context) => _ExaminationContent(key: _contentKey),
     );
   }
 }
 
 class _ExaminationContent extends ConsumerStatefulWidget {
-  const _ExaminationContent();
+  const _ExaminationContent({super.key});
 
   @override
   ConsumerState<_ExaminationContent> createState() => _ExaminationContentState();
@@ -89,6 +109,16 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
     if (_hasCheckedInvitationDialog) return;
     _hasCheckedInvitationDialog = true;
 
+    // Check if tutorial will be shown first
+    final tutorialController = ref.read(tutorialControllerProvider.notifier);
+    final tutorialWillShow = await tutorialController.shouldShowExaminationTutorial();
+
+    // If tutorial will be shown, don't show invitation dialog now
+    // It will be shown after tutorial completes via showInvitationDialogIfNeeded()
+    if (tutorialWillShow) {
+      return;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     final dontShow = prefs.getBool(_invitationDontShowKey) ?? false;
     final hasShown = prefs.getBool(_invitationShownKey) ?? false;
@@ -100,6 +130,28 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
       // Small delay to let the screen settle
       await Future.delayed(const Duration(milliseconds: 500));
+
+      if (mounted) {
+        _showInvitationDialog();
+      }
+    }
+  }
+
+  /// Called from parent when showcase completes
+  Future<void> showInvitationDialogIfNeeded() async {
+    if (!mounted) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final dontShow = prefs.getBool(_invitationDontShowKey) ?? false;
+    final hasShown = prefs.getBool(_invitationShownKey) ?? false;
+
+    // Only show on first examination start and if not opted out
+    if (!hasShown && !dontShow && mounted) {
+      // Mark as shown
+      await prefs.setBool(_invitationShownKey, true);
+
+      // Small delay to let the screen settle after showcase
+      await Future.delayed(const Duration(milliseconds: 300));
 
       if (mounted) {
         _showInvitationDialog();
