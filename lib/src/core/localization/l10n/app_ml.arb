@@ -294,5 +294,8 @@
   "invitationDialogContent": "കുറച്ചുകാലമായി കുമ്പസാരിച്ചിട്ടില്ലേ, അല്ലെങ്കിൽ കുമ്പസാരിക്കാൻ ഭയമുണ്ടോ?",
   "invitationDialogYes": "അതെ, എനിക്ക് പ്രോത്സാഹനം വേണം",
   "invitationDialogNo": "ഇല്ല, ഞാൻ തുടങ്ങാൻ തയ്യാറാണ്",
-  "invitationDialogDontShowAgain": "ഇത് വീണ്ടും കാണിക്കരുത്"
+  "invitationDialogDontShowAgain": "ഇത് വീണ്ടും കാണിക്കരുത്",
+
+  "searchPrayers": "പ്രാർത്ഥനകൾ തിരയുക...",
+  "allCategories": "എല്ലാം"
 }

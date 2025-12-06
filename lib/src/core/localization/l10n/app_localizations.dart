@@ -1816,6 +1816,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t show this again'**
   String get invitationDialogDontShowAgain;
+
+  /// No description provided for @searchPrayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search prayers...'**
+  String get searchPrayers;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategories;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

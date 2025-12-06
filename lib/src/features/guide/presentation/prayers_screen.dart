@@ -4,6 +4,7 @@ import 'package:confessionapp/src/core/localization/content_language_provider.da
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
+import 'package:confessionapp/src/core/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -126,8 +127,28 @@ final prayersContentProvider =
 });
 
 /// A beautifully designed prayers screen with categorized prayers
-class PrayersScreen extends ConsumerWidget {
+class PrayersScreen extends ConsumerStatefulWidget {
   const PrayersScreen({super.key});
+
+  @override
+  ConsumerState<PrayersScreen> createState() => _PrayersScreenState();
+}
+
+class _PrayersScreenState extends ConsumerState<PrayersScreen> {
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  final Map<String, GlobalKey> _categoryKeys = {};
+
+  String? _selectedCategoryId;
+  String _searchQuery = '';
+  bool _isSearchVisible = false;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
 
   IconData _getIconData(String iconName) {
     switch (iconName) {
@@ -172,15 +193,66 @@ class PrayersScreen extends ConsumerWidget {
     }
   }
 
+  void _scrollToCategory(String? categoryId) {
+    if (categoryId == null) {
+      // Scroll to top
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+
+    final key = _categoryKeys[categoryId];
+    if (key?.currentContext != null) {
+      Scrollable.ensureVisible(
+        key!.currentContext!,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      );
+    }
+  }
+
+  void _toggleSearch() {
+    HapticUtils.lightImpact();
+    setState(() {
+      _isSearchVisible = !_isSearchVisible;
+      if (!_isSearchVisible) {
+        _searchController.clear();
+        _searchQuery = '';
+      }
+    });
+  }
+
+  void _selectCategory(String? categoryId) {
+    HapticUtils.selectionClick();
+    setState(() {
+      _selectedCategoryId = categoryId;
+    });
+
+    // Only scroll if not searching
+    if (_searchQuery.isEmpty) {
+      _scrollToCategory(categoryId);
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final contentAsync = ref.watch(prayersContentProvider);
 
     return Scaffold(
       body: contentAsync.when(
-        data: (content) => _buildContent(context, content, theme, l10n),
+        data: (content) {
+          // Initialize category keys
+          for (final category in content.categories) {
+            _categoryKeys.putIfAbsent(category.id, () => GlobalKey());
+          }
+          return _buildContent(context, content, theme, l10n);
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
           child: Text('${l10n.error}: $error'),
@@ -195,7 +267,13 @@ class PrayersScreen extends ConsumerWidget {
     ThemeData theme,
     AppLocalizations l10n,
   ) {
+    // Filter categories and prayers based on search and selection
+    final filteredCategories = _getFilteredCategories(content.categories);
+    final hasResults = filteredCategories.isNotEmpty &&
+        filteredCategories.any((c) => c.prayers.isNotEmpty);
+
     return CustomScrollView(
+      controller: _scrollController,
       slivers: [
         // App Bar
         SliverAppBar(
@@ -249,34 +327,166 @@ class PrayersScreen extends ConsumerWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
 
-        // Prayer categories
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, categoryIndex) {
-                final category = content.categories[categoryIndex];
-                return _buildCategorySection(
-                  context,
-                  category,
-                  theme,
-                  categoryIndex,
-                );
-              },
-              childCount: content.categories.length,
-            ),
+        // Category chips row (sticky)
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _CategoryChipsHeaderDelegate(
+            categories: content.categories,
+            selectedCategoryId: _selectedCategoryId,
+            onCategorySelected: _selectCategory,
+            onSearchTapped: _toggleSearch,
+            isSearchActive: _isSearchVisible,
+            getIconData: _getIconData,
+            theme: theme,
+            l10n: l10n,
           ),
         ),
+
+        // Collapsible search bar
+        SliverToBoxAdapter(
+          child: _buildSearchBar(theme, l10n),
+        ),
+
+        // Show empty state if no results
+        if (!hasResults)
+          SliverFillRemaining(
+            child: EmptyState(
+              icon: Icons.search_off,
+              title: l10n.noResults,
+              subtitle: l10n.noResults,
+            ),
+          )
+        else
+          // Prayer categories
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, categoryIndex) {
+                  final category = filteredCategories[categoryIndex];
+                  if (category.prayers.isEmpty) return const SizedBox.shrink();
+                  return _buildCategorySection(
+                    context,
+                    category,
+                    theme,
+                    categoryIndex,
+                  );
+                },
+                childCount: filteredCategories.length,
+              ),
+            ),
+          ),
 
         // Bottom padding
         const SliverPadding(padding: EdgeInsets.only(bottom: 40)),
       ],
+    );
+  }
+
+  List<PrayerCategory> _getFilteredCategories(List<PrayerCategory> categories) {
+    return categories.map((category) {
+      // Category filter
+      if (_selectedCategoryId != null && category.id != _selectedCategoryId) {
+        return PrayerCategory(
+          id: category.id,
+          title: category.title,
+          icon: category.icon,
+          prayers: [],
+        );
+      }
+
+      // Search filter
+      if (_searchQuery.isNotEmpty) {
+        final filteredPrayers = category.prayers.where((prayer) {
+          return prayer.title.toLowerCase().contains(_searchQuery) ||
+              (prayer.subtitle?.toLowerCase().contains(_searchQuery) ?? false);
+        }).toList();
+
+        return PrayerCategory(
+          id: category.id,
+          title: category.title,
+          icon: category.icon,
+          prayers: filteredPrayers,
+        );
+      }
+
+      return category;
+    }).toList();
+  }
+
+  Widget _buildSearchBar(ThemeData theme, AppLocalizations l10n) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: _isSearchVisible ? 64 : 0,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: _isSearchVisible ? 1.0 : 0.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: l10n.searchPrayers,
+              prefixIcon: Icon(
+                Icons.search,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.clear,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                        });
+                      },
+                    )
+                  : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.outlineVariant,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.outlineVariant,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 2,
+                ),
+              ),
+              filled: true,
+              fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+            style: TextStyle(
+              fontFamily: AppTheme.fontFamilyLato,
+              fontSize: 16,
+              color: theme.colorScheme.onSurface,
+            ),
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value.toLowerCase();
+              });
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -287,6 +497,7 @@ class PrayersScreen extends ConsumerWidget {
     int categoryIndex,
   ) {
     return Column(
+      key: _categoryKeys[category.id],
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Category heading
@@ -335,7 +546,7 @@ class PrayersScreen extends ConsumerWidget {
         }),
 
         // Spacing between categories
-        if (categoryIndex < 4) const SizedBox(height: 16),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -362,6 +573,242 @@ class PrayersScreen extends ConsumerWidget {
       getIconData: _getIconData,
       isExpandable: prayer.isExpandable,
     ).animate().fadeIn(delay: (80 * (index < 6 ? index : 6)).ms).slideY(begin: 0.05, end: 0);
+  }
+}
+
+/// Delegate for sticky category chips header
+class _CategoryChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final List<PrayerCategory> categories;
+  final String? selectedCategoryId;
+  final Function(String?) onCategorySelected;
+  final VoidCallback onSearchTapped;
+  final bool isSearchActive;
+  final IconData Function(String) getIconData;
+  final ThemeData theme;
+  final AppLocalizations l10n;
+
+  _CategoryChipsHeaderDelegate({
+    required this.categories,
+    required this.selectedCategoryId,
+    required this.onCategorySelected,
+    required this.onSearchTapped,
+    required this.isSearchActive,
+    required this.getIconData,
+    required this.theme,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      child: Column(
+        children: [
+          Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.transparent,
+                          Colors.white,
+                          Colors.white,
+                          Colors.transparent,
+                        ],
+                        stops: [0.0, 0.02, 0.98, 1.0],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          // "All" chip
+                          _CategoryChip(
+                            label: l10n.allCategories,
+                            icon: Icons.apps,
+                            isSelected: selectedCategoryId == null,
+                            onTap: () => onCategorySelected(null),
+                            prayerCount: categories.fold(
+                              0,
+                              (sum, c) => sum + c.prayers.length,
+                            ),
+                            theme: theme,
+                          ),
+                          const SizedBox(width: 8),
+                          // Category chips
+                          ...categories.map((category) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: _CategoryChip(
+                                label: _getShortLabel(category.title),
+                                icon: getIconData(category.icon),
+                                isSelected: selectedCategoryId == category.id,
+                                onTap: () => onCategorySelected(category.id),
+                                prayerCount: category.prayers.length,
+                                theme: theme,
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // Search button
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: IconButton(
+                    onPressed: onSearchTapped,
+                    icon: Icon(
+                      isSearchActive ? Icons.search_off : Icons.search,
+                      color: isSearchActive
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                    style: IconButton.styleFrom(
+                      backgroundColor: isSearchActive
+                          ? theme.colorScheme.primaryContainer
+                          : theme.colorScheme.surfaceContainerHighest,
+                    ),
+                    tooltip: l10n.searchPrayers,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.3),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getShortLabel(String title) {
+    // Shorten category titles for chips
+    if (title.contains('Confession')) return 'Confession';
+    if (title.contains('Essential')) return 'Essential';
+    if (title.contains('Marian')) return 'Marian';
+    if (title.contains('Devotion')) return 'Devotions';
+    if (title.contains('Communion')) return 'Communion';
+    // For Malayalam or other languages, take first 10 chars
+    if (title.length > 12) return '${title.substring(0, 10)}...';
+    return title;
+  }
+
+  @override
+  double get maxExtent => 65;
+
+  @override
+  double get minExtent => 65;
+
+  @override
+  bool shouldRebuild(covariant _CategoryChipsHeaderDelegate oldDelegate) {
+    return selectedCategoryId != oldDelegate.selectedCategoryId ||
+        isSearchActive != oldDelegate.isSearchActive;
+  }
+}
+
+/// Individual category chip widget
+class _CategoryChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final int prayerCount;
+  final ThemeData theme;
+
+  const _CategoryChip({
+    required this.label,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+    required this.prayerCount,
+    required this.theme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        HapticUtils.selectionClick();
+        onTap();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? theme.colorScheme.primaryContainer
+              : theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyLato,
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? theme.colorScheme.primary.withValues(alpha: 0.2)
+                    : theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '$prayerCount',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

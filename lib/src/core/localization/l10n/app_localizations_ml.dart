@@ -938,4 +938,10 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get invitationDialogDontShowAgain => 'ഇത് വീണ്ടും കാണിക്കരുത്';
+
+  @override
+  String get searchPrayers => 'പ്രാർത്ഥനകൾ തിരയുക...';
+
+  @override
+  String get allCategories => 'എല്ലാം';
 }

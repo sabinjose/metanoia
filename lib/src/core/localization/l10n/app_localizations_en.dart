@@ -950,4 +950,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invitationDialogDontShowAgain => 'Don\'t show this again';
+
+  @override
+  String get searchPrayers => 'Search prayers...';
+
+  @override
+  String get allCategories => 'All';
 }
