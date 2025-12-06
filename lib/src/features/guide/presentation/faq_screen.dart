@@ -211,19 +211,9 @@ class FaqScreen extends ConsumerWidget {
                     l10n.faqSubtitle,
                     style: TextStyle(
                       fontFamily: AppTheme.fontFamilyEBGaramond,
-                      fontSize: 16,
+                      fontSize: 18,
                       fontStyle: FontStyle.italic,
                       color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.faqTitle,
-                    style: TextStyle(
-                      fontFamily: AppTheme.fontFamilyEBGaramond,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 24),
