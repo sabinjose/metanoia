@@ -101,29 +101,6 @@ class DataLoader {
     }
   }
 
-  static Future<List<GuideItemsCompanion>> loadGuide(
-    String languageCode,
-  ) async {
-    try {
-      final String jsonString = await rootBundle.loadString(
-        'assets/data/guide/guide_$languageCode.json',
-      );
-      final List<dynamic> jsonList = json.decode(jsonString);
-      return jsonList.map((json) {
-        return GuideItemsCompanion.insert(
-          section: json['section'],
-          title: json['title'],
-          icon: json['icon'],
-          content: json['content'],
-          displayOrder: json['displayOrder'],
-          languageCode: languageCode,
-        );
-      }).toList();
-    } catch (e) {
-      return [];
-    }
-  }
-
   static Future<List<PrayersCompanion>> loadPrayers(String languageCode) async {
     try {
       final String jsonString = await rootBundle.loadString(

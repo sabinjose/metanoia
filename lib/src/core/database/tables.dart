@@ -61,16 +61,6 @@ class UserSettings extends Table {
   TextColumn get value => text()();
 }
 
-class GuideItems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get section => text()();
-  TextColumn get title => text()();
-  TextColumn get icon => text()();
-  TextColumn get content => text()();
-  IntColumn get displayOrder => integer()();
-  TextColumn get languageCode => text()();
-}
-
 class Prayers extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();

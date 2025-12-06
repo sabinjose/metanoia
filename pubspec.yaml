@@ -118,7 +118,6 @@ flutter:
     - assets/data/questions/
     - assets/data/faqs/
     - assets/data/quotes/
-    - assets/data/guide/
     - assets/data/prayers/
     - assets/data/invitation/
     - assets/data/confession_guide/

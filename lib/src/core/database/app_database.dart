@@ -22,7 +22,6 @@ part 'app_database.g.dart';
     Confessions,
     ConfessionItems,
     UserSettings,
-    GuideItems,
     Prayers,
     UserCustomSins,
     Penances,
@@ -222,15 +221,7 @@ class AppDatabase extends _$AppDatabase {
         batch.insertAll(quotes, quotesData);
       });
 
-      // 5. Sync Guide Items (Full replace)
-      final guideData = await DataLoader.loadGuide(lang);
-      await (delete(guideItems)
-        ..where((t) => t.languageCode.equals(lang))).go();
-      await batch((batch) {
-        batch.insertAll(guideItems, guideData);
-      });
-
-      // 6. Sync Prayers (Full replace)
+      // 5. Sync Prayers (Full replace)
       final prayersData = await DataLoader.loadPrayers(lang);
       await (delete(prayers)..where((t) => t.languageCode.equals(lang))).go();
       await batch((batch) {

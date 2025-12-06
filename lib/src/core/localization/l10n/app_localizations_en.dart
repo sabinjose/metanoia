@@ -264,7 +264,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tutorialPrayersDesc => 'Find common prayers for before and after confession.';
 
   @override
-  String get tutorialGuideDesc => 'Read the guide and FAQs to learn more.';
+  String get tutorialGuideDesc => 'Find encouragement, step-by-step confession guide, and FAQs here.';
 
   @override
   String get tutorialSwipeDesc => 'Swipe left or right to navigate between commandments.';

@@ -252,7 +252,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tutorialPrayersDesc => 'കുമ്പസാരത്തിനുമുമ്പും ശേഷവുമുള്ള പ്രാർത്ഥനകൾ കണ്ടെത്തുക.';
 
   @override
-  String get tutorialGuideDesc => 'കൂടുതലറിയാൻ വഴികാട്ടിയും പതിവ് ചോദ്യങ്ങളും വായിക്കുക.';
+  String get tutorialGuideDesc => 'പ്രോത്സാഹനം, കുമ്പസാര വഴികാട്ടി, പതിവ് ചോദ്യങ്ങൾ എന്നിവ ഇവിടെ കാണുക.';
 
   @override
   String get tutorialSwipeDesc => 'കൽപ്പനകൾക്കിടയിൽ മാറാൻ ഇടത്തോട്ടോ വലത്തോട്ടോ സ്വൈപ്പ് ചെയ്യുക.';

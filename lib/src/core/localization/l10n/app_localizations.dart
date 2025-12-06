@@ -572,7 +572,7 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialGuideDesc.
   ///
   /// In en, this message translates to:
-  /// **'Read the guide and FAQs to learn more.'**
+  /// **'Find encouragement, step-by-step confession guide, and FAQs here.'**
   String get tutorialGuideDesc;
 
   /// No description provided for @tutorialSwipeDesc.
