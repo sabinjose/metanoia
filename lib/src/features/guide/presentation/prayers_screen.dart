@@ -139,8 +139,8 @@ class PrayersScreen extends ConsumerWidget {
         return Icons.favorite_border;
       case 'self_improvement':
         return Icons.self_improvement;
-      case 'local_dining_outlined':
-        return Icons.local_dining_outlined;
+      case 'brightness_7_outlined':
+        return Icons.brightness_7_outlined;
       case 'wb_twilight_outlined':
         return Icons.wb_twilight_outlined;
       case 'favorite_outline':
