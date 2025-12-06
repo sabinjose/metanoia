@@ -42,12 +42,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
-  String get appearance => 'Appearance';
-
-  @override
-  String get privacyAndSecurity => 'Privacy & Security';
-
-  @override
   String get chooseLanguage => 'Choose your preferred language';
 
   @override

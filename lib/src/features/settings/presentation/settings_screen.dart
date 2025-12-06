@@ -153,9 +153,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Appearance Section
-          _SectionHeader(title: l10n.appearance),
-          const SizedBox(height: 8),
           _SettingsCard(
             title: l10n.theme,
             subtitle: l10n.chooseTheme,
@@ -206,10 +203,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               l10n: l10n,
             ),
           ),
-          const SizedBox(height: 24),
-          // Language Section
-          _SectionHeader(title: l10n.language),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           _SettingsCard(
             title: l10n.appLanguage,
             subtitle: l10n.appLanguageSubtitle,
@@ -274,10 +268,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   error: (_, __) => Text(l10n.error),
                 ),
           ),
-          const SizedBox(height: 24),
-          // Privacy & Security Section
-          _SectionHeader(title: l10n.privacyAndSecurity),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           _SettingsCard(
             title: l10n.keepHistory,
             subtitle: l10n.keepHistorySubtitle,
@@ -300,10 +291,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               error: (_, __) => Text(l10n.error),
             ),
           ),
-          const SizedBox(height: 24),
-          // Notifications Section
-          _SectionHeader(title: l10n.reminders),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           _SettingsCard(
             key: _remindersKey,
             title: l10n.reminders,
@@ -432,10 +420,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               },
             ),
           ),
-          const SizedBox(height: 24),
-          // About Section
-          _SectionHeader(title: l10n.about),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           _SettingsCard(
             title: l10n.replayTutorial,
             subtitle: l10n.replayTutorialDesc,
@@ -731,27 +716,6 @@ class _ConfigTile extends StatelessWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, top: 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 0.5,
         ),
       ),
     );

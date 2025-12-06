@@ -42,12 +42,6 @@ class AppLocalizationsMl extends AppLocalizations {
   String get language => 'ഭാഷ';
 
   @override
-  String get appearance => 'രൂപഭാവം';
-
-  @override
-  String get privacyAndSecurity => 'സ്വകാര്യത & സുരക്ഷ';
-
-  @override
   String get chooseLanguage => 'നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക';
 
   @override
