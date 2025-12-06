@@ -925,6 +925,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetPinBiometricPrompt => 'Verify your identity to reset PIN';
 
   @override
+  String get confessionGuideTitle => 'How to Make a Good Confession';
+
+  @override
+  String get confessionGuideSubtitle => 'Step-by-step guide to the Sacrament';
+
+  @override
   String get invitationTitle => 'Returning to Confession?';
 
   @override

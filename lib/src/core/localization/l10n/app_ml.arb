@@ -286,6 +286,8 @@
   "resetPinWaitTimer": "ദയവായി {seconds} സെക്കൻഡ് കാത്തിരിക്കുക",
   "resetPinBiometricPrompt": "PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക",
 
+  "confessionGuideTitle": "നല്ല കുമ്പസാരം എങ്ങനെ നടത്താം",
+  "confessionGuideSubtitle": "കൂദാശയുടെ ഘട്ടംഘട്ടമായുള്ള വഴികാട്ടി",
   "invitationTitle": "കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?",
   "invitationSubtitle": "നിങ്ങൾക്കായി ഒരു പ്രോത്സാഹന വാക്ക്",
   "invitationDialogTitle": "സ്വാഗതം",

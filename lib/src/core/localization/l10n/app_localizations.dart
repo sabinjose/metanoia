@@ -1763,6 +1763,18 @@ abstract class AppLocalizations {
   /// **'Verify your identity to reset PIN'**
   String get resetPinBiometricPrompt;
 
+  /// No description provided for @confessionGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Make a Good Confession'**
+  String get confessionGuideTitle;
+
+  /// No description provided for @confessionGuideSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Step-by-step guide to the Sacrament'**
+  String get confessionGuideSubtitle;
+
   /// No description provided for @invitationTitle.
   ///
   /// In en, this message translates to:

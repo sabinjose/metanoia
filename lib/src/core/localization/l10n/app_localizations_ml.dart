@@ -913,6 +913,12 @@ class AppLocalizationsMl extends AppLocalizations {
   String get resetPinBiometricPrompt => 'PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക';
 
   @override
+  String get confessionGuideTitle => 'നല്ല കുമ്പസാരം എങ്ങനെ നടത്താം';
+
+  @override
+  String get confessionGuideSubtitle => 'കൂദാശയുടെ ഘട്ടംഘട്ടമായുള്ള വഴികാട്ടി';
+
+  @override
   String get invitationTitle => 'കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?';
 
   @override

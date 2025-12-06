@@ -297,6 +297,8 @@
   },
   "resetPinBiometricPrompt": "Verify your identity to reset PIN",
 
+  "confessionGuideTitle": "How to Make a Good Confession",
+  "confessionGuideSubtitle": "Step-by-step guide to the Sacrament",
   "invitationTitle": "Returning to Confession?",
   "invitationSubtitle": "A word of encouragement for you",
   "invitationDialogTitle": "Welcome",

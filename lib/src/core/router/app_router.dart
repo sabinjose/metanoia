@@ -10,6 +10,7 @@ import 'package:confessionapp/src/features/confession/presentation/insights_scre
 import 'package:confessionapp/src/features/confession/presentation/penance_screen.dart';
 import 'package:confessionapp/src/features/examination/presentation/examination_screen.dart';
 import 'package:confessionapp/src/features/examination/presentation/custom_sins_screen.dart';
+import 'package:confessionapp/src/features/guide/presentation/confession_guide_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/faq_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/guide_screen.dart';
 import 'package:confessionapp/src/features/guide/presentation/invitation_screen.dart';
@@ -169,6 +170,11 @@ GoRouter goRouter(Ref ref) {
                     path: 'invitation',
                     parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const InvitationScreen(),
+                  ),
+                  GoRoute(
+                    path: 'confession',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const ConfessionGuideScreen(),
                   ),
                 ],
               ),
