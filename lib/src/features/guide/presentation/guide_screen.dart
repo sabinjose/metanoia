@@ -49,6 +49,9 @@ class GuideScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
+              // Invitation card for those returning or anxious
+              _buildInvitationCard(context, l10n, theme),
+              const SizedBox(height: 16),
               // FAQ Card with content language
               _buildFaqCard(context, contentL10n, theme),
               const SizedBox(height: 16),
@@ -68,6 +71,72 @@ class GuideScreen extends ConsumerWidget {
         error: (error, stack) => Center(child: Text('${l10n.error}: $error')),
       ),
     );
+  }
+
+  Widget _buildInvitationCard(BuildContext context, AppLocalizations l10n, ThemeData theme) {
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          HapticUtils.lightImpact();
+          context.push('/guide/invitation');
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.favorite,
+                  size: 24,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.invitationTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.invitationSubtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.primary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).animate().fadeIn().slideY(begin: 0.1, end: 0);
   }
 
   Widget _buildFaqCard(BuildContext context, AppLocalizations l10n, ThemeData theme) {

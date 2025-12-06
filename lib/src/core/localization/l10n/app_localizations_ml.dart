@@ -911,4 +911,25 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get resetPinBiometricPrompt => 'PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക';
+
+  @override
+  String get invitationTitle => 'കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?';
+
+  @override
+  String get invitationSubtitle => 'നിങ്ങൾക്കായി ഒരു പ്രോത്സാഹന വാക്ക്';
+
+  @override
+  String get invitationDialogTitle => 'സ്വാഗതം';
+
+  @override
+  String get invitationDialogContent => 'കുറച്ചുകാലമായി കുമ്പസാരിച്ചിട്ടില്ലേ, അല്ലെങ്കിൽ കുമ്പസാരിക്കാൻ ഭയമുണ്ടോ?';
+
+  @override
+  String get invitationDialogYes => 'അതെ, എനിക്ക് പ്രോത്സാഹനം വേണം';
+
+  @override
+  String get invitationDialogNo => 'ഇല്ല, ഞാൻ തുടങ്ങാൻ തയ്യാറാണ്';
+
+  @override
+  String get invitationDialogDontShowAgain => 'ഇത് വീണ്ടും കാണിക്കരുത്';
 }

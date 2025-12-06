@@ -1762,6 +1762,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verify your identity to reset PIN'**
   String get resetPinBiometricPrompt;
+
+  /// No description provided for @invitationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Returning to Confession?'**
+  String get invitationTitle;
+
+  /// No description provided for @invitationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A word of encouragement for you'**
+  String get invitationSubtitle;
+
+  /// No description provided for @invitationDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get invitationDialogTitle;
+
+  /// No description provided for @invitationDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Is this your first confession in a while, or are you feeling anxious about going?'**
+  String get invitationDialogContent;
+
+  /// No description provided for @invitationDialogYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, I\'d like some encouragement'**
+  String get invitationDialogYes;
+
+  /// No description provided for @invitationDialogNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No, I\'m ready to begin'**
+  String get invitationDialogNo;
+
+  /// No description provided for @invitationDialogDontShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show this again'**
+  String get invitationDialogDontShowAgain;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

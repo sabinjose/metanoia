@@ -284,5 +284,13 @@
   "resetPinError": "PIN പുനഃസജ്ജീകരിക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.",
   "deleteConfirmationText": "DELETE",
   "resetPinWaitTimer": "ദയവായി {seconds} സെക്കൻഡ് കാത്തിരിക്കുക",
-  "resetPinBiometricPrompt": "PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക"
+  "resetPinBiometricPrompt": "PIN പുനഃസജ്ജീകരിക്കാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക",
+
+  "invitationTitle": "കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?",
+  "invitationSubtitle": "നിങ്ങൾക്കായി ഒരു പ്രോത്സാഹന വാക്ക്",
+  "invitationDialogTitle": "സ്വാഗതം",
+  "invitationDialogContent": "കുറച്ചുകാലമായി കുമ്പസാരിച്ചിട്ടില്ലേ, അല്ലെങ്കിൽ കുമ്പസാരിക്കാൻ ഭയമുണ്ടോ?",
+  "invitationDialogYes": "അതെ, എനിക്ക് പ്രോത്സാഹനം വേണം",
+  "invitationDialogNo": "ഇല്ല, ഞാൻ തുടങ്ങാൻ തയ്യാറാണ്",
+  "invitationDialogDontShowAgain": "ഇത് വീണ്ടും കാണിക്കരുത്"
 }

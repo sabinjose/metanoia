@@ -1,6 +1,8 @@
 import 'package:confessionapp/src/core/database/app_database.dart';
 import 'package:confessionapp/src/core/theme/app_showcase.dart';
+import 'package:confessionapp/src/core/theme/app_theme.dart';
 import 'package:confessionapp/src/core/tutorial/tutorial_controller.dart';
+import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:confessionapp/src/core/widgets/animated_count.dart';
 import 'package:confessionapp/src/features/confession/data/confession_repository.dart';
 import 'package:confessionapp/src/features/confession/presentation/confession_screen.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class ExaminationScreen extends StatelessWidget {
@@ -40,6 +43,10 @@ class _ExaminationContent extends ConsumerStatefulWidget {
 class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
   bool _hasShownRestoreSnackbar = false;
   bool _hasCheckedTutorial = false;
+  bool _hasCheckedInvitationDialog = false;
+
+  static const String _invitationShownKey = 'invitation_dialog_shown';
+  static const String _invitationDontShowKey = 'invitation_dialog_dont_show';
 
   // Showcase keys
   final GlobalKey _swipeKey = GlobalKey();
@@ -72,7 +79,150 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
           ),
         );
       }
+
+      // Check if we should show invitation dialog
+      _checkAndShowInvitationDialog();
     });
+  }
+
+  Future<void> _checkAndShowInvitationDialog() async {
+    if (_hasCheckedInvitationDialog) return;
+    _hasCheckedInvitationDialog = true;
+
+    final prefs = await SharedPreferences.getInstance();
+    final dontShow = prefs.getBool(_invitationDontShowKey) ?? false;
+    final hasShown = prefs.getBool(_invitationShownKey) ?? false;
+
+    // Only show on first examination start and if not opted out
+    if (!hasShown && !dontShow && mounted) {
+      // Mark as shown
+      await prefs.setBool(_invitationShownKey, true);
+
+      // Small delay to let the screen settle
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (mounted) {
+        _showInvitationDialog();
+      }
+    }
+  }
+
+  void _showInvitationDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    bool dontShowAgain = false;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          icon: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primaryContainer,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.favorite,
+              color: theme.colorScheme.primary,
+              size: 32,
+            ),
+          ),
+          title: Text(
+            l10n.invitationDialogTitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: AppTheme.fontFamilyEBGaramond,
+              fontSize: 24,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.invitationDialogContent,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Checkbox(
+                      value: dontShowAgain,
+                      onChanged: (value) {
+                        setDialogState(() {
+                          dontShowAgain = value ?? false;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setDialogState(() {
+                          dontShowAgain = !dontShowAgain;
+                        });
+                      },
+                      child: Text(
+                        l10n.invitationDialogDontShowAgain,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FilledButton.icon(
+                  onPressed: () async {
+                    HapticUtils.lightImpact();
+                    if (dontShowAgain) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool(_invitationDontShowKey, true);
+                    }
+                    if (dialogContext.mounted) {
+                      Navigator.pop(dialogContext);
+                      // Navigate to invitation screen
+                      context.push('/guide/invitation');
+                    }
+                  },
+                  icon: const Icon(Icons.favorite_outline),
+                  label: Text(l10n.invitationDialogYes),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  onPressed: () async {
+                    HapticUtils.lightImpact();
+                    if (dontShowAgain) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool(_invitationDontShowKey, true);
+                    }
+                    if (dialogContext.mounted) {
+                      Navigator.pop(dialogContext);
+                    }
+                  },
+                  child: Text(l10n.invitationDialogNo),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _checkAndShowTutorial() async {

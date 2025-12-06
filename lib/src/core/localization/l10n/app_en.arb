@@ -295,5 +295,13 @@
       }
     }
   },
-  "resetPinBiometricPrompt": "Verify your identity to reset PIN"
+  "resetPinBiometricPrompt": "Verify your identity to reset PIN",
+
+  "invitationTitle": "Returning to Confession?",
+  "invitationSubtitle": "A word of encouragement for you",
+  "invitationDialogTitle": "Welcome",
+  "invitationDialogContent": "Is this your first confession in a while, or are you feeling anxious about going?",
+  "invitationDialogYes": "Yes, I'd like some encouragement",
+  "invitationDialogNo": "No, I'm ready to begin",
+  "invitationDialogDontShowAgain": "Don't show this again"
 }

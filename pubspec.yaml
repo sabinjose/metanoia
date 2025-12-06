@@ -119,8 +119,8 @@ flutter:
     - assets/data/faqs/
     - assets/data/quotes/
     - assets/data/guide/
-    - assets/data/guide/
     - assets/data/prayers/
+    - assets/data/invitation/
     - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
