@@ -184,6 +184,8 @@ class _PrayersScreenState extends ConsumerState<PrayersScreen> {
         return Icons.flare_outlined;
       case 'all_inclusive':
         return Icons.all_inclusive;
+      case 'radio_button_unchecked':
+        return Icons.radio_button_unchecked;
       case 'water_drop_outlined':
         return Icons.water_drop_outlined;
       case 'shield_outlined':
@@ -1343,6 +1345,44 @@ class _ExpandablePrayerCardState extends State<_ExpandablePrayerCard> {
                 fontSize: 15,
                 fontStyle: FontStyle.italic,
                 height: 1.6,
+                color: widget.theme.colorScheme.onSurface,
+              ),
+            ),
+          ),
+        );
+      } else if (line.contains('[VERSICLE]')) {
+        final versicleText = line
+            .replaceAll('[VERSICLE]', '')
+            .replaceAll('[/VERSICLE]', '')
+            .trim();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              versicleText,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyLato,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: widget.theme.colorScheme.onSurface,
+              ),
+            ),
+          ),
+        );
+      } else if (line.contains('[RESPONSE]')) {
+        final responseText = line
+            .replaceAll('[RESPONSE]', '')
+            .replaceAll('[/RESPONSE]', '')
+            .trim();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              responseText,
+              style: TextStyle(
+                fontFamily: AppTheme.fontFamilyLato,
+                fontSize: 15,
+                fontStyle: FontStyle.italic,
                 color: widget.theme.colorScheme.onSurface,
               ),
             ),

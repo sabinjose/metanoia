@@ -98,7 +98,7 @@
                     "id": "holy_rosary",
                     "title": "The Holy Rosary",
                     "subtitle": "A Complete Guide for Beginners",
-                    "icon": "all_inclusive",
+                    "icon": "radio_button_unchecked",
                     "isExpandable": true,
                     "sections": [
                         {
