@@ -92,7 +92,7 @@
         {
             "id": "devotions",
             "title": "Devotional Prayers",
-            "icon": "self_improvement",
+            "icon": "auto_stories_outlined",
             "prayers": [
                 {
                     "id": "holy_rosary",
