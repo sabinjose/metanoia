@@ -152,7 +152,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqTitle.
   ///
   /// In en, this message translates to:
-  /// **'FAQ'**
+  /// **'Understanding Confession'**
   String get faqTitle;
 
   /// No description provided for @language.
@@ -1382,7 +1382,7 @@ abstract class AppLocalizations {
   /// No description provided for @faqSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Frequently asked questions about confession'**
+  /// **'A guide to the Sacrament of Reconciliation'**
   String get faqSubtitle;
 
   /// No description provided for @tapToExpand.
