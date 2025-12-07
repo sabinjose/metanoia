@@ -36,7 +36,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get guideTitle => 'വഴികാട്ടി';
 
   @override
-  String get faqTitle => 'കുമ്പസാരം മനസ്സിലാക്കുക';
+  String get faqTitle => 'കുമ്പസാരത്തെക്കുറിച്ച് കൂടുതൽ അറിയാൻ';
 
   @override
   String get language => 'ഭാഷ';
@@ -922,7 +922,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get confessionGuideSubtitle => 'കുമ്പസാര ക്രമം';
 
   @override
-  String get invitationTitle => 'കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?';
+  String get invitationTitle => 'ഒരുപാട് കാലമായോ കുമ്പസാരിച്ചിട്ട്?';
 
   @override
   String get invitationSubtitle => 'നിങ്ങൾക്കായി ഒരു പ്രോത്സാഹന വാക്ക്';
