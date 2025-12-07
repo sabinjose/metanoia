@@ -53,19 +53,33 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _skipOnboarding() async {
+    final theme = Theme.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         final l10n = AppLocalizations.of(context)!;
         return AlertDialog(
-          title: Text(l10n.skipOnboardingTitle),
-          content: Text(l10n.skipOnboardingMessage),
+          backgroundColor: theme.colorScheme.surface,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            l10n.skipOnboardingTitle,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            l10n.skipOnboardingMessage,
+            style: theme.textTheme.bodyLarge,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
               child: Text(l10n.cancel),
             ),
-            TextButton(
+            FilledButton(
               onPressed: () => Navigator.pop(context, true),
               child: Text(l10n.skip),
             ),
@@ -102,7 +116,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           Positioned.fill(
             child: PageView(
               controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               onPageChanged: (index) {
                 setState(() {
                   _currentPage = index;
@@ -142,7 +156,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   icon: Icons.notifications_outlined,
                   title: l10n.reminders,
                   description: l10n.remindersDescription,
-                  color: theme.colorScheme.error,
+                  color: const Color(0xFFE07B39), // Warm orange - positive reminder association
                   onNext: _nextPage,
                   buttonText: l10n.nextButton,
                 ),
