@@ -228,7 +228,7 @@
     {
         "commandmentCode": "en-9",
         "questions": [
-            "Have I given in to concupiscence (intense human carnal desires)?",
+            "Have I given in to concupiscence (intense sexual desires)?",
             "Have I given in to lust (disordered desire of inordinate enjoyment of sexual pleasure)?",
             "Have I made sexually suggestive or harassing comments or advances toward someone?",
             "Have I failed to dress modestly or averted my eyes when someone else is dressed immodestly?",
@@ -288,19 +288,19 @@
     {
         "commandmentCode": "en-13",
         "questions": [
-            "Have I presumed of God's mercy?",
+            "Have I sinned expecting God to forgive me without true repentance (Presumption)?",
             "Have I despaired of salvation?",
-            "Have I impugned the known truth?",
+            "Have I fought against or attacked truths I knew were taught by the Catholic Church?",
             "Have I envied another's spiritual good?",
-            "Have I been obstinate in sin?",
-            "Have I persisted in final impenitence?"
+            "Have I stubbornly remained in a state of sin?",
+            "Have I persisted in refusing to repent?"
         ]
     },
     {
         "commandmentCode": "en-14",
         "questions": [
             "Have I committed willful murder?",
-            "Have I committed the sin of Sodom?",
+            "Have I committed the sin of Sodom (unnatural sexual acts)?",
             "Have I oppressed the poor?",
             "Have I defrauded laborers of their wages?"
         ]
