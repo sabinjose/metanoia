@@ -10,15 +10,19 @@ class ContentCrypto {
   ContentCrypto._();
 
   // Key stored as char codes to avoid extraction via `strings` command
-  // ignore: unused_field
   static final _keyChars = <int>[
     0x4D, 0x33, 0x74, 0x34, 0x6E, 0x30, 0x31, 0x61, // M3t4n01a
     0x5F, 0x43, 0x30, 0x6E, 0x74, 0x33, 0x6E, 0x74, // _C0nt3nt
     0x5F, 0x50, 0x72, 0x30, 0x74, 0x33, 0x63, 0x74, // _Pr0t3ct
     0x31, 0x30, 0x6E, 0x5F, 0x4B, 0x33, 0x79, 0x21, // 10n_K3y!
   ];
+  // Fixed IV (16 bytes) - must match encrypt script
+  static final _ivChars = <int>[
+    0x4D, 0x33, 0x74, 0x34, 0x6E, 0x30, 0x31, 0x61, // M3t4n01a
+    0x5F, 0x49, 0x56, 0x5F, 0x4B, 0x33, 0x79, 0x21, // _IV_K3y!
+  ];
   static final _key = encrypt_pkg.Key(Uint8List.fromList(_keyChars));
-  static final _iv = encrypt_pkg.IV.fromLength(16);
+  static final _iv = encrypt_pkg.IV(Uint8List.fromList(_ivChars));
   static final _encrypter = encrypt_pkg.Encrypter(
     encrypt_pkg.AES(_key, mode: encrypt_pkg.AESMode.cbc),
   );
@@ -28,8 +32,9 @@ class ContentCrypto {
   /// - Debug: Loads plain JSON from `assets/data/`
   /// - Release: Loads encrypted content from `assets/data_encrypted/`
   static Future<String> loadContent(String assetPath) async {
-    if (kDebugMode) {
-      // In debug mode, load plain JSON directly
+    // Only use encryption in actual release builds
+    // Debug and Profile modes use plain JSON for easier development
+    if (!kReleaseMode) {
       return rootBundle.loadString(assetPath);
     } else {
       // In release mode, load and decrypt
