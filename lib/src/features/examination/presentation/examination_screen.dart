@@ -168,6 +168,11 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
           icon: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -183,9 +188,10 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
           title: Text(
             l10n.invitationDialogTitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: theme.textTheme.headlineSmall?.copyWith(
               fontFamily: AppTheme.fontFamilyEBGaramond,
-              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
             ),
           ),
           content: Column(
@@ -196,10 +202,11 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.5,
+                  height: 1.6,
+                  fontFamily: AppTheme.fontFamilyLato,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   SizedBox(
@@ -207,6 +214,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                     height: 24,
                     child: Checkbox(
                       value: dontShowAgain,
+                      activeColor: theme.colorScheme.primary,
                       onChanged: (value) {
                         setDialogState(() {
                           dontShowAgain = value ?? false;
@@ -226,6 +234,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                         l10n.invitationDialogDontShowAgain,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
+                          fontFamily: AppTheme.fontFamilyLato,
                         ),
                       ),
                     ),
@@ -234,7 +243,7 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
               ),
             ],
           ),
-          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           actions: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -252,10 +261,25 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                       context.push('/guide/invitation');
                     }
                   },
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                   icon: const Icon(Icons.favorite_outline),
-                  label: Text(l10n.invitationDialogYes),
+                  label: Text(
+                    l10n.invitationDialogYes,
+                    style: const TextStyle(
+                      fontFamily: AppTheme.fontFamilyLato,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () async {
                     HapticUtils.lightImpact();
@@ -267,7 +291,26 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
                       Navigator.pop(dialogContext);
                     }
                   },
-                  child: Text(l10n.invitationDialogNo),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    side: BorderSide(
+                      color: theme.colorScheme.outline,
+                    ),
+                  ),
+                  child: Text(
+                    l10n.invitationDialogNo,
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontFamilyLato,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                 ),
               ],
             ),
