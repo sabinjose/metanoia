@@ -74,9 +74,12 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
   void _startTutorial() {
     if (!mounted) return;
     // ignore: deprecated_member_use
-    ShowCaseWidget.of(
-      context,
-    ).startShowCase([_examineKey, _confessKey, _prayersKey, _guideKey]);
+    ShowCaseWidget.of(context).startShowCase([
+      _examineKey,
+      _confessKey,
+      _prayersKey,
+      _guideKey,
+    ]);
   }
 
   Future<void> _onRefresh() async {
