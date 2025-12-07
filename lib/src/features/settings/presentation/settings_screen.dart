@@ -163,95 +163,36 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           // Language settings
-          _SettingsCard(
+          _LanguagePickerCard(
             title: l10n.appLanguage,
             subtitle: l10n.appLanguageSubtitle,
             icon: Icons.language,
-            child: languageState.when(
+            selectedLabel: languageState.when(
               data: (locale) {
-                final languages =
-                    LanguageConfig.supportedContentLanguages.entries.toList();
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _LanguageChip(
-                        label: l10n.system,
-                        isSelected: locale == null,
-                        icon: Icons.brightness_auto,
-                        onSelected: (selected) {
-                          if (selected) {
-                            HapticUtils.selectionClick();
-                            ref
-                                .read(languageControllerProvider.notifier)
-                                .setLanguage(null);
-                          }
-                        },
-                      ),
-                      for (final lang in languages) ...[
-                        const SizedBox(width: 8),
-                        _LanguageChip(
-                          label: lang.value,
-                          isSelected: locale?.languageCode == lang.key,
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(Locale(lang.key));
-                            }
-                          },
-                        ),
-                      ],
-                    ],
-                  ),
-                );
+                if (locale == null) return l10n.system;
+                return LanguageConfig.supportedContentLanguages[
+                        locale.languageCode] ??
+                    locale.languageCode;
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (_, __) => Text(l10n.error),
+              loading: () => '...',
+              error: (_, __) => l10n.error,
             ),
+            onTap: () => _showAppLanguagePicker(context, ref, l10n),
           ),
           const SizedBox(height: 16),
-          _SettingsCard(
+          _LanguagePickerCard(
             title: l10n.contentLanguage,
             subtitle: l10n.contentLanguageSubtitle,
             icon: Icons.menu_book,
-            child: ref.watch(contentLanguageControllerProvider).when(
-                  data: (contentLanguage) {
-                    final languages = LanguageConfig
-                        .supportedContentLanguages.entries
-                        .toList();
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (int i = 0; i < languages.length; i++) ...[
-                            if (i > 0) const SizedBox(width: 8),
-                            _LanguageChip(
-                              label: languages[i].value,
-                              isSelected: contentLanguage.languageCode ==
-                                  languages[i].key,
-                              onSelected: (selected) {
-                                if (selected) {
-                                  HapticUtils.selectionClick();
-                                  ref
-                                      .read(
-                                        contentLanguageControllerProvider
-                                            .notifier,
-                                      )
-                                      .setLanguage(Locale(languages[i].key));
-                                }
-                              },
-                            ),
-                          ],
-                        ],
-                      ),
-                    );
-                  },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => Text(l10n.error),
+            selectedLabel: ref.watch(contentLanguageControllerProvider).when(
+                  data: (contentLanguage) =>
+                      LanguageConfig.supportedContentLanguages[
+                          contentLanguage.languageCode] ??
+                      contentLanguage.languageCode,
+                  loading: () => '...',
+                  error: (_, __) => l10n.error,
                 ),
+            onTap: () => _showContentLanguagePicker(context, ref),
           ),
           const SizedBox(height: 16),
           // Appearance settings
@@ -976,41 +917,312 @@ class _FontSizeSelector extends StatelessWidget {
   }
 }
 
-class _LanguageChip extends StatelessWidget {
-  const _LanguageChip({
+class _LanguagePickerCard extends StatelessWidget {
+  const _LanguagePickerCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.selectedLabel,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String selectedLabel;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: theme.colorScheme.outlineVariant, width: 0.5),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: theme.colorScheme.primary, size: 20),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      selectedLabel,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSecondaryContainer,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: theme.colorScheme.onSecondaryContainer,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void _showAppLanguagePicker(
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
+) {
+  final theme = Theme.of(context);
+  final languages = LanguageConfig.supportedContentLanguages.entries.toList();
+  final currentLocale = ref.read(languageControllerProvider).value;
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: theme.colorScheme.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.appLanguage,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: [
+                  _LanguageOptionTile(
+                    label: l10n.system,
+                    subtitle: l10n.appLanguageSubtitle,
+                    isSelected: currentLocale == null,
+                    onTap: () {
+                      HapticUtils.selectionClick();
+                      ref
+                          .read(languageControllerProvider.notifier)
+                          .setLanguage(null);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  for (final lang in languages)
+                    _LanguageOptionTile(
+                      label: lang.value,
+                      isSelected: currentLocale?.languageCode == lang.key,
+                      onTap: () {
+                        HapticUtils.selectionClick();
+                        ref
+                            .read(languageControllerProvider.notifier)
+                            .setLanguage(Locale(lang.key));
+                        Navigator.pop(context);
+                      },
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void _showContentLanguagePicker(BuildContext context, WidgetRef ref) {
+  final theme = Theme.of(context);
+  final l10n = AppLocalizations.of(context)!;
+  final languages = LanguageConfig.supportedContentLanguages.entries.toList();
+  final currentLocale = ref.read(contentLanguageControllerProvider).value;
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: theme.colorScheme.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (context) {
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.contentLanguage,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: [
+                  for (final lang in languages)
+                    _LanguageOptionTile(
+                      label: lang.value,
+                      isSelected: currentLocale?.languageCode == lang.key,
+                      onTap: () {
+                        HapticUtils.selectionClick();
+                        ref
+                            .read(contentLanguageControllerProvider.notifier)
+                            .setLanguage(Locale(lang.key));
+                        Navigator.pop(context);
+                      },
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+class _LanguageOptionTile extends StatelessWidget {
+  const _LanguageOptionTile({
     required this.label,
     required this.isSelected,
-    required this.onSelected,
-    this.icon,
+    required this.onTap,
+    this.subtitle,
   });
 
   final String label;
   final bool isSelected;
-  final ValueChanged<bool> onSelected;
-  final IconData? icon;
+  final VoidCallback onTap;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
-      label: Text(label),
-      avatar: icon != null ? Icon(icon, size: 18) : null,
-      selected: isSelected,
-      onSelected: onSelected,
-      showCheckmark: false,
-      labelStyle: TextStyle(
-        color:
-            isSelected
-                ? Theme.of(context).colorScheme.onSecondaryContainer
-                : Theme.of(context).colorScheme.onSurfaceVariant,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      ),
-      selectedColor: Theme.of(context).colorScheme.secondaryContainer,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
-      side: BorderSide(
-        color:
-            isSelected
-                ? Colors.transparent
-                : Theme.of(context).colorScheme.outlineVariant,
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Material(
+        color: isSelected
+            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                          color: isSelected
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (isSelected)
+                  Icon(
+                    Icons.check_rounded,
+                    color: theme.colorScheme.primary,
+                    size: 22,
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
