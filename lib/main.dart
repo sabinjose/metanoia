@@ -92,6 +92,8 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
                   Positioned.fill(
                     child: _LockScreenOverlay(parentContext: context),
                   ),
+                // Preview watermark - remove before publishing
+                const _PreviewWatermark(),
               ],
             ),
           );
@@ -122,6 +124,43 @@ class _LockScreenOverlay extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: const LockScreen(),
+    );
+  }
+}
+
+/// Preview watermark banner - REMOVE BEFORE PUBLISHING
+class _PreviewWatermark extends StatelessWidget {
+  const _PreviewWatermark();
+
+  @override
+  Widget build(BuildContext context) {
+    // Position below AppBar (SafeArea + approximate AppBar height)
+    final topPadding = MediaQuery.of(context).padding.top + kToolbarHeight;
+
+    return Positioned(
+      top: topPadding,
+      left: 0,
+      right: 0,
+      child: IgnorePointer(
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.red.withValues(alpha: 0.85),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Text(
+              'PREVIEW BUILD • holystack.dev',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
