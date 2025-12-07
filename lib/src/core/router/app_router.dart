@@ -76,7 +76,8 @@ GoRouter goRouter(Ref ref) {
           );
 
           if (isSensitiveRoute) {
-            return '/pin-setup';
+            // Pass the intended destination as a query parameter
+            return '/pin-setup?redirect=${Uri.encodeComponent(state.matchedLocation)}';
           }
         }
       }
@@ -207,7 +208,10 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/pin-setup',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const PinSetupScreen(),
+        builder: (context, state) {
+          final redirect = state.uri.queryParameters['redirect'];
+          return PinSetupScreen(redirectTo: redirect);
+        },
       ),
     ],
   );

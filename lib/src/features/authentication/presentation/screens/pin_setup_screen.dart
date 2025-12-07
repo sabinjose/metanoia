@@ -8,7 +8,10 @@ import 'package:go_router/go_router.dart';
 
 /// Screen for initial PIN setup (enter + confirm)
 class PinSetupScreen extends ConsumerStatefulWidget {
-  const PinSetupScreen({super.key});
+  const PinSetupScreen({super.key, this.redirectTo});
+
+  /// The route to navigate to after PIN setup is complete
+  final String? redirectTo;
 
   @override
   ConsumerState<PinSetupScreen> createState() => _PinSetupScreenState();
@@ -93,9 +96,10 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
         }
       }
 
-      // Navigate to home
+      // Navigate to the intended destination or home
       if (mounted) {
-        context.go('/');
+        final destination = widget.redirectTo ?? '/';
+        context.go(destination);
       }
     }
   }
