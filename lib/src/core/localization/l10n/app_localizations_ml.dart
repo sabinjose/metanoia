@@ -51,7 +51,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get chooseTheme => 'നിങ്ങളുടെ തീം തിരഞ്ഞെടുക്കുക';
 
   @override
-  String get system => 'ഫോൺ ക്രമീകരണം അനുസരിച്ച്';
+  String get system => 'സിസ്റ്റം';
 
   @override
   String get light => 'ലൈറ്റ്';
@@ -204,7 +204,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get viewHistory => 'ഹിസ്റ്ററി കാണുക';
 
   @override
-  String get noActiveConfession => 'സജീവമായ കുമ്പസാരമില്ല';
+  String get noActiveConfession => 'ആക്റ്റീവ് ആയ കുമ്പസാരമില്ല';
 
   @override
   String get startExaminationPrompt => 'പാപങ്ങൾ ചേർക്കാൻ ആത്മശോധന ആരംഭിക്കുക.';
