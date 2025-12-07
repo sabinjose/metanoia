@@ -40,7 +40,7 @@
             "Have I spoken disrespectfully, hatefully, defiantly, or carelessly about the faith, or sacred persons, places and things?",
             "Have I promoted disrespectful, hateful, defiant, or careless speech about the faith or sacred persons, places and things?",
             "Have I watched movies or listened to music that was blasphemous or irreverent?",
-            "Have I used foul language or watched movies or music that contained foul language?",
+            "Have I used foul language or watched movies or listened to music that contained foul language?",
             "Have I spoken disrespectfully of other people?",
             "Have I lied under oath (perjury)?",
             "Have I sworn or made promises in God’s name to things that were untrue or of little importance even if they were true?"
@@ -80,7 +80,7 @@
             "Have I failed to accept my parents’ advice or admonishments?",
             "Have I failed to foster openness to vocations in my children (marriage, holy orders, consecrated single life, etc.)?",
             "Have I failed to promote the just treatment of the poor, indigent, or migrants in society?",
-            "Have I commited violence against others?",
+            "Have I committed violence against others?",
             "Have I undermined the authority of my spouse in front of our children?",
             "Have I neglected to monitor my children's use of the internet and technology to protect their purity?"
         ]
@@ -220,7 +220,7 @@
             "Have I revealed the truth to someone who does not have the right to it (such as an unjust aggressor)?",
             "Have I violated the seal of confession by telling the contents of someone else’s confession to others?",
             "Have I disclosed professional secrets without grave cause?",
-            "Have I accepted what others say as truth without due scrutiny (particularly in matters of faith and morals or where another’s reputation is a stake)?",
+            "Have I accepted what others say as truth without due scrutiny (particularly in matters of faith and morals or where another’s reputation is at stake)?",
             "Have I promoted false public information (propaganda)?",
             "Have I shared unverified or false information (fake news) on social media?"
         ]
@@ -276,33 +276,33 @@
     {
         "commandmentCode": "en-12",
         "questions": [
-            "Pride",
-            "Greed (Avarice)",
-            "Lust",
-            "Envy",
-            "Gluttony",
-            "Wrath (Anger)",
-            "Sloth"
+            "Have I committed the sin of Pride?",
+            "Have I committed the sin of Greed (Avarice)?",
+            "Have I committed the sin of Lust?",
+            "Have I committed the sin of Envy?",
+            "Have I committed the sin of Gluttony?",
+            "Have I committed the sin of Wrath (Anger)?",
+            "Have I committed the sin of Sloth?"
         ]
     },
     {
         "commandmentCode": "en-13",
         "questions": [
-            "Presumption of God's mercy",
-            "Despair of salvation",
-            "Impugning the known truth",
-            "Envy of another's spiritual good",
-            "Obstinacy in sin",
-            "Final impenitence"
+            "Have I presumed of God's mercy?",
+            "Have I despaired of salvation?",
+            "Have I impugned the known truth?",
+            "Have I envied another's spiritual good?",
+            "Have I been obstinate in sin?",
+            "Have I persisted in final impenitence?"
         ]
     },
     {
         "commandmentCode": "en-14",
         "questions": [
-            "Willful murder",
-            "The sin of Sodom",
-            "Oppression of the poor",
-            "Defrauding laborers of their wages"
+            "Have I committed willful murder?",
+            "Have I committed the sin of Sodom?",
+            "Have I oppressed the poor?",
+            "Have I defrauded laborers of their wages?"
         ]
     }
 ]
