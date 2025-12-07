@@ -22,17 +22,18 @@ class ContentLanguagePage extends ConsumerWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: isDark
-              ? [
-                  theme.colorScheme.primaryContainer,
-                  theme.scaffoldBackgroundColor,
-                  theme.scaffoldBackgroundColor,
-                ]
-              : [
-                  theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-                  theme.scaffoldBackgroundColor,
-                  theme.colorScheme.secondaryContainer.withValues(alpha: 0.2),
-                ],
+          colors:
+              isDark
+                  ? [
+                    theme.colorScheme.primaryContainer,
+                    theme.scaffoldBackgroundColor,
+                    theme.scaffoldBackgroundColor,
+                  ]
+                  : [
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                    theme.scaffoldBackgroundColor,
+                    theme.colorScheme.secondaryContainer.withValues(alpha: 0.2),
+                  ],
         ),
       ),
       child: SafeArea(
@@ -46,30 +47,37 @@ class ContentLanguagePage extends ConsumerWidget {
 
               // Icon with elevated background
               Center(
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                        blurRadius: 24,
-                        offset: const Offset(0, 8),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.15,
+                            ),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.language,
-                    size: 48,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              )
+                      child: Icon(
+                        Icons.language,
+                        size: 48,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                  )
                   .animate()
                   .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.2, end: 0, duration: 400.ms, curve: Curves.easeOut)
+                  .slideY(
+                    begin: 0.2,
+                    end: 0,
+                    duration: 400.ms,
+                    curve: Curves.easeOut,
+                  )
                   .scale(
                     begin: const Offset(0.8, 0.8),
                     end: const Offset(1, 1),
@@ -81,75 +89,171 @@ class ContentLanguagePage extends ConsumerWidget {
 
               // Title
               Text(
-                l10n.chooseContentLanguage,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.3,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    l10n.chooseContentLanguage,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                      letterSpacing: -0.3,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                   .animate(delay: 150.ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.1, end: 0, duration: 350.ms, curve: Curves.easeOut),
+                  .slideY(
+                    begin: 0.1,
+                    end: 0,
+                    duration: 350.ms,
+                    curve: Curves.easeOut,
+                  ),
 
               const SizedBox(height: 12),
 
               // Subtitle
               Center(
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 320),
-                  child: Text(
-                    l10n.contentLanguageDescription,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      height: 1.5,
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 320),
+                      child: Text(
+                        l10n.contentLanguageDescription,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
+                  )
                   .animate(delay: 250.ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.1, end: 0, duration: 350.ms, curve: Curves.easeOut),
+                  .slideY(
+                    begin: 0.1,
+                    end: 0,
+                    duration: 350.ms,
+                    curve: Curves.easeOut,
+                  ),
 
               const SizedBox(height: 48),
 
               // Language Options
               contentLanguage.when(
-                data: (selectedLanguage) => Column(
-                  children: [
-                    _LanguageOption(
-                      label: 'English',
-                      locale: const Locale('en'),
-                      isSelected: selectedLanguage.languageCode == 'en',
-                      onTap: () {
-                        HapticUtils.selectionClick();
-                        ref
-                            .read(contentLanguageControllerProvider.notifier)
-                            .setLanguage(const Locale('en'));
-                      },
-                    )
-                        .animate(delay: 350.ms)
-                        .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                        .slideX(begin: -0.1, end: 0, duration: 350.ms, curve: Curves.easeOut),
-                    const SizedBox(height: 16),
-                    _LanguageOption(
-                      label: 'മലയാളം',
-                      locale: const Locale('ml'),
-                      isSelected: selectedLanguage.languageCode == 'ml',
-                      onTap: () {
-                        HapticUtils.selectionClick();
-                        ref
-                            .read(contentLanguageControllerProvider.notifier)
-                            .setLanguage(const Locale('ml'));
-                      },
-                    )
-                        .animate(delay: 450.ms)
-                        .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                        .slideX(begin: 0.1, end: 0, duration: 350.ms, curve: Curves.easeOut),
-                  ],
-                ),
+                data:
+                    (selectedLanguage) => Column(
+                      children: [
+                        _LanguageOption(
+                              label: 'English',
+                              locale: const Locale('en'),
+                              isSelected: selectedLanguage.languageCode == 'en',
+                              onTap: () {
+                                HapticUtils.selectionClick();
+                                ref
+                                    .read(
+                                      contentLanguageControllerProvider
+                                          .notifier,
+                                    )
+                                    .setLanguage(const Locale('en'));
+                              },
+                            )
+                            .animate(delay: 350.ms)
+                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                            .slideX(
+                              begin: -0.1,
+                              end: 0,
+                              duration: 350.ms,
+                              curve: Curves.easeOut,
+                            ),
+                        const SizedBox(height: 16),
+                        _LanguageOption(
+                              label: 'മലയാളം',
+                              locale: const Locale('ml'),
+                              isSelected: selectedLanguage.languageCode == 'ml',
+                              onTap: () {
+                                HapticUtils.selectionClick();
+                                ref
+                                    .read(
+                                      contentLanguageControllerProvider
+                                          .notifier,
+                                    )
+                                    .setLanguage(const Locale('ml'));
+                              },
+                            )
+                            .animate(delay: 450.ms)
+                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                            .slideX(
+                              begin: 0.1,
+                              end: 0,
+                              duration: 350.ms,
+                              curve: Curves.easeOut,
+                            ),
+                        const SizedBox(height: 16),
+                        _LanguageOption(
+                              label: 'Español',
+                              locale: const Locale('es'),
+                              isSelected: selectedLanguage.languageCode == 'es',
+                              onTap: () {
+                                HapticUtils.selectionClick();
+                                ref
+                                    .read(
+                                      contentLanguageControllerProvider
+                                          .notifier,
+                                    )
+                                    .setLanguage(const Locale('es'));
+                              },
+                            )
+                            .animate(delay: 550.ms)
+                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                            .slideX(
+                              begin: -0.1,
+                              end: 0,
+                              duration: 350.ms,
+                              curve: Curves.easeOut,
+                            ),
+                        const SizedBox(height: 16),
+                        _LanguageOption(
+                              label: 'Português',
+                              locale: const Locale('pt'),
+                              isSelected: selectedLanguage.languageCode == 'pt',
+                              onTap: () {
+                                HapticUtils.selectionClick();
+                                ref
+                                    .read(
+                                      contentLanguageControllerProvider
+                                          .notifier,
+                                    )
+                                    .setLanguage(const Locale('pt'));
+                              },
+                            )
+                            .animate(delay: 650.ms)
+                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                            .slideX(
+                              begin: 0.1,
+                              end: 0,
+                              duration: 350.ms,
+                              curve: Curves.easeOut,
+                            ),
+                        const SizedBox(height: 16),
+                        _LanguageOption(
+                              label: 'Français',
+                              locale: const Locale('fr'),
+                              isSelected: selectedLanguage.languageCode == 'fr',
+                              onTap: () {
+                                HapticUtils.selectionClick();
+                                ref
+                                    .read(
+                                      contentLanguageControllerProvider
+                                          .notifier,
+                                    )
+                                    .setLanguage(const Locale('fr'));
+                              },
+                            )
+                            .animate(delay: 750.ms)
+                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
+                            .slideX(
+                              begin: -0.1,
+                              end: 0,
+                              duration: 350.ms,
+                              curve: Curves.easeOut,
+                            ),
+                      ],
+                    ),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (_, __) => const Text('Error loading language'),
               ),
@@ -158,13 +262,15 @@ class ContentLanguagePage extends ConsumerWidget {
 
               // Note
               Text(
-                l10n.changeAnytimeNote,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                  fontStyle: FontStyle.italic,
-                ),
-                textAlign: TextAlign.center,
-              )
+                    l10n.changeAnytimeNote,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.7,
+                      ),
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
                   .animate(delay: 550.ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut),
 
@@ -172,42 +278,49 @@ class ContentLanguagePage extends ConsumerWidget {
 
               // Continue Button
               Container(
-                width: double.infinity,
-                constraints: const BoxConstraints(maxWidth: 400),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.25),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: FilledButton(
-                  onPressed: () {
-                    HapticUtils.mediumImpact();
-                    onNext();
-                  },
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.25,
+                          ),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    l10n.continueButton,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
+                    child: FilledButton(
+                      onPressed: () {
+                        HapticUtils.mediumImpact();
+                        onNext();
+                      },
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        l10n.continueButton,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              )
+                  )
                   .animate(delay: 650.ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.1, end: 0, duration: 350.ms, curve: Curves.easeOut),
+                  .slideY(
+                    begin: 0.1,
+                    end: 0,
+                    duration: 350.ms,
+                    curve: Curves.easeOut,
+                  ),
 
               const SizedBox(height: 24),
             ],
@@ -246,24 +359,27 @@ class _LanguageOption extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+              color:
+                  isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
               width: isSelected ? 2.5 : 1.5,
             ),
             borderRadius: BorderRadius.circular(20),
-            color: isSelected
-                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
-                : theme.colorScheme.surface.withValues(alpha: 0.5),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.2),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    ),
-                  ]
-                : [],
+            color:
+                isSelected
+                    ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
+                    : theme.colorScheme.surface.withValues(alpha: 0.5),
+            boxShadow:
+                isSelected
+                    ? [
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ]
+                    : [],
           ),
           child: Row(
             children: [
@@ -274,31 +390,35 @@ class _LanguageOption extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.outline,
+                    color:
+                        isSelected
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.outline,
                     width: 2,
                   ),
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : Colors.transparent,
+                  color:
+                      isSelected
+                          ? theme.colorScheme.primary
+                          : Colors.transparent,
                 ),
-                child: isSelected
-                    ? Icon(
-                        Icons.check,
-                        size: 16,
-                        color: theme.colorScheme.onPrimary,
-                      )
-                    : null,
+                child:
+                    isSelected
+                        ? Icon(
+                          Icons.check,
+                          size: 16,
+                          color: theme.colorScheme.onPrimary,
+                        )
+                        : null,
               ),
               const SizedBox(width: 16),
               Text(
                 label,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                  color: isSelected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface,
+                  color:
+                      isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurface,
                 ),
               ),
             ],

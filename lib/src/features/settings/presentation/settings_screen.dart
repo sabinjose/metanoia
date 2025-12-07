@@ -163,26 +163,90 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             icon: Icons.language,
             child: languageState.when(
               data:
-                  (locale) => SegmentedButton<String>(
-                    segments: [
-                      ButtonSegment(
-                        value: 'system',
-                        label: Text(l10n.system),
-                        icon: const Icon(Icons.brightness_auto),
-                      ),
-                      const ButtonSegment(value: 'en', label: Text('English')),
-                      const ButtonSegment(value: 'ml', label: Text('മലയാളം')),
-                    ],
-                    selected: {locale?.languageCode ?? 'system'},
-                    onSelectionChanged: (Set<String> newSelection) {
-                      HapticUtils.selectionClick();
-                      final value = newSelection.first;
-                      ref
-                          .read(languageControllerProvider.notifier)
-                          .setLanguage(
-                            value == 'system' ? null : Locale(value),
-                          );
-                    },
+                  (locale) => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _LanguageChip(
+                          label: l10n.system,
+                          isSelected: locale == null,
+                          icon: Icons.brightness_auto,
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(null);
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageChip(
+                          label: 'English',
+                          isSelected: locale?.languageCode == 'en',
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(const Locale('en'));
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageChip(
+                          label: 'മലയാളം',
+                          isSelected: locale?.languageCode == 'ml',
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(const Locale('ml'));
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageChip(
+                          label: 'Español',
+                          isSelected: locale?.languageCode == 'es',
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(const Locale('es'));
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageChip(
+                          label: 'Português',
+                          isSelected: locale?.languageCode == 'pt',
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(const Locale('pt'));
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        _LanguageChip(
+                          label: 'Français',
+                          isSelected: locale?.languageCode == 'fr',
+                          onSelected: (selected) {
+                            if (selected) {
+                              HapticUtils.selectionClick();
+                              ref
+                                  .read(languageControllerProvider.notifier)
+                                  .setLanguage(const Locale('fr'));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => Text(l10n.error),
@@ -197,24 +261,91 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 .watch(contentLanguageControllerProvider)
                 .when(
                   data:
-                      (contentLanguage) => SegmentedButton<Locale>(
-                        segments: const [
-                          ButtonSegment(
-                            value: Locale('en'),
-                            label: Text('English'),
-                          ),
-                          ButtonSegment(
-                            value: Locale('ml'),
-                            label: Text('മലയാളം'),
-                          ),
-                        ],
-                        selected: {contentLanguage},
-                        onSelectionChanged: (Set<Locale> newSelection) {
-                          HapticUtils.selectionClick();
-                          ref
-                              .read(contentLanguageControllerProvider.notifier)
-                              .setLanguage(newSelection.first);
-                        },
+                      (contentLanguage) => SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            _LanguageChip(
+                              label: 'English',
+                              isSelected: contentLanguage.languageCode == 'en',
+                              onSelected: (selected) {
+                                if (selected) {
+                                  HapticUtils.selectionClick();
+                                  ref
+                                      .read(
+                                        contentLanguageControllerProvider
+                                            .notifier,
+                                      )
+                                      .setLanguage(const Locale('en'));
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            _LanguageChip(
+                              label: 'മലയാളം',
+                              isSelected: contentLanguage.languageCode == 'ml',
+                              onSelected: (selected) {
+                                if (selected) {
+                                  HapticUtils.selectionClick();
+                                  ref
+                                      .read(
+                                        contentLanguageControllerProvider
+                                            .notifier,
+                                      )
+                                      .setLanguage(const Locale('ml'));
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            _LanguageChip(
+                              label: 'Español',
+                              isSelected: contentLanguage.languageCode == 'es',
+                              onSelected: (selected) {
+                                if (selected) {
+                                  HapticUtils.selectionClick();
+                                  ref
+                                      .read(
+                                        contentLanguageControllerProvider
+                                            .notifier,
+                                      )
+                                      .setLanguage(const Locale('es'));
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            _LanguageChip(
+                              label: 'Português',
+                              isSelected: contentLanguage.languageCode == 'pt',
+                              onSelected: (selected) {
+                                if (selected) {
+                                  HapticUtils.selectionClick();
+                                  ref
+                                      .read(
+                                        contentLanguageControllerProvider
+                                            .notifier,
+                                      )
+                                      .setLanguage(const Locale('pt'));
+                                }
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            _LanguageChip(
+                              label: 'Français',
+                              isSelected: contentLanguage.languageCode == 'fr',
+                              onSelected: (selected) {
+                                if (selected) {
+                                  HapticUtils.selectionClick();
+                                  ref
+                                      .read(
+                                        contentLanguageControllerProvider
+                                            .notifier,
+                                      )
+                                      .setLanguage(const Locale('fr'));
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                   loading:
                       () => const Center(child: CircularProgressIndicator()),
@@ -268,7 +399,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               currentScale: fontSizeScale,
               onChanged: (scale) {
                 HapticUtils.selectionClick();
-                ref.read(fontSizeControllerProvider.notifier).setFontSize(scale);
+                ref
+                    .read(fontSizeControllerProvider.notifier)
+                    .setFontSize(scale);
               },
               l10n: l10n,
             ),
@@ -341,7 +474,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                   ref
                                       .read(reminderSettingsProvider.notifier)
                                       .updateConfig(
-                                        config.copyWith(frequency: frequency.$1),
+                                        config.copyWith(
+                                          frequency: frequency.$1,
+                                        ),
                                       );
                                 }
                               },
@@ -362,7 +497,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           Expanded(
                             child: _ConfigTile(
                               label: l10n.time,
-                              value: _formatTime(context, config.hour, config.minute),
+                              value: _formatTime(
+                                context,
+                                config.hour,
+                                config.minute,
+                              ),
                               onTap:
                                   () => _showTimePicker(context, ref, config),
                             ),
@@ -496,21 +635,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: ref.watch(packageInfoProvider).when(
-              data: (info) => Text(
-                '${l10n.version} ${info.version} (${info.buildNumber})',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+            child: ref
+                .watch(packageInfoProvider)
+                .when(
+                  data:
+                      (info) => Text(
+                        '${l10n.version} ${info.version} (${info.buildNumber})',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                  loading:
+                      () => Text(
+                        l10n.version,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                  error: (_, __) => const SizedBox.shrink(),
                 ),
-              ),
-              loading: () => Text(
-                l10n.version,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
           ),
         ],
       ),
@@ -555,48 +698,60 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: theme.colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          l10n.selectDay,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.primary,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: theme.colorScheme.surface,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              l10n.selectDay,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children:
+                  [1, 2, 3, 4, 5, 6, 7].map((day) {
+                    final isSelected = config.weekday == day;
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor:
+                          isSelected
+                              ? theme.colorScheme.primaryContainer.withValues(
+                                alpha: 0.5,
+                              )
+                              : null,
+                      title: Text(
+                        _getDayName(context, day),
+                        style: TextStyle(
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected ? theme.colorScheme.primary : null,
+                        ),
+                      ),
+                      trailing:
+                          isSelected
+                              ? Icon(
+                                Icons.check,
+                                color: theme.colorScheme.primary,
+                              )
+                              : null,
+                      onTap: () {
+                        ref
+                            .read(reminderSettingsProvider.notifier)
+                            .updateConfig(config.copyWith(weekday: day));
+                        Navigator.pop(context);
+                      },
+                    );
+                  }).toList(),
+            ),
           ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [1, 2, 3, 4, 5, 6, 7].map((day) {
-            final isSelected = config.weekday == day;
-            return ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              tileColor: isSelected
-                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
-                  : null,
-              title: Text(
-                _getDayName(context, day),
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? theme.colorScheme.primary : null,
-                ),
-              ),
-              trailing: isSelected
-                  ? Icon(Icons.check, color: theme.colorScheme.primary)
-                  : null,
-              onTap: () {
-                ref
-                    .read(reminderSettingsProvider.notifier)
-                    .updateConfig(config.copyWith(weekday: day));
-                Navigator.pop(context);
-              },
-            );
-          }).toList(),
-        ),
-      ),
     );
   }
 
@@ -627,48 +782,60 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: theme.colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          l10n.remindMe,
-          style: theme.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.primary,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: theme.colorScheme.surface,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              l10n.remindMe,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children:
+                  advanceOptions.map((days) {
+                    final isSelected = config.advanceDays == days;
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor:
+                          isSelected
+                              ? theme.colorScheme.primaryContainer.withValues(
+                                alpha: 0.5,
+                              )
+                              : null,
+                      title: Text(
+                        days == 0 ? l10n.onTheDay : l10n.daysBefore(days),
+                        style: TextStyle(
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected ? theme.colorScheme.primary : null,
+                        ),
+                      ),
+                      trailing:
+                          isSelected
+                              ? Icon(
+                                Icons.check,
+                                color: theme.colorScheme.primary,
+                              )
+                              : null,
+                      onTap: () {
+                        ref
+                            .read(reminderSettingsProvider.notifier)
+                            .updateConfig(config.copyWith(advanceDays: days));
+                        Navigator.pop(context);
+                      },
+                    );
+                  }).toList(),
+            ),
           ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: advanceOptions.map((days) {
-            final isSelected = config.advanceDays == days;
-            return ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              tileColor: isSelected
-                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
-                  : null,
-              title: Text(
-                days == 0 ? l10n.onTheDay : l10n.daysBefore(days),
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? theme.colorScheme.primary : null,
-                ),
-              ),
-              trailing: isSelected
-                  ? Icon(Icons.check, color: theme.colorScheme.primary)
-                  : null,
-              onTap: () {
-                ref
-                    .read(reminderSettingsProvider.notifier)
-                    .updateConfig(config.copyWith(advanceDays: days));
-                Navigator.pop(context);
-              },
-            );
-          }).toList(),
-        ),
-      ),
     );
   }
 }
@@ -876,30 +1043,74 @@ class _FontSizeSelector extends StatelessWidget {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: FontSizeScale.values.map((scale) {
-            final isSelected = currentScale == scale;
-            return ChoiceChip(
-              label: Text(_getLabel(scale)),
-              selected: isSelected,
-              onSelected: (_) => onChanged(scale),
-              showCheckmark: false,
-              labelStyle: TextStyle(
-                color: isSelected
-                    ? theme.colorScheme.onSecondaryContainer
-                    : theme.colorScheme.onSurfaceVariant,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              selectedColor: theme.colorScheme.secondaryContainer,
-              backgroundColor: theme.colorScheme.surfaceContainerLow,
-              side: BorderSide(
-                color: isSelected
-                    ? Colors.transparent
-                    : theme.colorScheme.outlineVariant,
-              ),
-            );
-          }).toList(),
+          children:
+              FontSizeScale.values.map((scale) {
+                final isSelected = currentScale == scale;
+                return ChoiceChip(
+                  label: Text(_getLabel(scale)),
+                  selected: isSelected,
+                  onSelected: (_) => onChanged(scale),
+                  showCheckmark: false,
+                  labelStyle: TextStyle(
+                    color:
+                        isSelected
+                            ? theme.colorScheme.onSecondaryContainer
+                            : theme.colorScheme.onSurfaceVariant,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  selectedColor: theme.colorScheme.secondaryContainer,
+                  backgroundColor: theme.colorScheme.surfaceContainerLow,
+                  side: BorderSide(
+                    color:
+                        isSelected
+                            ? Colors.transparent
+                            : theme.colorScheme.outlineVariant,
+                  ),
+                );
+              }).toList(),
         ),
       ],
+    );
+  }
+}
+
+class _LanguageChip extends StatelessWidget {
+  const _LanguageChip({
+    required this.label,
+    required this.isSelected,
+    required this.onSelected,
+    this.icon,
+  });
+
+  final String label;
+  final bool isSelected;
+  final ValueChanged<bool> onSelected;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      label: Text(label),
+      avatar: icon != null ? Icon(icon, size: 18) : null,
+      selected: isSelected,
+      onSelected: onSelected,
+      showCheckmark: false,
+      labelStyle: TextStyle(
+        color:
+            isSelected
+                ? Theme.of(context).colorScheme.onSecondaryContainer
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      ),
+      selectedColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      side: BorderSide(
+        color:
+            isSelected
+                ? Colors.transparent
+                : Theme.of(context).colorScheme.outlineVariant,
+      ),
     );
   }
 }
