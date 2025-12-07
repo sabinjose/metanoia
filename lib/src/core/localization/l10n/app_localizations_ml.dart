@@ -15,7 +15,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get homeTitle => 'സ്വാഗതം';
 
   @override
-  String get examineTitle => 'പരിശോധന';
+  String get examineTitle => 'ആത്മശോധന';
 
   @override
   String get confessTitle => 'കുമ്പസാരം';
@@ -24,10 +24,10 @@ class AppLocalizationsMl extends AppLocalizations {
   String get prayersTitle => 'പ്രാർത്ഥനകൾ';
 
   @override
-  String get settingsTitle => 'ക്രമീകരണങ്ങൾ';
+  String get settingsTitle => 'സെറ്റിംഗ്സ്';
 
   @override
-  String get examinationTitle => 'മനസ്സാക്ഷി പരിശോധന';
+  String get examinationTitle => 'ആത്മശോധന';
 
   @override
   String get commandment => 'കൽപ്പന';
@@ -51,7 +51,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get chooseTheme => 'നിങ്ങളുടെ തീം തിരഞ്ഞെടുക്കുക';
 
   @override
-  String get system => 'സിസ്റ്റം';
+  String get system => 'ഫോൺ ക്രമീകരണം അനുസരിച്ച്';
 
   @override
   String get light => 'ലൈറ്റ്';
@@ -66,7 +66,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get getReminded => 'കുമ്പസാരത്തിന് പോകാൻ ഓർമ്മപ്പെടുത്തുക';
 
   @override
-  String get enableReminders => 'ഓർമ്മപ്പെടുത്തലുകൾ പ്രവർത്തനക്ഷമമാക്കുക';
+  String get enableReminders => 'ഓർമ്മപ്പെടുത്തലുകൾ നൽകുക';
 
   @override
   String get weekly => 'ആഴ്ചതോറും';
@@ -78,7 +78,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get monthly => 'മാസംതോറും';
 
   @override
-  String get quarterly => 'ത്രൈമാസികം';
+  String get quarterly => 'മൂന്നു മാസത്തിലൊന്ന്';
 
   @override
   String get day => 'ദിവസം';
@@ -98,7 +98,7 @@ class AppLocalizationsMl extends AppLocalizations {
   }
 
   @override
-  String get quickActions => 'ദ്രുത പ്രവർത്തനങ്ങൾ';
+  String get quickActions => 'പ്രധാന സേവനങ്ങൾ';
 
   @override
   String get lastConfession => 'കഴിഞ്ഞ കുമ്പസാരം';
@@ -201,22 +201,22 @@ class AppLocalizationsMl extends AppLocalizations {
   String get noResults => 'ഫലങ്ങളൊന്നും കണ്ടെത്തിയില്ല';
 
   @override
-  String get viewHistory => 'ചരിത്രം കാണുക';
+  String get viewHistory => 'ഹിസ്റ്ററി കാണുക';
 
   @override
   String get noActiveConfession => 'സജീവമായ കുമ്പസാരമില്ല';
 
   @override
-  String get startExaminationPrompt => 'പാപങ്ങൾ ചേർക്കാൻ പരിശോധന ആരംഭിക്കുക.';
+  String get startExaminationPrompt => 'പാപങ്ങൾ ചേർക്കാൻ ആത്മശോധന ആരംഭിക്കുക.';
 
   @override
-  String get startExamination => 'പരിശോധന ആരംഭിക്കുക';
+  String get startExamination => 'ആത്മശോധന ആരംഭിക്കുക';
 
   @override
   String get finishConfessionTitle => 'കുമ്പസാരം പൂർത്തിയാക്കണോ?';
 
   @override
-  String get finishConfessionContent => 'ഇത് കുമ്പസാരം പൂർത്തിയായതായി അടയാളപ്പെടുത്തുകയും ചരിത്രത്തിലേക്ക് മാറ്റുകയും ചെയ്യും.';
+  String get finishConfessionContent => 'കുമ്പസാരം പൂർത്തിയായതായി അടയാളപ്പെടുത്തി ഹിസ്റ്ററിയിലേക്ക് മാറ്റട്ടെ?';
 
   @override
   String get cancel => 'റദ്ദാക്കുക';
@@ -237,19 +237,19 @@ class AppLocalizationsMl extends AppLocalizations {
   String get keepHistory => 'കുമ്പസാര ചരിത്രം സൂക്ഷിക്കുക';
 
   @override
-  String get keepHistorySubtitle => 'തീയതിക്കൊപ്പം പാപങ്ങളും സൂക്ഷിക്കുക. പ്രവർത്തനരഹിതമാക്കിയാൽ, തീയതി മാത്രമേ സൂക്ഷിക്കൂ.';
+  String get keepHistorySubtitle => 'തീയതിക്കൊപ്പം പാപങ്ങളും സൂക്ഷിക്കുക. ഡിസേബിൾ ചെയ്താൽ, തീയതി മാത്രമേ സൂക്ഷിക്കൂ.';
 
   @override
   String get deleteConfession => 'കുമ്പസാരം നീക്കം ചെയ്യുക';
 
   @override
-  String get deleteConfessionContent => 'ഈ കുമ്പസാരം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ? ഈ പ്രവർത്തനം പഴയപടിയാക്കാൻ കഴിയില്ല.';
+  String get deleteConfessionContent => 'ഈ കുമ്പസാരരേഖ നീക്കം ചെയ്യണോ? ഇത് പിന്നീട് വീണ്ടെടുക്കാൻ കഴിയില്ല.';
 
   @override
-  String get tutorialExamineDesc => 'കുമ്പസാരത്തിനുമുമ്പ് മനസ്സാക്ഷി പരിശോധന ഇവിടെ ആരംഭിക്കുക.';
+  String get tutorialExamineDesc => 'കുമ്പസാരത്തിന് ഒരുക്കമായി ആത്മശോധന ഇവിടെ തുടങ്ങുക.';
 
   @override
-  String get tutorialConfessDesc => 'കുമ്പസാരത്തിനിടെ നിങ്ങളുടെ പാപങ്ങൾ ട്രാക്ക് ചെയ്യാൻ ഇത് ഉപയോഗിക്കുക.';
+  String get tutorialConfessDesc => 'കുമ്പസാരക്കൂട്ടിൽ പാപങ്ങൾ ഏറ്റുപറയുമ്പോൾ ഇത് ഉപയോഗിക്കാം.';
 
   @override
   String get tutorialPrayersDesc => 'കുമ്പസാരത്തിനുമുമ്പും ശേഷവുമുള്ള പ്രാർത്ഥനകൾ കണ്ടെത്തുക.';
@@ -270,7 +270,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tutorialCounterDesc => 'കുമ്പസാരത്തിനായി നിങ്ങൾ എത്ര ഇനങ്ങൾ തിരഞ്ഞെടുത്തു എന്ന് ഇത് കാണിക്കുന്നു.';
 
   @override
-  String get tutorialMenuDesc => 'സ്വന്തം പാപങ്ങൾ കൈകാര്യം ചെയ്യാനും തിരഞ്ഞെടുപ്പുകൾ മായ്ക്കാനും ഇവിടെ ഉപയോഗിക്കുക.';
+  String get tutorialMenuDesc => 'സ്വന്തം പാപങ്ങൾ കൈകാര്യം ചെയ്യാനും സെലക്ഷൻ മായ്ക്കാനും ഇവിടെ ഉപയോഗിക്കുക.';
 
   @override
   String get tutorialPenanceDesc => 'കുമ്പസാരക്കാരൻ നൽകുന്ന പ്രായശ്ചിത്തങ്ങൾ ഇവിടെ രേഖപ്പെടുത്താം.';
@@ -321,7 +321,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get rateDialogTitle => 'മെറ്റാനോയ ഇഷ്ടപ്പെട്ടോ?';
 
   @override
-  String get rateDialogContent => 'ഈ ആപ്പ് നിങ്ങൾക്ക് സഹായകരമാണെങ്കിൽ, ദയവായി റേറ്റ് ചെയ്യുക. ഇത് ഞങ്ങളെ വളരെയധികം സഹായിക്കും!';
+  String get rateDialogContent => 'ഈ ആപ്പ് നിങ്ങൾക്ക് പ്രയോജനപ്പെട്ടെങ്കിൽ, ദയവായി പ്ലേ സ്റ്റോറിൽ റേറ്റ് ചെയ്യുക. ഇത് ഞങ്ങളെ വളരെയധികം സഹായിക്കും!';
 
   @override
   String get rateDialogYes => 'ഇപ്പോൾ റേറ്റ് ചെയ്യുക';
@@ -354,16 +354,16 @@ class AppLocalizationsMl extends AppLocalizations {
   String get chooseContentLanguage => 'ഉള്ളടക്ക ഭാഷ തിരഞ്ഞെടുക്കുക';
 
   @override
-  String get contentLanguageDescription => 'പ്രാർത്ഥനകൾക്കും മനസ്സാക്ഷി പരിശോധനയ്ക്കും വഴികാട്ടികൾക്കുമായി ഭാഷ തിരഞ്ഞെടുക്കുക';
+  String get contentLanguageDescription => 'പ്രാർത്ഥനകൾക്കും ആത്മശോധനയ്ക്കും വഴികാട്ടികൾക്കുമായി ഭാഷ തിരഞ്ഞെടുക്കുക';
 
   @override
-  String get changeAnytimeNote => 'ക്രമീകരണങ്ങളിൽ നിങ്ങൾക്ക് എപ്പോൾ വേണമെങ്കിലും ഇത് മാറ്റാം';
+  String get changeAnytimeNote => 'സെറ്റിംഗ്സിൽ നിങ്ങൾക്ക് എപ്പോൾ വേണമെങ്കിലും ഇത് മാറ്റാം';
 
   @override
   String get continueButton => 'തുടരുക';
 
   @override
-  String get examineDescription => 'കുമ്പസാരത്തിന് മുമ്പ് പത്തു കൽപ്പനകൾ ഉപയോഗിച്ച് മനസ്സാക്ഷി പരിശോധിക്കുക';
+  String get examineDescription => 'കുമ്പസാരത്തിന് മുമ്പ് പത്തു കൽപ്പനകൾ ഉപയോഗിച്ച് ആത്മശോധന നടത്തുക';
 
   @override
   String get confessDescription => 'ഒന്നും മറന്നുപോകാതിരിക്കാൻ കുമ്പസാരത്തിനിടെ പാപങ്ങൾ രേഖപ്പെടുത്തുക';
@@ -372,16 +372,16 @@ class AppLocalizationsMl extends AppLocalizations {
   String get prayersDescription => 'കുമ്പസാരത്തിന് മുമ്പും ശേഷവുമുള്ള പ്രാർത്ഥനകളും പ്രായശ്ചിത്ത പ്രാർത്ഥനകളും ലഭ്യമാണ്';
 
   @override
-  String get remindersDescription => 'കുമ്പസാരത്തിന് പോകാൻ മറക്കാതിരിക്കാൻ ക്രമീകരണങ്ങളിൽ ഓർമ്മപ്പെടുത്തലുകൾ സജ്ജീകരിക്കുക';
+  String get remindersDescription => 'കുമ്പസാരത്തിന് പോകാൻ മറക്കാതിരിക്കാൻ സെറ്റിംഗ്സിൽ ഓർമ്മപ്പെടുത്തലുകൾ സജ്ജീകരിക്കുക';
 
   @override
   String get nextButton => 'അടുത്തത്';
 
   @override
-  String get customSins => 'സ്വന്തം പാപങ്ങൾ';
+  String get customSins => 'വ്യക്തിപരമായ പാപങ്ങൾ';
 
   @override
-  String get manageCustomSins => 'സ്വന്തം പാപങ്ങൾ കൈകാര്യം ചെയ്യുക';
+  String get manageCustomSins => 'വ്യക്തിപരമായ പാപങ്ങൾ';
 
   @override
   String get addCustomSin => 'പാപം ചേർക്കുക';
@@ -417,7 +417,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get customSinAdded => 'പാപം ചേർത്തു';
 
   @override
-  String get customSinUpdated => 'പാപം പുതുക്കി';
+  String get customSinUpdated => 'പാപം അപ്‌ഡേറ്റ് ചെയ്തു';
 
   @override
   String get customSinDeleted => 'പാപം നീക്കം ചെയ്തു';
@@ -426,22 +426,22 @@ class AppLocalizationsMl extends AppLocalizations {
   String get deleteCustomSinConfirm => 'ഈ പാപം നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?';
 
   @override
-  String get noCustomSins => 'ഇതുവരെ സ്വന്തം പാപങ്ങളില്ല';
+  String get noCustomSins => 'ഇതുവരെ കൂട്ടിച്ചേർത്ത പാപങ്ങളില്ല';
 
   @override
-  String get noCustomSinsDesc => 'നിങ്ങളുടെ പരിശോധന വ്യക്തിഗതമാക്കാൻ സ്വന്തം പാപങ്ങൾ ചേർക്കുക';
+  String get noCustomSinsDesc => 'നിങ്ങളുടെ പരിശോധന വ്യക്തിഗതമാക്കാൻ കൂടുതലായുള്ള പാപങ്ങൾ ചേർക്കുക';
 
   @override
   String get customVersion => 'സ്വന്തം (തിരുത്തിയത്)';
 
   @override
-  String get searchCustomSins => 'സ്വന്തം പാപങ്ങൾ തിരയുക...';
+  String get searchCustomSins => 'പാപങ്ങൾ തിരയുക...';
 
   @override
   String get addButton => 'ചേർക്കുക';
 
   @override
-  String get updateButton => 'പുതുക്കുക';
+  String get updateButton => 'അപ്‌ഡേറ്റ് ചെയ്യുക';
 
   @override
   String get deleteButton => 'നീക്കം ചെയ്യുക';
@@ -588,7 +588,7 @@ class AppLocalizationsMl extends AppLocalizations {
   }
 
   @override
-  String get examinationSummary => 'പരിശോധനാ സംഗ്രഹം';
+  String get examinationSummary => 'ആത്മശോധന സംഗ്രഹം';
 
   @override
   String selectedCount(Object count) {
@@ -659,7 +659,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get skipOnboardingMessage => 'ആപ്പ് മെനുവിൽ നിന്ന് പിന്നീട് സഹായവും ക്രമീകരണങ്ങളും എപ്പോൾ വേണമെങ്കിലും ആക്സസ് ചെയ്യാം.';
 
   @override
-  String get confessionHistoryTitle => 'കുമ്പസാര ചരിത്രം';
+  String get confessionHistoryTitle => 'മുമ്പത്തെ കുമ്പസാരങ്ങൾ';
 
   @override
   String get deleteAll => 'എല്ലാം ഇല്ലാതാക്കുക';
@@ -700,10 +700,10 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tapToExpand => 'കൂടുതൽ വായിക്കാൻ ടാപ്പ് ചെയ്യുക';
 
   @override
-  String get continueExamination => 'പരിശോധന തുടരുക';
+  String get continueExamination => 'ആത്മശോധന തുടരുക';
 
   @override
-  String get continueExaminationDesc => 'നിങ്ങൾക്ക് പുരോഗതിയിലുള്ള ഒരു പരിശോധന ഉണ്ട്';
+  String get continueExaminationDesc => 'പൂർത്തിയാക്കാത്ത ഒരു ആത്മശോധന ഉണ്ട്';
 
   @override
   String examinationProgress(Object count) {
@@ -717,7 +717,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get securitySubtitle => 'നിങ്ങളുടെ വ്യക്തിഗത ഡാറ്റ സംരക്ഷിക്കുക';
 
   @override
-  String get pinAndBiometric => 'PIN & ബയോമെട്രിക്';
+  String get pinAndBiometric => 'PIN & സെക്യൂരിറ്റി';
 
   @override
   String get pinAndBiometricSubtitle => 'ആപ്പ് ലോക്ക് ക്രമീകരണങ്ങൾ ക്രമീകരിക്കുക';
@@ -738,7 +738,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get pinMismatch => 'PIN കൾ പൊരുത്തപ്പെടുന്നില്ല';
 
   @override
-  String get biometricUnlock => 'ബയോമെട്രിക് അൺലോക്ക്';
+  String get biometricUnlock => 'ഫിംഗർപ്രിന്റ് / ഫെയ്‌സ് അൺലോക്ക്';
 
   @override
   String get autoLockTimeout => 'ഓട്ടോ-ലോക്ക് ടൈംഔട്ട്';
@@ -890,7 +890,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get resetPinWarning => 'മുന്നറിയിപ്പ്: ഇത് നിങ്ങളുടെ എല്ലാ ഡാറ്റയും ശാശ്വതമായി ഇല്ലാതാക്കും';
 
   @override
-  String get resetPinDescription => 'നിങ്ങൾ PIN പുനഃസജ്ജീകരിച്ചാൽ, നിങ്ങളുടെ എല്ലാ കുമ്പസാരങ്ങളും, ഇഷ്ടാനുസൃത പാപങ്ങളും, പ്രായശ്ചിത്തങ്ങളും, മറ്റ് വ്യക്തിഗത ഡാറ്റയും ശാശ്വതമായി ഇല്ലാതാക്കപ്പെടും. ഈ പ്രവർത്തനം പഴയപടിയാക്കാൻ കഴിയില്ല.';
+  String get resetPinDescription => 'നിങ്ങൾ PIN പുനഃസജ്ജീകരിച്ചാൽ, നിങ്ങളുടെ എല്ലാ കുമ്പസാരങ്ങളും, വ്യക്തിപരമായ പാപങ്ങളും, പ്രായശ്ചിത്തങ്ങളും, മറ്റ് വ്യക്തിഗത ഡാറ്റയും ശാശ്വതമായി ഇല്ലാതാക്കപ്പെടും. ഈ പ്രവർത്തനം പഴയപടിയാക്കാൻ കഴിയില്ല.';
 
   @override
   String get resetPinConfirmation => 'സ്ഥിരീകരിക്കാൻ DELETE എന്ന് ടൈപ്പ് ചെയ്യുക';
@@ -919,7 +919,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get confessionGuideTitle => 'നല്ല കുമ്പസാരം എങ്ങനെ നടത്താം';
 
   @override
-  String get confessionGuideSubtitle => 'കൂദാശയുടെ ഘട്ടംഘട്ടമായുള്ള വഴികാട്ടി';
+  String get confessionGuideSubtitle => 'കുമ്പസാര ക്രമം';
 
   @override
   String get invitationTitle => 'കുമ്പസാരത്തിലേക്ക് മടങ്ങുന്നുണ്ടോ?';
