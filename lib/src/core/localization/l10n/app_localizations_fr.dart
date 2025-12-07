@@ -327,7 +327,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get viewOnGithub => 'Voir sur GitHub';
 
   @override
-  String get madeWithLove => 'Fait avec ❤️ par Sabin';
+  String get madeWithLove => 'Fait avec ❤️ par holystack.dev';
 
   @override
   String get rateDialogTitle => 'Vous aimez Metanoia ?';

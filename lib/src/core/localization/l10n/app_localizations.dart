@@ -704,7 +704,7 @@ abstract class AppLocalizations {
   /// No description provided for @madeWithLove.
   ///
   /// In en, this message translates to:
-  /// **'Made with ❤️ by Sabin'**
+  /// **'Made with ❤️ by holystack.dev'**
   String get madeWithLove;
 
   /// No description provided for @rateDialogTitle.

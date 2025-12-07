@@ -333,7 +333,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get viewOnGithub => 'Ver en GitHub';
 
   @override
-  String get madeWithLove => 'Hecho con ❤️ por Sabin';
+  String get madeWithLove => 'Hecho con ❤️ por holystack.dev';
 
   @override
   String get rateDialogTitle => '¿Disfrutando Metanoia?';

@@ -315,7 +315,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get viewOnGithub => 'GitHub-ൽ കാണുക';
 
   @override
-  String get madeWithLove => 'സ്നേഹത്തോടെ നിർമ്മിച്ചത്';
+  String get madeWithLove => 'സ്നേഹത്തോടെ holystack.dev നിർമ്മിച്ചത്';
 
   @override
   String get rateDialogTitle => 'മെറ്റാനോയ ഇഷ്ടപ്പെട്ടോ?';
