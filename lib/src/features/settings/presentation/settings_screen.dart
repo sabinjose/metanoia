@@ -152,7 +152,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final keepHistory = ref.watch(keepHistorySettingsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settingsTitle)),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
+        ),
+        title: Text(l10n.settingsTitle),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
