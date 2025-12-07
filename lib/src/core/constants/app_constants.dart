@@ -36,6 +36,27 @@ abstract class ReviewConfig {
   static const int minDaysBetweenPrompts = 30;
 }
 
+/// Supported Languages configuration
+abstract class LanguageConfig {
+  /// All supported content languages with their display names
+  /// Add new languages here when adding translations
+  /// Format: {'code': 'Display Name'}
+  static const Map<String, String> supportedContentLanguages = {
+    'en': 'English',
+    'ml': 'മലയാളം',
+    'es': 'Español',
+    'pt': 'Português',
+    'fr': 'Français',
+  };
+
+  /// Get list of language codes only (for database sync)
+  static List<String> get languageCodes =>
+      supportedContentLanguages.keys.toList();
+
+  /// Default content language
+  static const String defaultContentLanguage = 'en';
+}
+
 /// App URLs and links
 abstract class AppUrls {
   /// GitHub repository URL

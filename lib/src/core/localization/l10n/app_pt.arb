@@ -280,6 +280,13 @@
     "resetPinError": "Falha ao redefinir PIN. Por favor, tente novamente.",
     "deleteConfirmationText": "EXCLUIR",
     "resetPinWaitTimer": "Por favor aguarde {seconds} segundos",
+    "@resetPinWaitTimer": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "resetPinBiometricPrompt": "Verifique sua identidade para redefinir o PIN",
     "confessionGuideTitle": "Como Fazer uma Boa Confissão",
     "confessionGuideSubtitle": "Guia passo a passo para o Sacramento",

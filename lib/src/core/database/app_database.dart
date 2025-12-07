@@ -10,6 +10,7 @@ import 'dart:math';
 import 'tables.dart';
 
 import 'data_loader.dart';
+import 'package:confessionapp/src/core/constants/app_constants.dart';
 
 part 'app_database.g.dart';
 
@@ -31,7 +32,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -130,7 +131,7 @@ class AppDatabase extends _$AppDatabase {
     },
   );
   Future<void> syncContent() async {
-    final languages = ['en', 'ml'];
+    final languages = LanguageConfig.languageCodes;
 
     for (final lang in languages) {
       // 1. Sync Commandments

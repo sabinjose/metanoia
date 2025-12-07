@@ -162,92 +162,45 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: l10n.appLanguageSubtitle,
             icon: Icons.language,
             child: languageState.when(
-              data:
-                  (locale) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _LanguageChip(
-                          label: l10n.system,
-                          isSelected: locale == null,
-                          icon: Icons.brightness_auto,
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(null);
-                            }
-                          },
-                        ),
+              data: (locale) {
+                final languages =
+                    LanguageConfig.supportedContentLanguages.entries.toList();
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _LanguageChip(
+                        label: l10n.system,
+                        isSelected: locale == null,
+                        icon: Icons.brightness_auto,
+                        onSelected: (selected) {
+                          if (selected) {
+                            HapticUtils.selectionClick();
+                            ref
+                                .read(languageControllerProvider.notifier)
+                                .setLanguage(null);
+                          }
+                        },
+                      ),
+                      for (final lang in languages) ...[
                         const SizedBox(width: 8),
                         _LanguageChip(
-                          label: 'English',
-                          isSelected: locale?.languageCode == 'en',
+                          label: lang.value,
+                          isSelected: locale?.languageCode == lang.key,
                           onSelected: (selected) {
                             if (selected) {
                               HapticUtils.selectionClick();
                               ref
                                   .read(languageControllerProvider.notifier)
-                                  .setLanguage(const Locale('en'));
-                            }
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _LanguageChip(
-                          label: 'മലയാളം',
-                          isSelected: locale?.languageCode == 'ml',
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(const Locale('ml'));
-                            }
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _LanguageChip(
-                          label: 'Español',
-                          isSelected: locale?.languageCode == 'es',
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(const Locale('es'));
-                            }
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _LanguageChip(
-                          label: 'Português',
-                          isSelected: locale?.languageCode == 'pt',
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(const Locale('pt'));
-                            }
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        _LanguageChip(
-                          label: 'Français',
-                          isSelected: locale?.languageCode == 'fr',
-                          onSelected: (selected) {
-                            if (selected) {
-                              HapticUtils.selectionClick();
-                              ref
-                                  .read(languageControllerProvider.notifier)
-                                  .setLanguage(const Locale('fr'));
+                                  .setLanguage(Locale(lang.key));
                             }
                           },
                         ),
                       ],
-                    ),
+                    ],
                   ),
+                );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => Text(l10n.error),
             ),
@@ -257,17 +210,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: l10n.contentLanguage,
             subtitle: l10n.contentLanguageSubtitle,
             icon: Icons.menu_book,
-            child: ref
-                .watch(contentLanguageControllerProvider)
-                .when(
-                  data:
-                      (contentLanguage) => SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
+            child: ref.watch(contentLanguageControllerProvider).when(
+                  data: (contentLanguage) {
+                    final languages = LanguageConfig
+                        .supportedContentLanguages.entries
+                        .toList();
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (int i = 0; i < languages.length; i++) ...[
+                            if (i > 0) const SizedBox(width: 8),
                             _LanguageChip(
-                              label: 'English',
-                              isSelected: contentLanguage.languageCode == 'en',
+                              label: languages[i].value,
+                              isSelected: contentLanguage.languageCode ==
+                                  languages[i].key,
                               onSelected: (selected) {
                                 if (selected) {
                                   HapticUtils.selectionClick();
@@ -276,79 +233,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                         contentLanguageControllerProvider
                                             .notifier,
                                       )
-                                      .setLanguage(const Locale('en'));
-                                }
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            _LanguageChip(
-                              label: 'മലയാളം',
-                              isSelected: contentLanguage.languageCode == 'ml',
-                              onSelected: (selected) {
-                                if (selected) {
-                                  HapticUtils.selectionClick();
-                                  ref
-                                      .read(
-                                        contentLanguageControllerProvider
-                                            .notifier,
-                                      )
-                                      .setLanguage(const Locale('ml'));
-                                }
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            _LanguageChip(
-                              label: 'Español',
-                              isSelected: contentLanguage.languageCode == 'es',
-                              onSelected: (selected) {
-                                if (selected) {
-                                  HapticUtils.selectionClick();
-                                  ref
-                                      .read(
-                                        contentLanguageControllerProvider
-                                            .notifier,
-                                      )
-                                      .setLanguage(const Locale('es'));
-                                }
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            _LanguageChip(
-                              label: 'Português',
-                              isSelected: contentLanguage.languageCode == 'pt',
-                              onSelected: (selected) {
-                                if (selected) {
-                                  HapticUtils.selectionClick();
-                                  ref
-                                      .read(
-                                        contentLanguageControllerProvider
-                                            .notifier,
-                                      )
-                                      .setLanguage(const Locale('pt'));
-                                }
-                              },
-                            ),
-                            const SizedBox(width: 8),
-                            _LanguageChip(
-                              label: 'Français',
-                              isSelected: contentLanguage.languageCode == 'fr',
-                              onSelected: (selected) {
-                                if (selected) {
-                                  HapticUtils.selectionClick();
-                                  ref
-                                      .read(
-                                        contentLanguageControllerProvider
-                                            .notifier,
-                                      )
-                                      .setLanguage(const Locale('fr'));
+                                      .setLanguage(Locale(languages[i].key));
                                 }
                               },
                             ),
                           ],
-                        ),
+                        ],
                       ),
-                  loading:
-                      () => const Center(child: CircularProgressIndicator()),
+                    );
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (_, __) => Text(l10n.error),
                 ),
           ),

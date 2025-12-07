@@ -196,7 +196,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectDay => 'Select Day';
 
   @override
-  String selected(Object count) {
+  String selected(num count) {
     return '$count selected';
   }
 

@@ -212,7 +212,7 @@
     "confessionDate": "Date de Confession",
     "dateUpdated": "Date mise à jour",
     "changeDateConfirmTitle": "Changer la Date ?",
-    "changeDateConfirmMessage": "Changer la date de confession au {date} ?",
+    "changeDateConfirmMessage": "Changer la date de confession à {date} ?",
     "noGuideContent": "Contenu du guide non disponible",
     "noGuideContentDesc": "Le contenu du guide apparaîtra ici",
     "noFaqContent": "FAQs non disponibles",
@@ -280,6 +280,13 @@
     "resetPinError": "Échec de la réinitialisation du PIN. Veuillez réessayer.",
     "deleteConfirmationText": "SUPPRIMER",
     "resetPinWaitTimer": "Veuillez patienter {seconds} secondes",
+    "@resetPinWaitTimer": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "resetPinBiometricPrompt": "Vérifiez votre identité pour réinitialiser le PIN",
     "confessionGuideTitle": "Comment faire une bonne confession",
     "confessionGuideSubtitle": "Guide étape par étape pour le Sacrement",

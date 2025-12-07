@@ -60,7 +60,7 @@
     "contentLanguageSubtitle": "Idioma para el examen, FAQs y oraciones",
     "version": "Versión",
     "selectDay": "Seleccionar Día",
-    "selected": "{count} seleccionado",
+    "selected": "{count, plural, =1{1 seleccionado} other{{count} seleccionados}}",
     "selectedLabel": "seleccionado",
     "counter": "Contador",
     "searchPlaceholder": "Buscar mandamientos o preguntas...",
@@ -236,7 +236,7 @@
     "tooManyAttempts": "Demasiados intentos fallidos",
     "tryAgainIn": "Intenta de nuevo en {time}",
     "useBiometricUnlock": "Usar Desbloqueo Biométrico",
-    "unlockWithFingerprintOrFace": "Desbloquear con huella o rostro",
+    "unlockWithFingerprintOrFace": "Desbloquear con huella digital o rostro",
     "lockAfter": "Bloquear Después de",
     "timeInBackgroundBeforeLocking": "Tiempo en segundo plano antes de bloquear",
     "changePin": "Cambiar PIN",
@@ -280,6 +280,13 @@
     "resetPinError": "Error al restablecer PIN. Por favor intenta de nuevo.",
     "deleteConfirmationText": "ELIMINAR",
     "resetPinWaitTimer": "Por favor espera {seconds} segundos",
+    "@resetPinWaitTimer": {
+        "placeholders": {
+            "seconds": {
+                "type": "int"
+            }
+        }
+    },
     "resetPinBiometricPrompt": "Verifica tu identidad para restablecer el PIN",
     "confessionGuideTitle": "Cómo hacer una buena confesión",
     "confessionGuideSubtitle": "Guía paso a paso para el Sacramento",

@@ -184,7 +184,7 @@ class AppLocalizationsMl extends AppLocalizations {
   String get selectDay => 'ദിവസം തിരഞ്ഞെടുക്കുക';
 
   @override
-  String selected(Object count) {
+  String selected(num count) {
     return '$count തിരഞ്ഞെടുത്തു';
   }
 

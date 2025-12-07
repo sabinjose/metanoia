@@ -196,7 +196,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectDay => 'Sélectionner le Jour';
 
   @override
-  String selected(Object count) {
+  String selected(num count) {
     return '$count sélectionnés';
   }
 
@@ -690,7 +690,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String changeDateConfirmMessage(Object date) {
-    return 'Changer la date de confession au $date ?';
+    return 'Changer la date de confession à $date ?';
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:confessionapp/src/core/constants/app_constants.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -37,13 +38,20 @@ class ContentLanguagePage extends ConsumerWidget {
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(flex: 2),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                  vertical: 24.0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacer(flex: 1),
 
               // Icon with elevated background
               Center(
@@ -135,13 +143,18 @@ class ContentLanguagePage extends ConsumerWidget {
 
               // Language Options
               contentLanguage.when(
-                data:
-                    (selectedLanguage) => Column(
-                      children: [
+                data: (selectedLanguage) {
+                  final languages =
+                      LanguageConfig.supportedContentLanguages.entries.toList();
+                  return Column(
+                    children: [
+                      for (int i = 0; i < languages.length; i++) ...[
+                        if (i > 0) const SizedBox(height: 16),
                         _LanguageOption(
-                              label: 'English',
-                              locale: const Locale('en'),
-                              isSelected: selectedLanguage.languageCode == 'en',
+                              label: languages[i].value,
+                              locale: Locale(languages[i].key),
+                              isSelected: selectedLanguage.languageCode ==
+                                  languages[i].key,
                               onTap: () {
                                 HapticUtils.selectionClick();
                                 ref
@@ -149,111 +162,21 @@ class ContentLanguagePage extends ConsumerWidget {
                                       contentLanguageControllerProvider
                                           .notifier,
                                     )
-                                    .setLanguage(const Locale('en'));
+                                    .setLanguage(Locale(languages[i].key));
                               },
                             )
-                            .animate(delay: 350.ms)
+                            .animate(delay: (350 + i * 100).ms)
                             .fadeIn(duration: 350.ms, curve: Curves.easeOut)
                             .slideX(
-                              begin: -0.1,
-                              end: 0,
-                              duration: 350.ms,
-                              curve: Curves.easeOut,
-                            ),
-                        const SizedBox(height: 16),
-                        _LanguageOption(
-                              label: 'മലയാളം',
-                              locale: const Locale('ml'),
-                              isSelected: selectedLanguage.languageCode == 'ml',
-                              onTap: () {
-                                HapticUtils.selectionClick();
-                                ref
-                                    .read(
-                                      contentLanguageControllerProvider
-                                          .notifier,
-                                    )
-                                    .setLanguage(const Locale('ml'));
-                              },
-                            )
-                            .animate(delay: 450.ms)
-                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                            .slideX(
-                              begin: 0.1,
-                              end: 0,
-                              duration: 350.ms,
-                              curve: Curves.easeOut,
-                            ),
-                        const SizedBox(height: 16),
-                        _LanguageOption(
-                              label: 'Español',
-                              locale: const Locale('es'),
-                              isSelected: selectedLanguage.languageCode == 'es',
-                              onTap: () {
-                                HapticUtils.selectionClick();
-                                ref
-                                    .read(
-                                      contentLanguageControllerProvider
-                                          .notifier,
-                                    )
-                                    .setLanguage(const Locale('es'));
-                              },
-                            )
-                            .animate(delay: 550.ms)
-                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                            .slideX(
-                              begin: -0.1,
-                              end: 0,
-                              duration: 350.ms,
-                              curve: Curves.easeOut,
-                            ),
-                        const SizedBox(height: 16),
-                        _LanguageOption(
-                              label: 'Português',
-                              locale: const Locale('pt'),
-                              isSelected: selectedLanguage.languageCode == 'pt',
-                              onTap: () {
-                                HapticUtils.selectionClick();
-                                ref
-                                    .read(
-                                      contentLanguageControllerProvider
-                                          .notifier,
-                                    )
-                                    .setLanguage(const Locale('pt'));
-                              },
-                            )
-                            .animate(delay: 650.ms)
-                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                            .slideX(
-                              begin: 0.1,
-                              end: 0,
-                              duration: 350.ms,
-                              curve: Curves.easeOut,
-                            ),
-                        const SizedBox(height: 16),
-                        _LanguageOption(
-                              label: 'Français',
-                              locale: const Locale('fr'),
-                              isSelected: selectedLanguage.languageCode == 'fr',
-                              onTap: () {
-                                HapticUtils.selectionClick();
-                                ref
-                                    .read(
-                                      contentLanguageControllerProvider
-                                          .notifier,
-                                    )
-                                    .setLanguage(const Locale('fr'));
-                              },
-                            )
-                            .animate(delay: 750.ms)
-                            .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                            .slideX(
-                              begin: -0.1,
+                              begin: i.isEven ? -0.1 : 0.1,
                               end: 0,
                               duration: 350.ms,
                               curve: Curves.easeOut,
                             ),
                       ],
-                    ),
+                    ],
+                  );
+                },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (_, __) => const Text('Error loading language'),
               ),
@@ -274,7 +197,7 @@ class ContentLanguagePage extends ConsumerWidget {
                   .animate(delay: 550.ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut),
 
-              const Spacer(flex: 3),
+              const Spacer(flex: 2),
 
               // Continue Button
               Container(
@@ -322,9 +245,12 @@ class ContentLanguagePage extends ConsumerWidget {
                     curve: Curves.easeOut,
                   ),
 
-              const SizedBox(height: 24),
-            ],
-          ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

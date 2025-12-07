@@ -447,7 +447,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{count} selected'**
-  String selected(Object count);
+  String selected(num count);
 
   /// No description provided for @selectedLabel.
   ///

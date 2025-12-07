@@ -196,8 +196,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get selectDay => 'Seleccionar Día';
 
   @override
-  String selected(Object count) {
-    return '$count seleccionado';
+  String selected(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seleccionados',
+      one: '1 seleccionado',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -767,7 +773,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get useBiometricUnlock => 'Usar Desbloqueo Biométrico';
 
   @override
-  String get unlockWithFingerprintOrFace => 'Desbloquear con huella o rostro';
+  String get unlockWithFingerprintOrFace => 'Desbloquear con huella digital o rostro';
 
   @override
   String get lockAfter => 'Bloquear Después de';
