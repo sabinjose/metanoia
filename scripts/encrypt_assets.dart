@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart' as encrypt_pkg;
 
@@ -14,8 +15,14 @@ void main() async {
   print('🔐 Starting content encryption...\n');
 
   // Same key and IV as ContentCrypto - must match exactly!
-  const keyString = 'M3t4n01a_C0nt3nt_Pr0t3ct10n_K3y!'; // 32 chars for AES-256
-  final key = encrypt_pkg.Key.fromUtf8(keyString);
+  // Key stored as char codes (same as content_crypto.dart)
+  final keyChars = <int>[
+    0x4D, 0x33, 0x74, 0x34, 0x6E, 0x30, 0x31, 0x61, // M3t4n01a
+    0x5F, 0x43, 0x30, 0x6E, 0x74, 0x33, 0x6E, 0x74, // _C0nt3nt
+    0x5F, 0x50, 0x72, 0x30, 0x74, 0x33, 0x63, 0x74, // _Pr0t3ct
+    0x31, 0x30, 0x6E, 0x5F, 0x4B, 0x33, 0x79, 0x21, // 10n_K3y!
+  ];
+  final key = encrypt_pkg.Key(Uint8List.fromList(keyChars));
   final iv = encrypt_pkg.IV.fromLength(16);
   final encrypter = encrypt_pkg.Encrypter(
     encrypt_pkg.AES(key, mode: encrypt_pkg.AESMode.cbc),
