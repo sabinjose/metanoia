@@ -626,7 +626,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearDraft => 'Effacer le Brouillon';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Effacer';
 
   @override
   String draftRestored(num count) {

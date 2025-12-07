@@ -626,7 +626,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearDraft => 'Limpar Rascunho';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Limpar';
 
   @override
   String draftRestored(num count) {

@@ -632,7 +632,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clearDraft => 'Borrar Borrador';
 
   @override
-  String get clear => 'Clear';
+  String get clear => 'Borrar';
 
   @override
   String draftRestored(num count) {

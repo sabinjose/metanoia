@@ -298,5 +298,6 @@
     "invitationDialogNo": "No, estoy listo para comenzar",
     "invitationDialogDontShowAgain": "No mostrar esto de nuevo",
     "searchPrayers": "Buscar oraciones...",
-    "allCategories": "Todas"
+    "allCategories": "Todas",
+    "clear": "Borrar"
 }
