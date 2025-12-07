@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:confessionapp/src/core/database/app_database.dart';
+import 'package:confessionapp/src/core/utils/content_crypto.dart';
 import 'package:drift/drift.dart';
 
 class DataLoader {
   static Future<List<CommandmentsCompanion>> loadCommandments(
     String languageCode,
   ) async {
-    final String jsonString = await rootBundle.loadString(
+    final String jsonString = await ContentCrypto.loadContent(
       'assets/data/commandments/commandments_$languageCode.json',
     );
     final List<dynamic> jsonList = json.decode(jsonString);
@@ -29,7 +29,7 @@ class DataLoader {
     String languageCode,
     List<Commandment> commandments,
   ) async {
-    final String jsonString = await rootBundle.loadString(
+    final String jsonString = await ContentCrypto.loadContent(
       'assets/data/questions/questions_$languageCode.json',
     );
     final List<dynamic> jsonList = json.decode(jsonString);
@@ -65,7 +65,7 @@ class DataLoader {
 
   static Future<List<FaqsCompanion>> loadFaqs(String languageCode) async {
     try {
-      final String jsonString = await rootBundle.loadString(
+      final String jsonString = await ContentCrypto.loadContent(
         'assets/data/faqs/faqs_$languageCode.json',
       );
       final List<dynamic> jsonList = json.decode(jsonString);
@@ -85,7 +85,7 @@ class DataLoader {
 
   static Future<List<QuotesCompanion>> loadQuotes(String languageCode) async {
     try {
-      final String jsonString = await rootBundle.loadString(
+      final String jsonString = await ContentCrypto.loadContent(
         'assets/data/quotes/quotes_$languageCode.json',
       );
       final List<dynamic> jsonList = json.decode(jsonString);
@@ -103,7 +103,7 @@ class DataLoader {
 
   static Future<List<PrayersCompanion>> loadPrayers(String languageCode) async {
     try {
-      final String jsonString = await rootBundle.loadString(
+      final String jsonString = await ContentCrypto.loadContent(
         'assets/data/prayers/prayers_$languageCode.json',
       );
       final List<dynamic> jsonList = json.decode(jsonString);

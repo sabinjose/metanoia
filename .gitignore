@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Encrypted assets (generated at build time)
+assets/data_encrypted/

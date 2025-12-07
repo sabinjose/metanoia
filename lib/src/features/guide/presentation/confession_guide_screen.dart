@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:confessionapp/src/core/localization/content_language_provider.dart';
 import 'package:confessionapp/src/core/localization/l10n/app_localizations.dart';
 import 'package:confessionapp/src/core/theme/app_theme.dart';
+import 'package:confessionapp/src/core/utils/content_crypto.dart';
 import 'package:confessionapp/src/core/utils/haptic_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -85,7 +85,7 @@ final confessionGuideContentProvider =
       await ref.watch(contentLanguageControllerProvider.future);
   final languageCode = contentLanguage.languageCode;
 
-  final jsonString = await rootBundle.loadString(
+  final jsonString = await ContentCrypto.loadContent(
     'assets/data/confession_guide/confession_guide_$languageCode.json',
   );
   final json = jsonDecode(jsonString) as Map<String, dynamic>;
