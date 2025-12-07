@@ -228,7 +228,7 @@
     {
         "commandmentCode": "es-9",
         "questions": [
-            "¿He cedido a la concupiscencia (deseos carnales humanos intensos)?",
+            "¿He cedido a la concupiscencia (deseos sexuales intensos)?",
             "¿He cedido a la lujuria (deseo desordenado de disfrute inmoderado del placer sexual)?",
             "¿He hecho comentarios o insinuaciones sexualmente sugerentes o acosadoras hacia alguien?",
             "¿He fallado en vestir modestamente o desviado la mirada cuando alguien más viste inmodestamente?",
@@ -276,33 +276,33 @@
     {
         "commandmentCode": "es-12",
         "questions": [
-            "Soberbia",
-            "Avaricia",
-            "Lujuria",
-            "Envidia",
-            "Gula",
-            "Ira",
-            "Pereza"
+            "¿He cometido el pecado de Soberbia?",
+            "¿He cometido el pecado de Avaricia?",
+            "¿He cometido el pecado de Lujuria?",
+            "¿He cometido el pecado de Envidia?",
+            "¿He cometido el pecado de Gula?",
+            "¿He cometido el pecado de Ira?",
+            "¿He cometido el pecado de Pereza?"
         ]
     },
     {
         "commandmentCode": "es-13",
         "questions": [
-            "Presunción de la misericordia de Dios",
-            "Desesperación de la salvación",
-            "Impugnar la verdad conocida",
-            "Envidia del bien espiritual ajeno",
-            "Obstinación en el pecado",
-            "Impenitencia final"
+            "¿He pecado esperando que Dios me perdone sin verdadero arrepentimiento (Presunción)?",
+            "¿He desesperado de la salvación?",
+            "¿He luchado contra o atacado verdades que sabía que eran enseñadas por la Iglesia Católica?",
+            "¿He envidiado el bien espiritual de otro?",
+            "¿He permanecido tercamente en estado de pecado?",
+            "¿He persistido en rechazar el arrepentimiento?"
         ]
     },
     {
         "commandmentCode": "es-14",
         "questions": [
-            "Homicidio voluntario",
-            "El pecado de Sodoma",
-            "Opresión de los pobres",
-            "Defraudar a los trabajadores de su salario"
+            "¿He cometido homicidio voluntario?",
+            "¿He cometido el pecado de Sodoma (actos sexuales antinaturales)?",
+            "¿He oprimido a los pobres?",
+            "¿He defraudado a los trabajadores de su salario?"
         ]
     }
 ]

@@ -228,7 +228,7 @@
     {
         "commandmentCode": "pt-9",
         "questions": [
-            "Cedi à concupiscência (desejos carnais humanos intensos)?",
+            "Cedi à concupiscência (desejos sexuais intensos)?",
             "Cedi à luxúria (desejo desordenado de desfrute imoderado do prazer sexual)?",
             "Fiz comentários ou insinuações sexualmente sugestivas ou assediadoras para alguém?",
             "Falhei em vestir modestamente ou desviei o olhar quando alguém mais veste imodestamente?",
@@ -276,33 +276,33 @@
     {
         "commandmentCode": "pt-12",
         "questions": [
-            "Soberba",
-            "Avareza",
-            "Luxúria",
-            "Inveja",
-            "Gula",
-            "Ira",
-            "Preguiça"
+            "Cometi o pecado da Soberba?",
+            "Cometi o pecado da Avareza?",
+            "Cometi o pecado da Luxúria?",
+            "Cometi o pecado da Inveja?",
+            "Cometi o pecado da Gula?",
+            "Cometi o pecado da Ira?",
+            "Cometi o pecado da Preguiça?"
         ]
     },
     {
         "commandmentCode": "pt-13",
         "questions": [
-            "Presunção da misericórdia de Deus",
-            "Desespero da salvação",
-            "Impugnar a verdade conhecida",
-            "Inveja do bem espiritual alheio",
-            "Obstinação no pecado",
-            "Impenitência final"
+            "Pequei esperando que Deus me perdoe sem verdadeiro arrependimento (Presunção)?",
+            "Desesperei da salvação?",
+            "Lutei contra ou ataquei verdades que sabia serem ensinadas pela Igreja Católica?",
+            "Invejei o bem espiritual alheio?",
+            "Permaneci teimosamente em estado de pecado?",
+            "Persisti na recusa de me arrepender?"
         ]
     },
     {
         "commandmentCode": "pt-14",
         "questions": [
-            "Homicídio voluntário",
-            "O pecado de Sodoma",
-            "Opressão dos pobres",
-            "Defraudar os trabalhadores de seu salário"
+            "Cometi homicídio voluntário?",
+            "Cometi o pecado de Sodoma (atos sexuais não naturais)?",
+            "Oprimi os pobres?",
+            "Defraudei os trabalhadores de seu salário?"
         ]
     }
 ]

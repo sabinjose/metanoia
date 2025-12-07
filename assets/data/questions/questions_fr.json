@@ -228,7 +228,7 @@
     {
         "commandmentCode": "fr-9",
         "questions": [
-            "Ai-je cédé à la concupiscence (désirs charnels humains intenses) ?",
+            "Ai-je cédé à la concupiscence (désirs sexuels intenses) ?",
             "Ai-je cédé à la luxure (désir désordonné de jouissance immodérée du plaisir sexuel) ?",
             "Ai-je fait des commentaires ou des avances sexuellement suggestifs ou harcelants envers quelqu'un ?",
             "Ai-je manqué de m'habiller modestement ou détourné les yeux lorsque quelqu'un d'autre est habillé de manière immodeste ?",
@@ -276,33 +276,33 @@
     {
         "commandmentCode": "fr-12",
         "questions": [
-            "Orgueil",
-            "Avarice",
-            "Luxure",
-            "Envie",
-            "Gourmandise",
-            "Colère",
-            "Paresse"
+            "Ai-je commis le péché d'Orgueil ?",
+            "Ai-je commis le péché d'Avarice ?",
+            "Ai-je commis le péché de Luxure ?",
+            "Ai-je commis le péché d'Envie ?",
+            "Ai-je commis le péché de Gourmandise ?",
+            "Ai-je commis le péché de Colère ?",
+            "Ai-je commis le péché de Paresse ?"
         ]
     },
     {
         "commandmentCode": "fr-13",
         "questions": [
-            "Présomption de la miséricorde de Dieu",
-            "Désespoir du salut",
-            "Impugner la vérité connue",
-            "Envie du bien spirituel d'autrui",
-            "Obstination dans le péché",
-            "Impénitence finale"
+            "Ai-je péché en comptant sur le pardon de Dieu sans vrai repentir (Présomption) ?",
+            "Ai-je désespéré du salut ?",
+            "Ai-je combattu ou attaqué des vérités que je savais enseignées par l'Église catholique ?",
+            "Ai-je envié le bien spirituel d'autrui ?",
+            "Me suis-je obstiné dans le péché ?",
+            "Ai-je persisté dans le refus de me repentir ?"
         ]
     },
     {
         "commandmentCode": "fr-14",
         "questions": [
-            "Meurtre volontaire",
-            "Le péché de Sodome",
-            "Oppression des pauvres",
-            "Frauder les travailleurs de leur salaire"
+            "Ai-je commis un meurtre volontaire ?",
+            "Ai-je commis le péché de Sodome (actes sexuels contre nature) ?",
+            "Ai-je opprimé les pauvres ?",
+            "Ai-je fraudé les travailleurs de leur salaire ?"
         ]
     }
 ]
