@@ -65,7 +65,6 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
   bool _hasCheckedTutorial = false;
   bool _hasCheckedInvitationDialog = false;
 
-  static const String _invitationShownKey = 'invitation_dialog_shown';
   static const String _invitationDontShowKey = 'invitation_dialog_dont_show';
 
   // Showcase keys
@@ -121,13 +120,9 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
     final prefs = await SharedPreferences.getInstance();
     final dontShow = prefs.getBool(_invitationDontShowKey) ?? false;
-    final hasShown = prefs.getBool(_invitationShownKey) ?? false;
 
-    // Only show on first examination start and if not opted out
-    if (!hasShown && !dontShow && mounted) {
-      // Mark as shown
-      await prefs.setBool(_invitationShownKey, true);
-
+    // Show dialog unless user opted out
+    if (!dontShow && mounted) {
       // Small delay to let the screen settle
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -143,13 +138,9 @@ class _ExaminationContentState extends ConsumerState<_ExaminationContent> {
 
     final prefs = await SharedPreferences.getInstance();
     final dontShow = prefs.getBool(_invitationDontShowKey) ?? false;
-    final hasShown = prefs.getBool(_invitationShownKey) ?? false;
 
-    // Only show on first examination start and if not opted out
-    if (!hasShown && !dontShow && mounted) {
-      // Mark as shown
-      await prefs.setBool(_invitationShownKey, true);
-
+    // Show dialog unless user opted out
+    if (!dontShow && mounted) {
       // Small delay to let the screen settle after showcase
       await Future.delayed(const Duration(milliseconds: 300));
 
